@@ -1,0 +1,56 @@
+<mvc:View controllerName="zpoly.zpolyplanung.controller.Master" xmlns:mvc="sap.ui.core.mvc" xmlns:html="http://www.w3.org/1999/xhtml"
+	displayBlock="true" xmlns="sap.m" xmlns:semantic="sap.m.semantic" xmlns:ism="zism.zismlibrary.controls" xmlns:suite="sap.suite.ui.commons" xmlns:core="sap.ui.core">
+	<Page id="masterPage" showFooter="true" title="{i18n>appTitle}">
+		<content>
+			<IconTabBar id="idIconTabBar"   class="sapUiResponsiveContentPadding" expanded="true" expandable="false" select="onTabbarSelect">
+				<items>
+					<IconTabFilter text="Übersicht" key="Ueber" >
+						<FlexBox direction="Row" alignItems="Center" class="sapUiResponsiveMargin">
+							<items>
+								<Label text="{i18n>FilialenAuswahl}" labelFor="filialeInput" class="sapUiSmallMargin"/>
+								<ism:FilialeChooser id="filialeInput" onFilialeSelected="onFilialeSelected"/>
+								<Text id="filialeInputDescr" text="{ZSRSDATAFEED>Name1}" class="sapUiSmallMargin"/>
+								<Label text="{i18n>Kalenderwoche}" labelFor="calenderAuswahl" class="sapUiSmallMargin"/>
+								<DatePicker id="calenderAuswahl" placeholder="{i18n>Kalenderwoche}" displayFormat="w.YYYY" class="sapUiSmallMargin"/>
+							</items>
+						</FlexBox>
+						<Table id="flTable" inset="false" 
+							delete="onStellplatzDelete">
+							<headerToolbar>
+								<OverflowToolbar>
+ 										<Title text="Polyflächen" level="H1"/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="16em">
+									<Text text="Id"/>
+								</Column>
+								<Column width="16em">
+									<Text text="Bezeichnung"/>
+								</Column>
+								<Column width="16em">
+									<Text text="Belegung"/>
+								</Column>
+								<Column width="16em">
+									<Text text="Sortimentsbereich"/>
+								</Column>
+							</columns>
+						
+						</Table>
+					</IconTabFilter>
+					<IconTabSeparator icon="sap-icon://open-command-field"/>
+					<IconTabFilter id="tabGrob" text="Grobplanung" key="Grob" enabled="false"/>
+					<IconTabSeparator icon="sap-icon://open-command-field"/>
+					<IconTabFilter id="tabDetail" text="Detailplanung" key="Detail" enabled="false"/>
+				</items>
+			</IconTabBar>
+		</content>
+		<footer>
+			<Bar id="masterToolbar">
+				<contentRight>
+					<Button id="printBtn" icon="sap-icon://print" text="Plan Ausdrücken" press="onBtnPrint"/>
+				</contentRight>
+			</Bar>
+		</footer>
+	</Page>
+</mvc:View>

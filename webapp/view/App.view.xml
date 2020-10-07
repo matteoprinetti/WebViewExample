@@ -1,0 +1,7 @@
+<mvc:View controllerName="zpoly.zpolyplanung.controller.App" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" busy="{appView>/busy}"
+	busyIndicatorDelay="{appView>/delay}" xmlns="sap.m">
+	<Shell id="shell">
+		<App id="idAppControl"/>
+	</Shell>
+	
+</mvc:View>

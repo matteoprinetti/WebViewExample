@@ -1,0 +1,282 @@
+<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+	xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData" Version="1.0">
+	<edmx:Reference xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx"
+		Uri="https://dgm.migros.ch:1490/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='LOCAL')/$value"><edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/></edmx:Reference>
+	<edmx:DataServices m:DataServiceVersion="2.0">
+		<Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="ZSRSDATAFEED_SRV" xml:lang="de" sap:schema-version="1">
+			<EntityType Name="ArtikelDetails" sap:content-version="1">
+				<Key><PropertyRef Name="Matnr"/></Key><Property Name="SiteId" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="SITE_ID" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Matnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Material" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Ean" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="EAN" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Description" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="DESCRIPTION" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ArticlePrice" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="ARTICLE_PRICE" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ArticlePriceCurkey" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="ARTICLE_PRICE_CURKEY"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ArticlePricePrecision" Type="Edm.Int16" Nullable="false" sap:unicode="false" sap:label="Dezimalst." sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="StockQuantity" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="STOCK_QUANTITY" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="StockUnit" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="STOCK_UNIT" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="StockQuantityPrecision" Type="Edm.Int16" Nullable="false" sap:unicode="false" sap:label="Dezimalst." sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ArticleWeight" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="ARTICLE_WEIGHT" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ArticleWeightUnit" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="ARTICLE_WEIGHT_UNIT"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ArticleWeightPrecision" Type="Edm.Int16" Nullable="false" sap:unicode="false" sap:label="Dezimalst." sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ConversionRules" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="CONVERSION_RULES" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Message" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="MESSAGE" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ThumbnailUrl" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="THUMBNAIL_URL" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="LargeImgUrl" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="LARGE_IMG_URL" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="DummyArticleIncl" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false"
+					sap:label="Dummyfunktion in der Laenge 1" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzthema" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Bezeichnung" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzfamilie" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Bezeichnung"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzwgbez" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Warengrpbez" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzverkaufsdata" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Verkaufsdata"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzkonsumstop" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Konsumationsstop"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzbstme" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Best.Mengeneinheit"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzliq" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Einstelliges Kennzeichen"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzrpa" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Einstelliges Kennzeichen"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzartikelKat" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Artikelkategorie"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzartikelKatbez" Type="Edm.String" Nullable="false" MaxLength="60" sap:unicode="false" sap:label="Art.Kat.Bezeichnung"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzautoverlust" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Auto. Verlustbuchung"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzlieferung" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Lieferung"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzlieferungbez" Type="Edm.String" Nullable="false" MaxLength="60" sap:unicode="false" sap:label="Lieferungscode Bez."
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzprodartId" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Produktionsart"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzprodartIdbez" Type="Edm.String" Nullable="false" MaxLength="60" sap:unicode="false" sap:label="Produktionsart Bez."
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zztaklv" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Steuerklass." sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zztaklvbez" Type="Edm.String" Nullable="false" MaxLength="60" sap:unicode="false" sap:label="SteuerKlassifik.Bez."
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzdctrStockQuantity" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Frei verwendbar"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzdctrStockUnit" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Basis-ME"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzsysid" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="SAP-System-ID"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzdest" Type="Edm.String" Nullable="false" MaxLength="32" sap:unicode="false" sap:label="Destination" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzlocco" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Location Code"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzattyp" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Materialtyp" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzattypbez" Type="Edm.String" Nullable="false" MaxLength="60" sap:unicode="false" sap:label="Artikeltyp-Bezeichn."
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzbossnr" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="BOSS Nummer"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzbossweltbez" Type="Edm.String" Nullable="false" MaxLength="35" sap:unicode="false" sap:label="Bez. BOSS"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzbossbbbez" Type="Edm.String" Nullable="false" MaxLength="35" sap:unicode="false" sap:label="Bez. BOSS"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzbossvsekbez" Type="Edm.String" Nullable="false" MaxLength="35" sap:unicode="false" sap:label="Bez. BOSS"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzbossthemabez" Type="Edm.String" Nullable="false" MaxLength="35" sap:unicode="false" sap:label="Bez. BOSS"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzbossfambez" Type="Edm.String" Nullable="false" MaxLength="35" sap:unicode="false" sap:label="Bez. BOSS"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzbbtyp" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="SortimentsLArt"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzbbtypbez" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="SLArt - Bez."
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzmtart" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Materialart" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzmtartbez" Type="Edm.String" Nullable="false" MaxLength="25" sap:unicode="false" sap:label="MatArtBezeich"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzsortber" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Sortimentsbereich"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzsortberbez" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="SortBer-Bez."
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzsstuf" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="SortimStufe" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzsstufbez" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="SStufe - Bez."
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzsaiso" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Saison" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzsaisobez" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Saisontyp-Bez."
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzmarke" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Marke" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzmarkebez" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Marke" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzlist" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Gelistet" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzaktvp" Type="Edm.String" Nullable="false" MaxLength="15" sap:unicode="false" sap:label="Aktions-VP" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzworkArea" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Arbeitsbereich"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzworkAreabez" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Text" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzbestTransit" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Transitbestand"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzinvStatus" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Inventur Status"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzinvDatum" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Datum letzter Invent"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzinvLockDatbi" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Sperrdatum bis" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzbestBestell" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Bestellbestand"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzarbeitsvorrat" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Arbeitsvorrat"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzeventbtn" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Event Button" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzbestBestellAuft" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Bestellbestand"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzbestAtpPruef" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="ATP-Prüfung"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzbestAtpFrei" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Frei verwendbar ATP"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzbestKundauft" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Kundenauftrag"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzbestAusstellung" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Ausstellung"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzbestVzFila" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Bestand VZ Filialuaf"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzbestVzKube" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Bestand VZ KUBE/Onli"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zzlagerplatz" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Lagerplatz"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzaktionKennz" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Aktion J/N" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzbestWeHeute" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Wareneingang heute"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzbestOct" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Off. Clearing/Transf"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzbestVzShow" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Bestand VZ anzeigen"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="SortimentBereich" sap:content-version="1">
+				<Key><PropertyRef Name="Bereich"/></Key><Property Name="Bereich" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Beschreibung" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Userflag" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Flag" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Locco" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="BeschreibungBuffer" sap:content-version="1">
+				<Key><PropertyRef Name="Boss"/></Key><Property Name="Description" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Beschreibung" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Boss" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Boss" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="Ean" sap:content-version="1">
+				<Key><PropertyRef Name="Matnr"/><PropertyRef Name="SiteId"/><PropertyRef Name="EanCode"/></Key><Property Name="Matnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Material" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="SiteId" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Werk" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="EanCode" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="EAN/UPC-Code"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Unit" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Feld der Laenge 3 Bytes"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Quantity" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="char20" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="BmeUnit" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Feld der Laenge 3 Bytes"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="BmeQuantity" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="char20" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Hpean" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Haupt-EAN" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="Boss" sap:content-version="1">
+				<Key><PropertyRef Name="Id"/></Key><Property Name="Id" Type="Edm.String" Nullable="false" sap:hierarchy-node-for="Id" sap:unicode="false" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Name" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Parentid" Type="Edm.String" Nullable="false" sap:hierarchy-parent-node-for="Id" sap:unicode="false" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Level" Type="Edm.Int32" Nullable="false" sap:hierarchy-level-for="Id" sap:unicode="false" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Drilldownstate" Type="Edm.String" Nullable="false" sap:hierarchy-drill-state-for="Id" sap:unicode="false"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="Beschreibung" sap:content-version="1">
+				<Key><PropertyRef Name="Boss"/></Key><Property Name="Description" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Beschreibung" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Boss" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Boss" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="FilialeKurz" sap:content-version="1">
+				<Key><PropertyRef Name="Filiale"/></Key><Property Name="Filiale" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Betrieb" sap:creatable="false"
+					sap:updatable="false"/><Property Name="Locco" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Locco" sap:creatable="false"
+					sap:updatable="false"/><Property Name="Name1" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Name 1" sap:creatable="false"
+					sap:updatable="false"/></EntityType>
+			<EntityType Name="Filialen" sap:content-version="1">
+				<Key><PropertyRef Name="Filiale"/></Key><Property Name="Mandt" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Mandant" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Filiale" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Betrieb" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ErpWerks" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Systemabhängige Werks" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Name1" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Name 1" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Bwkey" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Bewertungskreis"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Kunnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="KundenNrBetrieb"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Lifnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="LiefNrBtb" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Fabkl" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Logistikkal" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Name2" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Name 2" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Stras" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Straße/Hausnr" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Pfach" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Postfach" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Pstlz" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Postleitzahl" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Ort01" Type="Edm.String" Nullable="false" MaxLength="25" sap:unicode="false" sap:label="Ort" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Ekorg" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Einkaufsorg" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Vkorg" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="VerkaufsorgIV" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Chazv" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="ChargZustVerw" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Kkowk" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Kond.BtrbsEbene"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Kordb" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Orderbuchpfl." sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Bedpl" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Bedarfspl." sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Land1" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Land" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Regio" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Region" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Counc" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="County-Code" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Cityc" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="City-Code" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Adrnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Adresse" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Iwerk" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Planungsbetrieb"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Txjcd" Type="Edm.String" Nullable="false" MaxLength="15" sap:unicode="false" sap:label="Steuerstandort"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Vtweg" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="VertrWegIV" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Spart" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="SparteIV" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Spras" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Sprache" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Wksop" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="SOP-Betrieb" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Awsls" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="AbweichSchl." sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ChazvOld" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="ChargZustVerw" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Vlfkz" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Betriebstyp" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Bzirk" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Kundenbezirk" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zone1" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Lieferregion" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Taxiw" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Steuerind. Btrb"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Bzqhl" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Regellieferant" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Let01" Type="Edm.Decimal" Nullable="false" Precision="3" Scale="0" sap:unicode="false" sap:label="1. Mahnung"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Let02" Type="Edm.Decimal" Nullable="false" Precision="3" Scale="0" sap:unicode="false" sap:label="2. Mahnung"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Let03" Type="Edm.Decimal" Nullable="false" Precision="3" Scale="0" sap:unicode="false" sap:label="3. Mahnung"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="TxnamMa1" Type="Edm.String" Nullable="false" MaxLength="16" sap:unicode="false" sap:label="Text 1. Mahnung"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="TxnamMa2" Type="Edm.String" Nullable="false" MaxLength="16" sap:unicode="false" sap:label="Text 2. Mahnung"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="TxnamMa3" Type="Edm.String" Nullable="false" MaxLength="16" sap:unicode="false" sap:label="Text 3. Mahnung"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Betol" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Bestelltoleranz"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="J1bbranch" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Geschäftsort"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Vtbfi" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Vertr.ber.Find."
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Fprfw" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Verteilungsprofil"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Achvm" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Archivierungsvorm." sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Dvsart" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="DVS-Art" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Nodetype" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Knotentyp SCM"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Nschema" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Namensschema" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Pkosa" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Kostenträger" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Misch" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Mischkalkulation" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Mgvupd" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Istkalk." sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Vstel" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Versandstelle" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Mgvlaupd" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Leistungen im Ist"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Mgvlareval" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="St. KoStl. Entl."
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Sourcing" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Sourcing über ATP"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="SgtStat" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="SegmStat. Disp."
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="FshMgArunReq" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="AuftrAllokLauf"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="FshSeaim" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Saison aktiv BFü" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="FshBomMaintenance" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Steuerungsdaten STL"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Oilival" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="EXG-Bewertung"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Oihvtype" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Lieferantenart"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Oihcredipi" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="IPI-Kredit"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Storetype" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Filialtyp" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="DepStore" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Über-WH" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Locco" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Locco" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="Artikel" sap:content-version="1">
+				<Key><PropertyRef Name="matnr"/></Key><Property Name="matnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="maktx" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="ilnnr" Type="Edm.String" Nullable="false" MaxLength="13" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="ean11" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="kbetr" Type="Edm.Decimal" Nullable="false" Precision="11" Scale="2" sap:unicode="false" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="konwa" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="dest" Type="Edm.String" Nullable="false" MaxLength="32" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><NavigationProperty Name="toEans" Relationship="ZSRSDATAFEED_SRV.ArtikeltoEans" FromRole="FromRole_ArtikeltoEans"
+					ToRole="ToRole_ArtikeltoEans"/><NavigationProperty Name="toDetails" Relationship="ZSRSDATAFEED_SRV.ArtikeltoDetails" FromRole="FromRole_ArtikeltoDetails"
+					ToRole="ToRole_ArtikeltoDetails"/></EntityType>
+			<EntityType Name="Artikelsuche" sap:content-version="1">
+				<Key><PropertyRef Name="sortkz"/><PropertyRef Name="matnr"/></Key><Property Name="sortkz" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Sortimentskennzeichen" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false"/><Property Name="matnr" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Artikelnummer" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="maktx" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Artikelkurztext" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ean11" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="EAN-Nummer" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ilnnr" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="International Lokationsnr" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
+			<Association Name="ArtikeltoEans" sap:content-version="1"><End Type="ZSRSDATAFEED_SRV.Artikel" Multiplicity="1" Role="FromRole_ArtikeltoEans"/><End Type="ZSRSDATAFEED_SRV.Ean" Multiplicity="*" Role="ToRole_ArtikeltoEans"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_ArtikeltoEans"><PropertyRef Name="matnr"/></Principal>
+					<Dependent Role="ToRole_ArtikeltoEans"><PropertyRef Name="Matnr"/></Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<Association Name="ArtikeltoDetails" sap:content-version="1"><End Type="ZSRSDATAFEED_SRV.Artikel" Multiplicity="1" Role="FromRole_ArtikeltoDetails"/><End Type="ZSRSDATAFEED_SRV.ArtikelDetails" Multiplicity="0..1" Role="ToRole_ArtikeltoDetails"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_ArtikeltoDetails"><PropertyRef Name="matnr"/></Principal>
+					<Dependent Role="ToRole_ArtikeltoDetails"><PropertyRef Name="Matnr"/></Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<EntityContainer Name="ZSRSDATAFEED_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx"><EntitySet Name="ArtikelDetailsSet" EntityType="ZSRSDATAFEED_SRV.ArtikelDetails" sap:creatable="false" sap:updatable="false"
+				sap:deletable="false" sap:pageable="false" sap:content-version="1"/><EntitySet Name="SortimentBereichSet" EntityType="ZSRSDATAFEED_SRV.SortimentBereich" sap:creatable="false" sap:updatable="false"
+				sap:deletable="false" sap:pageable="false" sap:content-version="1"/><EntitySet Name="BeschreibungBufferSet" EntityType="ZSRSDATAFEED_SRV.BeschreibungBuffer" sap:creatable="false" sap:updatable="false"
+				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="EanSet" EntityType="ZSRSDATAFEED_SRV.Ean" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:content-version="1"/><EntitySet Name="BossSet" EntityType="ZSRSDATAFEED_SRV.Boss" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="BeschreibungSet" EntityType="ZSRSDATAFEED_SRV.Beschreibung" sap:creatable="false" sap:updatable="false"
+				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="FilialeKurzSet" EntityType="ZSRSDATAFEED_SRV.FilialeKurz" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="FilialenSet" EntityType="ZSRSDATAFEED_SRV.Filialen" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="ArtikelSet" EntityType="ZSRSDATAFEED_SRV.Artikel" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:content-version="1"/><EntitySet Name="ArtikelsucheSet" EntityType="ZSRSDATAFEED_SRV.Artikelsuche" sap:creatable="false" sap:updatable="false"
+				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+				<AssociationSet Name="ArtikeltoEansSet" Association="ZSRSDATAFEED_SRV.ArtikeltoEans" sap:creatable="false" sap:updatable="false"
+					sap:deletable="false" sap:content-version="1"><End EntitySet="ArtikelSet" Role="FromRole_ArtikeltoEans"/><End EntitySet="EanSet" Role="ToRole_ArtikeltoEans"/></AssociationSet>
+				<AssociationSet Name="ArtikeltoDetailsSet" Association="ZSRSDATAFEED_SRV.ArtikeltoDetails" sap:creatable="false" sap:updatable="false"
+					sap:deletable="false" sap:content-version="1"><End EntitySet="ArtikelSet" Role="FromRole_ArtikeltoDetails"/><End EntitySet="ArtikelDetailsSet" Role="ToRole_ArtikeltoDetails"/></AssociationSet>
+				<FunctionImport Name="SetWa" ReturnType="ZSRSDATAFEED_SRV.SortimentBereich" EntitySet="SortimentBereichSet" m:HttpMethod="POST"
+					sap:action-for="ZSRSDATAFEED_SRV.SortimentBereich"><Parameter Name="Bereich" Type="Edm.String" Mode="In"/></FunctionImport>
+			</EntityContainer>
+			<Annotations xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="ZSRSFILIALENBETRIEB_SRV.ZSRS_WGRP_BOSSNR">
+				<Annotation Term="UI.HeaderInfo">
+					<Record><PropertyValue Property="TypeName" String="ZSRS_WGRP_BOSSNR"/><PropertyValue Property="TypeNamePlural" String="Warengruppen"/></Record>
+				</Annotation>
+				<Annotation Term="UI.LineItem">
+					<Collection>
+						<Record Type="UI.DataField"><PropertyValue Property="Label" String=""/><PropertyValue Property="Value" Path="BW"/></Record>
+						<Record Type="UI.DataField"><PropertyValue Property="Label" String=""/><PropertyValue Property="Value" Path="BB"/></Record>
+						<Record Type="UI.DataField"><PropertyValue Property="Label" String=""/><PropertyValue Property="Value" Path="VS"/></Record>
+						<Record Type="UI.DataField"><PropertyValue Property="Label" String=""/><PropertyValue Property="Value" Path="TH"/></Record>
+						<Record Type="UI.DataField"><PropertyValue Property="Label" String=""/><PropertyValue Property="Value" Path="Matkl"/></Record>
+						<Record Type="UI.DataField"><PropertyValue Property="Label" String=""/><PropertyValue Property="Value" Path="Wgbez"/></Record>
+						<Record Type="UI.DataField"><PropertyValue Property="Label" String=""/><PropertyValue Property="Value" Path="Sstuf"/></Record>
+						<Record Type="UI.DataField"><PropertyValue Property="Label" String=""/><PropertyValue Property="Value" String=""/></Record>
+						<Record Type="UI.DataField"><PropertyValue Property="Label"/><PropertyValue Property="Value" Path="Wdaus"/></Record>
+					</Collection>
+				</Annotation>
+				<Annotation Term="UI.Identification">
+					<Collection>
+						<Record Type="UI.DataField"><PropertyValue Property="Label" String=""/><PropertyValue Property="Value" Path="Matkl"/></Record>
+					</Collection>
+				</Annotation>
+				<Annotation Term="UI.HeaderFacets">
+					<Collection>
+						<Record Type="UI.ReferenceFacet"><PropertyValue Property="ID" String="GeneralInformation"/><PropertyValue Property="Label" String="General Information"/><PropertyValue Property="Target" AnnotationPath="@UI.Identification"/></Record>
+					</Collection>
+				</Annotation>
+				<Annotation Term="UI.Facets">
+					<Collection>
+						<Record Type="UI.ReferenceFacet"><PropertyValue Property="ID" String="ItemList"/><PropertyValue Property="Label" String="Item List"/><PropertyValue Property="Target" AnnotationPath="ToItems/@UI.LineItem"/></Record>
+					</Collection>
+				</Annotation>
+			</Annotations><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self"
+				href="https://dgm.migros.ch:1490/sap/opu/odata/sap/ZSRSDATAFEED_SRV/$metadata"/><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="latest-version"
+				href="https://dgm.migros.ch:1490/sap/opu/odata/sap/ZSRSDATAFEED_SRV/$metadata"/></Schema>
+	</edmx:DataServices>
+</edmx:Edmx>

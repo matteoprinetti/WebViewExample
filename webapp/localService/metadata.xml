@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+	xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+	<edmx:DataServices m:DataServiceVersion="2.0">
+		<Schema Namespace="ZISM_POLY_SRV" xml:lang="de" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+			<EntityType Name="WarentraegerTyp" sap:content-version="1">
+				<Key><PropertyRef Name="Id"/></Key><Property Name="Id" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/></EntityType>
+			<EntityType Name="WarentraegerTypDescr" sap:content-version="1">
+				<Key><PropertyRef Name="Language"/><PropertyRef Name="Id"/></Key><Property Name="Language" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Id" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/><Property Name="Description" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="Organisation" sap:content-version="1">
+				<Key><PropertyRef Name="Id"/></Key><Property Name="Id" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Id" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="BuName" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="BuName" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Name" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Name" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="Stellplatz" sap:content-version="1">
+				<Key><PropertyRef Name="Key"/><PropertyRef Name="FlaecheId"/></Key><Property Name="Key" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="FlaecheId" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Name" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="WtId" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="WtName" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Anzahl" Type="Edm.Int32" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="Flaechen" sap:content-version="1">
+				<Key><PropertyRef Name="Id"/></Key><Property Name="Id" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Locco" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Name" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Type" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Sortber" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Org" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/><NavigationProperty Name="FlaecheToStellplatz" Relationship="ZISM_POLY_SRV.toStellplatz" FromRole="FromRole_toStellplatz"
+					ToRole="ToRole_toStellplatz"/></EntityType>
+			<Association Name="toStellplatz" sap:content-version="1"><End Type="ZISM_POLY_SRV.Flaechen" Multiplicity="1" Role="FromRole_toStellplatz"/><End Type="ZISM_POLY_SRV.Stellplatz" Multiplicity="*" Role="ToRole_toStellplatz"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_toStellplatz"><PropertyRef Name="Id"/></Principal>
+					<Dependent Role="ToRole_toStellplatz"><PropertyRef Name="FlaecheId"/></Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<EntityContainer Name="ZISM_POLY_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx"><EntitySet Name="WarentraegerTypSet" EntityType="ZISM_POLY_SRV.WarentraegerTyp" sap:creatable="false" sap:updatable="false"
+				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="WarentraegerTypDescrSet" EntityType="ZISM_POLY_SRV.WarentraegerTypDescr" sap:creatable="false" sap:updatable="false"
+				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="OrganisationSet" EntityType="ZISM_POLY_SRV.Organisation" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="StellplatzSet" EntityType="ZISM_POLY_SRV.Stellplatz" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="FlaechenSet" EntityType="ZISM_POLY_SRV.Flaechen" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+				<AssociationSet Name="toStellplatzSet" Association="ZISM_POLY_SRV.toStellplatz" sap:creatable="false" sap:updatable="false"
+					sap:deletable="false" sap:content-version="1"><End EntitySet="FlaechenSet" Role="FromRole_toStellplatz"/><End EntitySet="StellplatzSet" Role="ToRole_toStellplatz"/></AssociationSet>
+			</EntityContainer><atom:link rel="self" href="https://dgm.migros.ch:1490/sap/opu/odata/sap/ZISM_POLY_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/><atom:link rel="latest-version" href="https://dgm.migros.ch:1490/sap/opu/odata/sap/ZISM_POLY_SRV/$metadata"
+				xmlns:atom="http://www.w3.org/2005/Atom"/></Schema>
+	</edmx:DataServices>
+</edmx:Edmx>

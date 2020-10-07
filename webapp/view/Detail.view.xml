@@ -1,0 +1,108 @@
+<mvc:View controllerName="zpoly.zpolyplanung.controller.Detail" xmlns:mvc="sap.ui.core.mvc" xmlns:html="http://www.w3.org/1999/xhtml"
+	displayBlock="true" xmlns="sap.m" xmlns:semantic="sap.m.semantic" xmlns:ism="zism.zismlibrary.controls" xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core">
+	<semantic:DetailPage id="detailPage" showFooter="true">
+		<semantic:subHeader>
+			<Bar>
+				<contentMiddle>
+					<Title text="{i18n>detailTitle}"></Title>
+				</contentMiddle>
+			</Bar>
+		</semantic:subHeader>
+		<semantic:content>
+			<VBox>
+				<f:SimpleForm id="SimpleFormDisplay354" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3"
+					labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1"
+					singleContainerFullSize="false">
+					<f:content>
+						<Label text="Flächenid"/>
+						<Text text="{Id}"/>
+						<Label text="Name"/>
+						<Input id="inpName" value="{Name}" change="onRecordChanged" showSuggestion="true"
+							suggestionItems="{ path: 'Namen>/NamenCollection'}" >
+							<suggestionItems>
+								<core:Item text="{Namen>SuggestedName}"/>
+							</suggestionItems>
+						</Input>
+						<Label text="Typ"/>
+						<Select id="inpTyp" enabled="true" forceSelection="false" selectedKey="{Type}" items="{ path: 'Typ>/TypCollection'}"
+							change="onRecordChanged">
+							<core:Item key="{Typ>Typ}" text="{Typ>Name}"/>
+						</Select>
+						<!-- PolyFlächenteil -->
+						<Label text="Direktion" visible="{ path: 'Type', formatter: '.formatter.isPolyFlaeche' }"/>
+						<Select id="inpOrg" enabled="true" forceSelection="false" selectedKey="{Org}" items="{ path: '/OrganisationSet'}" change="onRecordChanged"
+							visible="{ path: 'Type', formatter: '.formatter.isPolyFlaeche' }">
+							<core:Item key="{Id}" text="{Name}"/>
+						</Select>
+						<!-- PromoFlächenteil -->
+						<Label text="Sortimentsbereich" visible="{ path: 'Type', formatter: '.formatter.isPromoFlaeche' }"/>
+						<Select id="inpSor" enabled="true" forceSelection="false" selectedKey="{Sortber}" items="{ path: '/SortimentSet'}" change="onRecordChanged"
+							visible="{ path: 'Type', formatter: '.formatter.isPromoFlaeche' }">
+							<core:Item key="{Id}" text="{Name}"/>
+						</Select>
+					</f:content>
+				</f:SimpleForm>
+				<Table id="idBossTable" inset="false" mode="None" delete="onBossnrDelete" visible="{ path: 'Type', formatter: '.formatter.isPromoFlaeche' }"
+					items="{ path: 'FlaecheToBossnr', factory: '.bossitemFactory' }">
+					<headerToolbar>
+						<OverflowToolbar>
+							<content>
+								<Title text="Boss" level="H1"/>
+								<ism:BossTree id="bossSelect" select="onBossSelect" sortimentbereich="{Sortber}" class="sapUiSmallMargin" hidden="true"/>
+								<Button id="addBossnrBtn" icon="sap-icon://positive" press="onBtnAddBossnr"/>
+								<Button id="delBossnrBtn" icon="sap-icon://delete" press="onBtnDelBossnr"/>
+							</content>
+						</OverflowToolbar>
+					</headerToolbar>
+					<columns>
+						<Column width="8em">
+							<Text text="Bossnr"/>
+						</Column>
+						<Column width="18em">
+							<Text text="Beschreibung"/>
+						</Column>
+					</columns>
+				</Table>
+				<Table id="idSPTable" inset="false" items="{ path: 'FlaecheToStellplatz', parameters: { operationMode: 'Client' } }" mode="None"
+					delete="onStellplatzDelete">
+					<headerToolbar>
+						<OverflowToolbar>
+							<content>
+								<Title text="Stellplätze" level="H1"/>
+								<Button id="addStellplatzBtn" icon="sap-icon://positive" press="onBtnAddStellplatz"/>
+								<Button id="delStellplatzBtn" icon="sap-icon://delete" press="onBtnDelStellplatz"/>
+							</content>
+						</OverflowToolbar>
+					</headerToolbar>
+					<columns>
+						<Column width="16em">
+							<Text text="Bezeichnung"/>
+						</Column>
+						<Column width="8em">
+							<Text text="Wt"/>
+						</Column>
+						<Column width="8em">
+							<Text text="Anzahl"/>
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem >
+							<cells>
+								<Input id="inpStellplatzName" value="{Name}" change="onStellPlatzChanged"/>
+								<Select id="inpWT" enabled="true" forceSelection="false" selectedKey="{WtId}" items="{ path: '/WarentraegerTypDescrSet'}"
+									change="onStellPlatzChanged">
+									<core:Item key="{Id}" text="{Description}"/>
+								</Select>
+								<Input id="inpAnzahl" value="{Anzahl}" change="onStellPlatzChanged"/>
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</VBox>
+		</semantic:content>
+		<semantic:customFooterContent>
+			<Button id="delBtn" icon="sap-icon://delete" press="onBtnDelete"/>
+		</semantic:customFooterContent>
+	</semantic:DetailPage>
+</mvc:View>
