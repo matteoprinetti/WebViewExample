@@ -4,25 +4,6 @@ sap.ui.define([
 	"use strict";
 
 	return BaseController.extend("zpoly.zpolyplanung.controller.Master", {
-		/*
-				oTheSorter: new sap.ui.model.Sorter("Id", false, false, function (a, b) {
-
-					// sort by Name, with a twist: if the Id is the actually new id, is the last one always.
-
-					var oNamea = this.getModel().getProperty("/FlaechenSet(guid'" + a.toLowerCase() + "')").Name;
-					var oNameb = this.getModel().getProperty("/FlaechenSet(guid'" + b.toLowerCase() + "')").Name;
-
-					// if one of them is the last one, assign the "Fake" Name "ZZZZZZZZZZZZZZZZZZZZ".
-					if (this.getOwnerComponent().last_new_flaeche_id) {
-						if (this.getOwnerComponent().last_new_flaeche_id.toLowerCase() === a.toLowerCase()) oNamea = "zzzzzzzzzzzzzzzzzzzzzzzz";
-						if (this.getOwnerComponent().last_new_flaeche_id.toLowerCase() === b.toLowerCase()) oNameb = "zzzzzzzzzzzzzzzzzzzzzzzz";
-					}
-
-					return oNamea.localeCompare(oNameb);
-
-				}),
-		*/
-		firstCall: true,
 
 		onInit: function () {
 
@@ -48,20 +29,19 @@ sap.ui.define([
 						sorter: new sap.ui.model.Sorter("Name")
 					});
 
-					this.getView().byId("filialeInputDescr").bindElement({
-						model: "ZSRSDATAFEED",
-						path: "/FilialenSet('" + oResponse.Filiale + "')"
-					});
+					// save the filiale for the next screens
 
-					this.getView().byId("filialeInput").setValue(oResponse.Filiale);
+					this.setFilialeData(oResponse);
 
 				}.bind(this)
 			});
+
 		},
 
 		onSelectionChange: function (oEvent) {
 			var oList = oEvent.getSource(),
-				bSelected = oEvent.getParameter("selected");
+				bSelected = oEvent.getParameter("selected"),
+				oData = oEvent.getSource().getBindingContext().getObject();
 
 			// skip navigation when deselecting an item in multi selection mode
 			if (!(oList.getMode() === "MultiSelect" && !bSelected)) {
@@ -69,13 +49,56 @@ sap.ui.define([
 				// enable the filter before selecting
 				this.getView().byId("tabGrob").setEnabled(true);
 				this.getView().byId("idIconTabBar").setSelectedKey("Grob");
+
+				// set the binding for the selPP element 
+
+				var oLoccoFilter = new sap.ui.model.Filter("Locco",
+					sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco);
+
+				this.getView().byId("selPP").bindItems({
+					path: "/FlaechenSet",
+					filters: [oLoccoFilter],
+					factory: this.selPPFactory.bind(this),
+					sorter: new sap.ui.model.Sorter("Name"),
+					events: {
+						dataReceived: function (oData2) {
+
+							// position on the Id that was chosen 
+
+							for (var x = 0; x < this.getView().byId("selPP").getItems().length; x++) {
+								var item = this.getView().byId("selPP").getItems()[x];
+								if (item.getKey() === oData.Id) {
+									this.getView().byId("selPP").setSelectedItem(item);
+									this.loadGrob(oData.Id);
+								}
+							}
+
+						}.bind(this)
+					}
+				});
+
+				// if there is at least on
+
 			}
+		},
+
+		setFilialeData: function (oData) {
+
+			this.getView().getModel("local").setProperty("/Filiale", oData.Filiale);
+			this.getView().getModel("ZSRSDATAFEED").read("/FilialenSet('" + oData.Filiale + "')", {
+				success: function (oResponse2) {
+					this.getView().getModel("local").setProperty("/FilialeDescr", oResponse2.Name1);
+				}.bind(this)
+			});
+
+			this.getView().byId("filialeInput").setValue(oData.Filiale);
 		},
 
 		onFilialeSelected: function (oEvent) {
 			var filiale = oEvent.getParameters().filiale;
-			this.getView().byId("filialeInput").setValue(filiale);
-			this.getView().byId("filialeInputDescr").setText(this.getModel("ZSRSDATAFEED").getProperty("/FilialenSet('" + filiale + "')").Name1);
+			this.setFilialeData({
+				"Filiale": filiale
+			});
 
 			this.getOwnerComponent().locco = this.getModel("ZSRSDATAFEED").getProperty("/FilialenSet('" + filiale + "')").Locco;
 
@@ -91,15 +114,19 @@ sap.ui.define([
 
 		},
 
-		createSortBerContent: function (sId, oContext) {
-			var sortber = oContext.getProperty('Sortber');
-			var sortberText = new sap.m.Text();
-			sortberText.bindElement({
-				path: "/SortimentSet('" + sortber + "')"
-			});
-			sortberText.bindProperty("text", "Descr");
-			return sortberText;
+		onCalWeekChange: function (oEvent) {
+			var a = 1;
 		},
+		/*		
+				createSortBerContent: function (sId, oContext) {
+					var sortber = oContext.getProperty('Sortber');
+					var sortberText = new sap.m.Text();
+					sortberText.bindElement({
+						path: "/SortimentSet('" + sortber + "')"
+					});
+					sortberText.bindProperty("text", "Descr");
+					return sortberText;
+				},*/
 
 		onTabbarSelect: function (oEvent) {
 			if (oEvent.getParameters().key === "Ueber") {
@@ -135,6 +162,25 @@ sap.ui.define([
 			oItemTemplate.addCell(sortberText);
 
 			return oItemTemplate;
+		},
+
+		selPPFactory: function (sId, oContext) {
+
+			var oItemTemplate = new sap.ui.core.Item({
+				key: "{Id}",
+				text: "{Name}"
+			});
+
+			return oItemTemplate;
+		},
+		
+		onPPSelected:function(oEvent) {
+			this.loadGrob(oEvent.getParameters().selectedItem.getKey());
+		},
+		
+		loadGrob: function(oId) {
+			console.log(oId);
 		}
+
 	});
 });

@@ -1,0 +1,66 @@
+<core:FragmentDefinition xmlns:mvc="sap.ui.core.mvc" xmlns:html="http://www.w3.org/1999/xhtml" displayBlock="true" xmlns="sap.m"
+	xmlns:semantic="sap.m.semantic" xmlns:ism="zism.zismlibrary.controls" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" xmlns:grid="sap.ui.layout.cssgrid">
+	<FlexBox direction="Row" alignItems="Center" class="sapUiResponsiveMargin">
+		<items>
+			<Label text="{i18n>FilialenAuswahl}" labelFor="filialeInput" class="sapUiSmallMargin"/>
+			<Text id="filialeInputGrob" text='{local>/Filiale}'/>
+			<Text id="filialeInputDescrGrob" text="{local>/FilialeDescr}" class="sapUiSmallMargin"/>
+			<DatePicker id="calenderAuswahlGrob" placeholder="{i18n>Kalenderwoche}" displayFormat="w.YYYY" class="sapUiSmallMargin"
+				value="{local>/CalWeek}" editable="false"/>
+			<Label text="{i18n>PPFlaeche}" class="sapUiSmallMargin"/>
+			<Select id="selPP" enabled="true" forceSelection="false" selectedKey="{local>/selectedPPF}" change="onPPSelected" class="sapUiSmallMargin"></Select>
+		</items>
+	</FlexBox>
+	<l:Splitter>
+		<IconTabBar id="idSelAngTabBar" class="sapUiResponsiveContentPadding" expanded="true" expandable="false" select="onAngebotBarSelect">
+			<items>
+				<IconTabFilter text="Angebote" key="Angebote">
+					<Table id="AngeboteTable" inset="false">
+						<columns>
+							<Column width="20%">
+								<Text text="Angebot"/>
+							</Column>
+							<Column width="10%">
+								<Text text="Status"/>
+							</Column>
+							<Column width="30%">
+								<Text text="Kampagne"/>
+							</Column>
+							<Column width="10%">
+								<Text text="Prognose"/>
+							</Column>
+						</columns>
+					</Table>
+				</IconTabFilter>
+				<IconTabFilter text="Artikel ohne Angebote" key="Artikel">
+					<Text text="to be done"/>
+				</IconTabFilter>
+			</items>
+			<layoutData>
+				<l:SplitterLayoutData size="50%" resizable="false"/>
+			</layoutData>
+		</IconTabBar>
+		<Table id="StellPlatzTable1" inset="false">
+			<columns>
+				<Column width="20%">
+					<Text text="Angebot"/>
+				</Column>
+				<Column width="10%">
+					<Text text="Status"/>
+				</Column>
+				<Column width="30%">
+					<Text text="Kampagne"/>
+				</Column>
+				<Column width="5%">
+					<Text text="Wt"/>
+				</Column>
+			</columns>
+		
+		<layoutData>
+			<l:SplitterLayoutData size="50%" resizable="false"/>
+		</layoutData>
+		</Table>
+ 
+</l:Splitter>
+</core:FragmentDefinition>

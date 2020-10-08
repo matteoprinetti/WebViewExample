@@ -42,6 +42,22 @@ sap.ui.define([
 
 			this.setModel(new sap.ui.model.json.JSONModel("/services/userapi/currentUser"), "user");
 
+			// local model for data
+			
+			this.setModel(new sap.ui.model.json.JSONModel(), "local");
+			
+					// also set the date of the picker to today 
+
+			var today = new Date();
+			var dd = String(today.getDate()).padStart(2, '0');
+			var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+			var yyyy = today.getFullYear();
+
+			today = dd + '.' + mm + '.' + yyyy;
+
+			this.getModel("local").setProperty("/CalWeek", today);
+			
+			
 			// size limit of Suggestions and error Handler
 			// (assuming a oData provider is set as default model)
 			if (this.getModel() !== undefined) {

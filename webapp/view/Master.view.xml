@@ -9,9 +9,10 @@
 							<items>
 								<Label text="{i18n>FilialenAuswahl}" labelFor="filialeInput" class="sapUiSmallMargin"/>
 								<ism:FilialeChooser id="filialeInput" onFilialeSelected="onFilialeSelected"/>
-								<Text id="filialeInputDescr" text="{ZSRSDATAFEED>Name1}" class="sapUiSmallMargin"/>
+								<Text id="filialeInputDescr" text="{local>/FilialeDescr}" class="sapUiSmallMargin"/>
 								<Label text="{i18n>Kalenderwoche}" labelFor="calenderAuswahl" class="sapUiSmallMargin"/>
-								<DatePicker id="calenderAuswahl" placeholder="{i18n>Kalenderwoche}" displayFormat="w.YYYY" class="sapUiSmallMargin"/>
+								<DatePicker id="calenderAuswahl" placeholder="{i18n>Kalenderwoche}" displayFormat="w.YYYY" class="sapUiSmallMargin"
+								   value="{local>/CalWeek}" change="onCalWeekChange" />
 							</items>
 						</FlexBox>
 						<Table id="flTable" inset="false" 
@@ -39,7 +40,9 @@
 						</Table>
 					</IconTabFilter>
 					<IconTabSeparator icon="sap-icon://open-command-field"/>
-					<IconTabFilter id="tabGrob" text="Grobplanung" key="Grob" enabled="false"/>
+					<IconTabFilter id="tabGrob" text="Grobplanung" key="Grob" enabled="false">
+						<core:Fragment fragmentName= "zpoly.zpolyplanung.view.GrobPlanung" type="XML"/>
+						</IconTabFilter>
 					<IconTabSeparator icon="sap-icon://open-command-field"/>
 					<IconTabFilter id="tabDetail" text="Detailplanung" key="Detail" enabled="false"/>
 				</items>
