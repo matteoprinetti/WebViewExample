@@ -431,12 +431,17 @@ sap.ui.define([
 
 						_table.addItem(_row2);
 
+						_table.addDragDropConfig(new sap.ui.core.dnd.DropInfo({ drop: this.onDragDrop}));
 						_box.addItem(_table);
 					}
 
-				}
+				}.bind(this)
 			});
 
+		},
+		
+		onDragDrop: function(oEvent) {
+			var a = 1;
 		}
 
 	});
