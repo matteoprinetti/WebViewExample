@@ -11,7 +11,7 @@
 								<ism:FilialeChooser id="filialeInput" onFilialeSelected="onFilialeSelected"/>
 								<Text id="filialeInputDescr" text="{local>/FilialeDescr}" class="sapUiSmallMargin"/>
 								<Label text="{i18n>Kalenderwoche}" labelFor="calenderAuswahl" class="sapUiSmallMargin"/>
-								<DatePicker id="calenderAuswahl" placeholder="{i18n>Kalenderwoche}" displayFormat="w.YYYY" class="sapUiSmallMargin"
+								<DatePicker id="calenderAuswahl" placeholder="{i18n>Kalenderwoche}" displayFormat="w.YYYY" valueFormat="wwYYYY" class="sapUiSmallMargin"
 								   value="{local>/CalWeek}" change="onCalWeekChange" />
 							</items>
 						</FlexBox>

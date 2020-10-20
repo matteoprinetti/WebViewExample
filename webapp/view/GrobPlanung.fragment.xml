@@ -6,7 +6,7 @@
 			<Label text="{i18n>FilialenAuswahl}" labelFor="filialeInput" class="sapUiSmallMargin"/>
 			<Text id="filialeInputGrob" text='{local>/Filiale}'/>
 			<Text id="filialeInputDescrGrob" text="{local>/FilialeDescr}" class="sapUiSmallMargin"/>
-			<DatePicker id="calenderAuswahlGrob" placeholder="{i18n>Kalenderwoche}" displayFormat="w.YYYY" class="sapUiSmallMargin"
+			<DatePicker id="calenderAuswahlGrob" placeholder="{i18n>Kalenderwoche}" displayFormat="w.YYYY" class="sapUiSmallMargin" 
 				value="{local>/CalWeek}" editable="false"/>
 			<Label text="{i18n>PPFlaeche}" class="sapUiSmallMargin"/>
 			<Select id="selPP" enabled="true" forceSelection="false" selectedKey="{local>/selectedPPF}" change="onPPSelected" class="sapUiSmallMargin"></Select>
@@ -18,16 +18,16 @@
 				<IconTabFilter text="Angebote" key="Angebote">
 					<Table id="AngeboteTable" inset="false">
 						<columns>
-							<Column width="20%">
+							<Column width="30%">
 								<Text text="Angebot"/>
 							</Column>
-							<Column width="10%">
+							<Column width="20%">
 								<Text text="Status"/>
 							</Column>
-							<Column width="30%">
+							<Column width="20%">
 								<Text text="Kampagne"/>
 							</Column>
-							<Column width="10%">
+							<Column width="30%">
 								<Text text="Prognose"/>
 							</Column>
 						</columns>
@@ -41,26 +41,12 @@
 				<l:SplitterLayoutData size="50%" resizable="false"/>
 			</layoutData>
 		</IconTabBar>
-		<Table id="StellPlatzTable1" inset="false">
-			<columns>
-				<Column width="20%">
-					<Text text="Angebot"/>
-				</Column>
-				<Column width="10%">
-					<Text text="Status"/>
-				</Column>
-				<Column width="30%">
-					<Text text="Kampagne"/>
-				</Column>
-				<Column width="5%">
-					<Text text="Wt"/>
-				</Column>
-			</columns>
+		<VBox id="itemsBox">
 		
 		<layoutData>
 			<l:SplitterLayoutData size="50%" resizable="false"/>
 		</layoutData>
-		</Table>
+		</VBox>
  
 </l:Splitter>
 </core:FragmentDefinition>

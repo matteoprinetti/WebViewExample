@@ -1,1 +1,21 @@
 /* Enter your custom styles here */
+
+.zpolytableblack {
+	border-top-width: 3px;
+    border-top-color: black;
+    border-top-style: solid;
+    
+    border-bottom-width: 3px;
+    border-bottom-color: black;
+    border-bottom-style: solid;
+    
+    border-left-width: 3px;
+    border-left-color: black;
+    border-left-style: solid;
+    
+    border-right-width: 3px;
+    border-right-color: black;
+    border-right-style: solid;
+    
+    
+}

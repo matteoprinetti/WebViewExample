@@ -34,6 +34,13 @@
 				"settings": {
 					"localUri": "localService/ZSRSDATAFEED_SRV/metadata.xml"
 				}
+			},
+			"ZISMAP_OFR_SRV": {
+				"uri": "/sap/opu/odata/sap/ZISMAP_OFR_SRV/",
+				"type": "OData",
+				"settings": {
+					"localUri": "localService/ZISMAP_OFR_SRV/metadata.xml"
+				}
 			}
 		}
 	},
@@ -53,7 +60,10 @@
 			"tablet": true,
 			"phone": true
 		},
-		"supportedThemes": ["sap_hcb", "sap_bluecrystal"]
+		"supportedThemes": [
+			"sap_hcb",
+			"sap_bluecrystal"
+		]
 	},
 	"sap.ui5": {
 		"config": {
@@ -114,12 +124,24 @@
 				},
 				"dataSource": "ZSRSDATAFEED_SRV",
 				"preload": true
+			},
+			"Offers": {
+				"type": "sap.ui.model.odata.v2.ODataModel",
+				"settings": {
+					"defaultOperationMode": "Server",
+					"defaultBindingMode": "OneWay",
+					"defaultCountMode": "Request"
+				},
+				"dataSource": "ZISMAP_OFR_SRV",
+				"preload": true
 			}
 		},
 		"resources": {
-			"css": [{
-				"uri": "css/style.css"
-			}]
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
 		},
 		"routing": {
 			"config": {
@@ -134,11 +156,15 @@
 					"target": []
 				}
 			},
-			"routes": [{
-				"name": "TargetMaster",
-				"pattern": "",
-				"target": ["TargetMaster"]
-			}],
+			"routes": [
+				{
+					"name": "TargetMaster",
+					"pattern": "",
+					"target": [
+						"TargetMaster"
+					]
+				}
+			],
 			"targets": {
 				"TargetMaster": {
 					"viewType": "XML",
