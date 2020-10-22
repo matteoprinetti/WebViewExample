@@ -1,6 +1,9 @@
 sap.ui.define([
-	"./BaseController"
-], function (BaseController) {
+	"./BaseController",
+	"zpoly/zpolyplanung/controls/StellPlatzItemTable",
+	"zpoly/zpolyplanung/factories/FlaecheItemFactory",
+		"zpoly/zpolyplanung/factories/OffersItemFactory"
+], function (BaseController,StellPlatzItemTable,FlaecheItemFactory,OffersItemFactory) {
 	"use strict";
 
 	return BaseController.extend("zpoly.zpolyplanung.controller.Master", {
@@ -25,7 +28,7 @@ sap.ui.define([
 					this.getView().byId("flTable").bindItems({
 						path: "/FlaechenSet",
 						filters: [oLoccoFilter],
-						factory: this.flaecheItemFactory.bind(this),
+						factory: FlaecheItemFactory.factory.bind(this),
 						sorter: new sap.ui.model.Sorter("Name")
 					});
 
@@ -43,6 +46,17 @@ sap.ui.define([
 		},
 
 		onSelectionChange: function (oEvent) {
+			
+			
+		var selPPFactory = function (sId, oContext) {
+
+			var oItemTemplate = new sap.ui.core.Item({
+				key: "{Id}",
+				text: "{Name}"
+			});
+
+			return oItemTemplate;
+		};
 			var oList = oEvent.getSource(),
 				bSelected = oEvent.getParameter("selected"),
 				oData = oEvent.getSource().getBindingContext().getObject();
@@ -62,7 +76,7 @@ sap.ui.define([
 				this.getView().byId("selPP").bindItems({
 					path: "/FlaechenSet",
 					filters: [oLoccoFilter],
-					factory: this.selPPFactory.bind(this),
+					factory: selPPFactory.bind(this),
 					sorter: new sap.ui.model.Sorter("Name"),
 					events: {
 						dataReceived: function (oData2) {
@@ -139,85 +153,14 @@ sap.ui.define([
 			}
 		},
 
-		flaecheItemFactory: function (sId, oContext) {
 
-			var oItemTemplate = new sap.m.ColumnListItem({
-				type: "Navigation",
-				title: "{Name}",
-				press: this.onSelectionChange.bind(this)
-			});
-			oItemTemplate.addCell(new sap.m.Text({
-				text: "{Id}"
-			}));
-			oItemTemplate.addCell(new sap.m.Text({
-				text: "{Name}"
-			}));
-			oItemTemplate.addCell(new sap.m.Text({
-				text: "{Belegung}" // TODO this is calculated
-			}));
-			var sortberText = new sap.m.Text();
-
-			// bind only if there is a valid Sortber (which is not the case for Promofläche)
-			if (oContext.getProperty('Sortber') !== "") {
-				sortberText.bindElement({
-					path: "/SortimentSet('" + oContext.getProperty('Sortber') + "')"
-				});
-				sortberText.bindProperty("text", "Name");
-			}
-			oItemTemplate.addCell(sortberText);
-
-			return oItemTemplate;
-		},
-
-		selPPFactory: function (sId, oContext) {
-
-			var oItemTemplate = new sap.ui.core.Item({
-				key: "{Id}",
-				text: "{Name}"
-			});
-
-			return oItemTemplate;
-		},
 
 		onPPSelected: function (oEvent) {
-			this.loadGrob(oEvent.getParameters().selectedItem.getKey());
+			this.loadGrob(oEvent.getParameters().selectedItem.getKey(),this.getView().byId("calenderAuswahlGrob").getValue());
 		},
 
 		loadGrob: function (oId, oWeek) {
-
-			var factory = function (sId, oContext) {
-
-				var itemFactory = new sap.m.ColumnListItem({
-					type: "Inactive"
-				});
-
-				itemFactory.addCell(new sap.m.Label({
-					text: oContext.getObject().ZzExtOfrId + " " + oContext.getObject().OfrName
-				}));
-
-				itemFactory.addCell(new sap.m.Label({
-					text: oContext.getObject().OfrSubStateDescr
-				}));
-
-				var campaign = "";
-				var campaigns = this.getModel("Offers").getProperty(oContext.getPath() + "/toCampaign");
-
-				// get the first campaign in case it has more - not sure if this is ok
-				for (var x in campaigns) {
-					campaign = this.getModel("Offers").getProperty("/" + campaigns[x]);
-					break;
-				}
-				itemFactory.addCell(new sap.m.Label({
-					text: campaign.CampaignName
-				}));
-
-				itemFactory.addCell(new sap.m.Label({
-					text: oContext.getObject().ZzUmsbudget.replace(".00", "")
-				}));
-
-				return itemFactory;
-			};
-
+ 
 			var oLoccoFilter = new sap.ui.model.Filter("Locco",
 				sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco);
 
@@ -228,7 +171,7 @@ sap.ui.define([
 				path: "Offers>/OfrHeadSet",
 				filters: [oLoccoFilter, oWeekFilter],
 				//template: itemTemplate,
-				factory: factory.bind(this),
+				factory: OffersItemFactory.factory.bind(this),
 				parameters: {
 					expand: "toCampaign"
 				}
@@ -239,210 +182,40 @@ sap.ui.define([
 			var _box = this.getView().byId("itemsBox");
 			_box.removeAllItems();
 
+			 
 			this.getModel().read("/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz", {
 				success: function (oData) {
 					for (var x in oData.results) {
 						var _data = oData.results[x];
-						// add a Header 
 
-						var _vbox = new sap.m.FlexBox({
-							direction: "Row",
-							alignItems: "Center"
-						}).addStyleClass("sapUiTinyMargin");
-						_vbox.addItem(new sap.m.Label({
-							text: "Stellplatz: "
-						}).addStyleClass("sapUiSmallMargin"));
-						_vbox.addItem(new sap.m.Label({
-							text: _data.Name
-						}).addStyleClass("sapUiSmallMargin"));
-						_vbox.addItem(new sap.m.Label({
-							text: "WT: "
-						}).addStyleClass("sapUiSmallMargin"));
-						_vbox.addItem(new sap.m.Label({
-							text: _data.WtName
-						}).addStyleClass("sapUiSmallMargin"));
-						_box.addItem(_vbox);
+						//var _table = new sap.m.Table().addStyleClass("zpolytableblack");
+					 
+						var _table = new StellPlatzItemTable({ container: _box });
+						
+						_table.setHeaderData(_data);
+						
+						//this.addDetailTable(_table, _box, _data); // Header and co.
 
-						var _vbox2 = new sap.m.FlexBox({
-							direction: "Row",
-							alignItems: "Center"
-						}).addStyleClass("sapUiTinyMargins");
-						_vbox2.addItem(new sap.m.Label({
-							text: "Anzahl: "
-						}).addStyleClass("sapUiSmallMargin"));
-						_vbox2.addItem(new sap.m.Label({
-							text: _data.Anzahl
-						}).addStyleClass("sapUiSmallMargin"));
-						_vbox2.addItem(new sap.m.Label({
-							text: "Belegung"
-						}).addStyleClass("sapUiSmallMargin"));
-						_vbox2.addItem(new sap.m.Label({
-							text: "20%"
-						}).addStyleClass("sapUiSmallMargin"));
-
-						_box.addItem(_vbox2);
-						var _table = new sap.m.Table().addStyleClass("zpolytableblack");
-						_table.addColumn(new sap.m.Column({
-							header: new sap.m.Text({
-								text: "Angebot"
-							})
-						}));
-						_table.addColumn(new sap.m.Column({
-							header: new sap.m.Text({
-								text: "Status"
-							})
-						}));
-						_table.addColumn(new sap.m.Column({
-							header: new sap.m.Text({
-								text: "Campagne"
-							})
-						}));
-						_table.addColumn(new sap.m.Column({
-							header: new sap.m.Text({
-								text: "WT"
-							}),
-							width: "20%"
-						}));
-						_table.addColumn(new sap.m.Column({
-							header: new sap.m.Text({
-								text: "H"
-							}),
-							width: "20%"
-						}));
-						_table.addColumn(new sap.m.Column({
-							header: new sap.m.Text({
-								text: "G"
-							}),
-							width: "10%"
-						}));
-						_table.addColumn(new sap.m.Column({
-							header: new sap.m.Text({
-								text: "ST"
-							}),
-							width: "5%"
-						}));
-
-						// Test Zeile...
-
-						var _row1 = new sap.m.ColumnListItem({
-							type: "Inactive"
-						});
-						_row1.addCell(new sap.m.Label({
-							text: "Drei für Zwei"
-						}));
-						_row1.addCell(new sap.m.Label({
-							text: "Genehmigt"
-						}));
-						_row1.addCell(new sap.m.Label({
-							text: "Unser M"
-						}));
-
-						var _sel1 = new sap.m.Select().addStyleClass("sapUiTinyMargins");
-						_sel1.addItem(new sap.ui.core.Item({
-							key: "1",
-							text: "1"
-						}));
-						_sel1.addItem(new sap.ui.core.Item({
-							key: "2",
-							text: "2"
-						}));
-						_sel1.addItem(new sap.ui.core.Item({
-							key: "3",
-							text: "3"
-						}));
-						_row1.addCell(_sel1);
-
-						var _sel2 = new sap.m.Select().addStyleClass("sapUiTinyMargins");
-						_sel2.addItem(new sap.ui.core.Item({
-							key: "1",
-							text: "1"
-						}));
-						_sel2.addItem(new sap.ui.core.Item({
-							key: "2",
-							text: "2"
-						}));
-						_sel2.addItem(new sap.ui.core.Item({
-							key: "3",
-							text: "3"
-						}));
-						_row1.addCell(_sel2);
-
-						_row1.addCell(new sap.m.Label({
-							text: "6"
-						}));
-
-						_row1.addCell(new sap.m.Label({
-							text: "X"
-						}));
-
-						_table.addItem(_row1);
-
-						var _row2 = new sap.m.ColumnListItem({
-							type: "Inactive"
-						});
-						_row2.addCell(new sap.m.Label({
-							text: "Drei für Zwei"
-						}));
-						_row2.addCell(new sap.m.Label({
-							text: "Genehmigt"
-						}));
-						_row2.addCell(new sap.m.Label({
-							text: "Unser M"
-						}));
-
-						var _sel3 = new sap.m.Select().addStyleClass("sapUiTinyMargins");
-						_sel3.addItem(new sap.ui.core.Item({
-							key: "1",
-							text: "1"
-						}));
-						_sel3.addItem(new sap.ui.core.Item({
-							key: "2",
-							text: "2"
-						}));
-						_sel3.addItem(new sap.ui.core.Item({
-							key: "3",
-							text: "3"
-						}));
-						_row2.addCell(_sel3);
-
-						var _sel4 = new sap.m.Select().addStyleClass("sapUiTinyMargins");
-
-						_sel4.addItem(new sap.ui.core.Item({
-							key: "1",
-							text: "1"
-						}));
-						_sel4.addItem(new sap.ui.core.Item({
-							key: "2",
-							text: "2"
-						}));
-						_sel4.addItem(new sap.ui.core.Item({
-							key: "3",
-							text: "3"
-						}));
-						_row2.addCell(_sel4);
-
-						_row2.addCell(new sap.m.Label({
-							text: "3"
-						}));
-
-						_row2.addCell(new sap.m.Label({
-							text: " "
-						}));
-
-						_table.addItem(_row2);
-
-						_table.addDragDropConfig(new sap.ui.core.dnd.DropInfo({ drop: this.onDragDrop}));
+						// bind the items with a custom binding using a filter on key and week
+						
+						_table.setCustomBinding( { Key: _data.Key, Week: oWeek }); 
+						
+				
+						
 						_box.addItem(_table);
 					}
 
 				}.bind(this)
 			});
 
-		},
+		} ,
 		
-		onDragDrop: function(oEvent) {
-			var a = 1;
+		onStellPlatzItemDelete: function(oEvent) {
+			// dragging here means deleting from the stellplatzitem table
+			this.getModel().remove(oEvent.getParameters().draggedControl.getBindingContextPath(),{});         
+			
 		}
+
 
 	});
 });

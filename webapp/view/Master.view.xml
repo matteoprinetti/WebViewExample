@@ -23,8 +23,8 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column width="16em">
-									<Text text="Id"/>
+								<Column width="16em" visible="false">
+									<Text text="Id" />
 								</Column>
 								<Column width="16em">
 									<Text text="Bezeichnung"/>
