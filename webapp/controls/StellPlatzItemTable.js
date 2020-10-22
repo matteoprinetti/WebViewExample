@@ -150,6 +150,7 @@ sap.ui.define([
 
 			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
 			var _angebot_or_article_key = "";
+			var _matnr = "";
 			var _article_flag = "";
 
 			if (_path.indexOf("/OfrHeadSet") >= 0) { // we just dropped an Angebot
@@ -159,7 +160,9 @@ sap.ui.define([
 
 			if (_path.indexOf("/ArtikelsucheSet") >= 0) { // we just dropped an Artikel
 				_angebot_or_article_key = this.getModel("ZSRSDATAFEED").getProperty(_path).matnr;
+				_matnr = this.getModel("ZSRSDATAFEED").getProperty(_path).matnr;
 				_article_flag = "X";
+				
 			}
 
 			if(_angebot_or_article_key ==="") return; // we dropped something but we cannot handle it (for example itself)
@@ -172,7 +175,7 @@ sap.ui.define([
 				Woche: this.getWeek(),
 				ArtikelFlag: _article_flag === 'X' ? true : false,
 				Angebot: _angebot_or_article_key,
-				Matnr: _angebot_or_article_key
+				Matnr: _matnr
 			};
 
 			var _objectpath = "/" + this.getModel().createKey("PlanungItemSet", _objectkey);
