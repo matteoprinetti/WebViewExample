@@ -2,8 +2,8 @@ sap.ui.define([
 	"./BaseController",
 	"zpoly/zpolyplanung/controls/StellPlatzItemTable",
 	"zpoly/zpolyplanung/factories/FlaecheItemFactory",
-		"zpoly/zpolyplanung/factories/OffersItemFactory"
-], function (BaseController,StellPlatzItemTable,FlaecheItemFactory,OffersItemFactory) {
+	"zpoly/zpolyplanung/factories/OffersItemFactory"
+], function (BaseController, StellPlatzItemTable, FlaecheItemFactory, OffersItemFactory) {
 	"use strict";
 
 	return BaseController.extend("zpoly.zpolyplanung.controller.Master", {
@@ -45,18 +45,57 @@ sap.ui.define([
 
 		},
 
-		onSelectionChange: function (oEvent) {
-			
-			
-		var selPPFactory = function (sId, oContext) {
+		onArtikelSearch: function (oEvent) {
 
-			var oItemTemplate = new sap.ui.core.Item({
-				key: "{Id}",
-				text: "{Name}"
+			var sValue = oEvent.getParameters().query;
+			var aFilter = [];
+			if (sValue.match(/^[0-9]+$/)) {
+				aFilter.push(new sap.ui.model.Filter("matnr", sap.ui.model.FilterOperator.StartsWith, sValue));
+			} else {
+				aFilter.push(new sap.ui.model.Filter("maktx", sap.ui.model.FilterOperator.StartsWith, sValue));
+			}
+
+			var oItemTemplate = new sap.m.CustomListItem();
+			var box = new sap.m.HBox();
+
+			/*var producticon = new sap.ui.core.Icon();
+			var producticon = new sap.ui.core.Icon({
+				src: {
+					path: "MEDIAEXPORT>/HauptBildSet(Artnr='" + oValue.substr(oValue.length - 12) +
+							"',Format='web240x310')/$value'"
+					}
+				}
+			);*/
+			
+			//box.addItem(producticon);
+
+			box.addItem(new sap.m.ObjectIdentifier({
+				title: "{ZSRSDATAFEED>matnr}",
+				text: "{ZSRSDATAFEED>maktx}"
+			}).addStyleClass("sapUiSmallMargin"));
+
+			oItemTemplate.addContent(box);
+
+			this.getView().byId("idArtikelList").bindItems({
+				path: "/ArtikelsucheSet",
+				filters: aFilter,
+				model: "ZSRSDATAFEED",
+				template: oItemTemplate
 			});
 
-			return oItemTemplate;
-		};
+		},
+
+		onSelectionChange: function (oEvent) {
+
+			var selPPFactory = function (sId, oContext) {
+
+				var oItemTemplate = new sap.ui.core.Item({
+					key: "{Id}",
+					text: "{Name}"
+				});
+
+				return oItemTemplate;
+			};
 			var oList = oEvent.getSource(),
 				bSelected = oEvent.getParameter("selected"),
 				oData = oEvent.getSource().getBindingContext().getObject();
@@ -153,14 +192,12 @@ sap.ui.define([
 			}
 		},
 
-
-
 		onPPSelected: function (oEvent) {
-			this.loadGrob(oEvent.getParameters().selectedItem.getKey(),this.getView().byId("calenderAuswahlGrob").getValue());
+			this.loadGrob(oEvent.getParameters().selectedItem.getKey(), this.getView().byId("calenderAuswahlGrob").getValue());
 		},
 
 		loadGrob: function (oId, oWeek) {
- 
+
 			var oLoccoFilter = new sap.ui.model.Filter("Locco",
 				sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco);
 
@@ -182,40 +219,45 @@ sap.ui.define([
 			var _box = this.getView().byId("itemsBox");
 			_box.removeAllItems();
 
-			 
 			this.getModel().read("/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz", {
 				success: function (oData) {
 					for (var x in oData.results) {
 						var _data = oData.results[x];
 
 						//var _table = new sap.m.Table().addStyleClass("zpolytableblack");
-					 
-						var _table = new StellPlatzItemTable({ container: _box });
-						
+
+						var _table = new StellPlatzItemTable({
+							container: _box
+						});
+
 						_table.setHeaderData(_data);
-						
+
 						//this.addDetailTable(_table, _box, _data); // Header and co.
 
 						// bind the items with a custom binding using a filter on key and week
-						
-						_table.setCustomBinding( { Key: _data.Key, Week: oWeek }); 
-						
-				
-						
+
+						_table.setCustomBinding({
+							Key: _data.Key,
+							Week: oWeek
+						});
+
 						_box.addItem(_table);
 					}
 
 				}.bind(this)
 			});
 
-		} ,
-		
-		onStellPlatzItemDelete: function(oEvent) {
-			// dragging here means deleting from the stellplatzitem table
-			this.getModel().remove(oEvent.getParameters().draggedControl.getBindingContextPath(),{});         
-			
-		}
+		},
 
+		onStellPlatzItemDelete: function (oEvent) {
+			// dragging here means deleting from the stellplatzitem table
+			// but only if this really comes from there..
+			
+			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
+			if(_path.indexOf("/PlanungItemSet") >=0 )		// prevent self-drop
+					this.getModel().remove(_path, {});
+
+		}
 
 	});
 });

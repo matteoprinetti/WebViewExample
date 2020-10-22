@@ -41,6 +41,13 @@
 				"settings": {
 					"localUri": "localService/ZISMAP_OFR_SRV/metadata.xml"
 				}
+			},
+			"ZR_MEDIAEXPORT_SRV": {
+				"uri": "/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/",
+				"type": "OData",
+				"settings": {
+					"localUri": "localService/ZR_MEDIAEXPORT_SRV/metadata.xml"
+				}
 			}
 		}
 	},
@@ -132,6 +139,16 @@
 					"defaultCountMode": "Request"
 				},
 				"dataSource": "ZISMAP_OFR_SRV",
+				"preload": true
+			},
+			"MEDIAEXPORT": {
+				"type": "sap.ui.model.odata.v2.ODataModel",
+				"settings": {
+					"defaultOperationMode": "Server",
+					"defaultBindingMode": "OneWay",
+					"defaultCountMode": "Request"
+				},
+				"dataSource": "ZR_MEDIAEXPORT_SRV",
 				"preload": true
 			}
 		},

@@ -1,0 +1,26 @@
+<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+	xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData" Version="1.0">
+	<edmx:DataServices m:DataServiceVersion="2.0">
+		<Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="ZR_MEDIAEXPORT_SRV" xml:lang="de" sap:schema-version="1">
+			<EntityType Name="ArtikelBuild" m:HasStream="true" sap:label="M-API" sap:content-version="1">
+				<Key><PropertyRef Name="Artnr"/><PropertyRef Name="Stack"/></Key><Property Name="MimeType" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="MimeType" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Artnr" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Artikelnummer" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Stack" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Stack" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="HauptBild" m:HasStream="true" sap:label="PIM" sap:content-version="1">
+				<Key><PropertyRef Name="Artnr"/><PropertyRef Name="Format"/></Key><Property Name="MimeType" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Mimetype" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Artnr" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Artikelnummer" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Format" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Format" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="Angebot" m:HasStream="true" sap:content-version="1">
+				<Key><PropertyRef Name="AngebotNr"/></Key><Property Name="MimeType" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Mimetype" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="AngebotNr" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="AngebotNr" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityContainer Name="ZR_MEDIAEXPORT_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx"><EntitySet Name="ArtikelBildSet" EntityType="ZR_MEDIAEXPORT_SRV.ArtikelBuild" sap:creatable="false" sap:updatable="false"
+				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="HauptBildSet" EntityType="ZR_MEDIAEXPORT_SRV.HauptBild" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="AngebotSet" EntityType="ZR_MEDIAEXPORT_SRV.Angebot" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:addressable="false" sap:content-version="1"/></EntityContainer><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self"
+				href="https://dgm.migros.ch:1490/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/$metadata"/><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="latest-version"
+				href="https://dgm.migros.ch:1490/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/$metadata"/></Schema>
+	</edmx:DataServices>
+</edmx:Edmx>

@@ -1,6 +1,6 @@
 <core:FragmentDefinition xmlns:mvc="sap.ui.core.mvc" xmlns:html="http://www.w3.org/1999/xhtml" displayBlock="true" xmlns="sap.m"
 	xmlns:semantic="sap.m.semantic" xmlns:ism="zism.zismlibrary.controls" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core"
-	xmlns:l="sap.ui.layout" xmlns:grid="sap.ui.layout.cssgrid" xmlns:dnd="sap.ui.core.dnd" 		xmlns:uxap="sap.uxap">
+	xmlns:l="sap.ui.layout" xmlns:grid="sap.ui.layout.cssgrid" xmlns:dnd="sap.ui.core.dnd" xmlns:uxap="sap.uxap">
 	<FlexBox direction="Row" alignItems="Center" class="sapUiResponsiveMargin">
 		<items>
 			<Label text="{i18n>FilialenAuswahl}" labelFor="filialeInput" class="sapUiSmallMargin"/>
@@ -37,18 +37,26 @@
 						</columns>
 					</Table>
 				</IconTabFilter>
-				<IconTabFilter text="Artikel ohne Angebote" key="Artikel">
-				
+				<IconTabFilter text="Artikel ohne Angebote" key="Artikel" >
+					<SearchField width="90%" class="sapUiSmallMargin" search="onArtikelSearch"/>
+					<ScrollContainer  height ="500px" width="100%" vertical="true" focusable="true">
+						<List id="idArtikelList" >
+							<dragDropConfig>
+								<dnd:DragInfo groupName="itemsgroup" sourceAggregation="items"/>
+								<dnd:DropInfo drop="onStellPlatzItemDelete"/>
+							</dragDropConfig>
+						</List>
+					</ScrollContainer>
 				</IconTabFilter>
 			</items>
 			<layoutData>
 				<l:SplitterLayoutData size="50%" resizable="false"/>
 			</layoutData>
 		</IconTabBar>
-		<HBox id="itemsBox">
+		<VBox id="itemsBox">
 			<layoutData>
 				<l:SplitterLayoutData size="50%" resizable="false"/>
 			</layoutData>
-		</HBox>
+		</VBox>
 	</l:Splitter>
 </core:FragmentDefinition>
