@@ -244,7 +244,7 @@ sap.ui.define([
 
 					// warenträger selects 
 
-					var _sel1 = new sap.m.Select().addStyleClass("sapUiTinyMargins");
+			/*		var _sel1 = new sap.m.Select().addStyleClass("sapUiTinyMargins");
 					_sel1.addItem(new sap.ui.core.Item({
 						key: "1",
 						text: "1"
@@ -256,7 +256,7 @@ sap.ui.define([
 					_sel1.addItem(new sap.ui.core.Item({
 						key: "3",
 						text: "3"
-					}));
+					}));*/
 					//oItemTemplate.addCell(_sel1);
 					oItemTemplate.addCell(new sap.m.Input({
 						width: "5%"
@@ -274,11 +274,20 @@ sap.ui.define([
 			}
 
 			if (oContext.getObject().ArtikelFlag) {
-
+/*
 				var _artikeldetails = new sap.m.ObjectIdentifier({
 					title: '{ZSRSDATAFEED>matnr}',
 					text: '{ZSRSDATAFEED>maktx}'
-				});
+				});*/
+				
+					var _artikeldetails = new sap.m.StandardListItem({
+					title: "{ZSRSDATAFEED>matnr}",
+					description:  "{ZSRSDATAFEED>maktx}"
+				}).addStyleClass("sapUiTinyMargins");
+				
+				// I did not manage to get this one solved... expand does not understand that this is media not data
+				_artikeldetails.setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/HauptBildSet(Artnr='" + oContext.getObject().Matnr +
+							"',Format='web240x310')/$value" );
 
 				var _articlekey = this.getModel("ZSRSDATAFEED").createKey("/ArtikelSet", {
 					matnr: _objectid

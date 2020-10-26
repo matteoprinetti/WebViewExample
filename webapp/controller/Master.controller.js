@@ -55,32 +55,30 @@ sap.ui.define([
 				aFilter.push(new sap.ui.model.Filter("maktx", sap.ui.model.FilterOperator.StartsWith, sValue));
 			}
 
-			var oItemTemplate = new sap.m.CustomListItem();
-			var box = new sap.m.HBox();
+			var oItemFactory = function (sId, oContext) {
+				var oItemTemplate = new sap.m.StandardListItem({
+					title: "{ZSRSDATAFEED>matnr}",
+					description:  "{ZSRSDATAFEED>maktx}"
+				}).addStyleClass("sapUiTinyMargins");
+				
+				// I did not manage to get this one solved... expand does not understand that this is media not data
+				oItemTemplate.setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/HauptBildSet(Artnr='" + oContext.getObject().matnr +
+							"',Format='web240x310')/$value" );
 
-			/*var producticon = new sap.ui.core.Icon();
-			var producticon = new sap.ui.core.Icon({
-				src: {
-					path: "MEDIAEXPORT>/HauptBildSet(Artnr='" + oValue.substr(oValue.length - 12) +
-							"',Format='web240x310')/$value'"
-					}
-				}
-			);*/
-			
-			//box.addItem(producticon);
-
-			box.addItem(new sap.m.ObjectIdentifier({
-				title: "{ZSRSDATAFEED>matnr}",
-				text: "{ZSRSDATAFEED>maktx}"
-			}).addStyleClass("sapUiSmallMargin"));
-
-			oItemTemplate.addContent(box);
+				//oItemTemplate.addContent(box);
+				return oItemTemplate;
+			};
 
 			this.getView().byId("idArtikelList").bindItems({
 				path: "/ArtikelsucheSet",
 				filters: aFilter,
 				model: "ZSRSDATAFEED",
-				template: oItemTemplate
+				factory: oItemFactory
+					/*,
+									parameters: {
+										expand: "toBild",
+										faultTolerant: true
+									}*/
 			});
 
 		},
@@ -252,10 +250,10 @@ sap.ui.define([
 		onStellPlatzItemDelete: function (oEvent) {
 			// dragging here means deleting from the stellplatzitem table
 			// but only if this really comes from there..
-			
+
 			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
-			if(_path.indexOf("/PlanungItemSet") >=0 )		// prevent self-drop
-					this.getModel().remove(_path, {});
+			if (_path.indexOf("/PlanungItemSet") >= 0) // prevent self-drop, only PlanungItems can be handled 
+				this.getModel().remove(_path, {});
 
 		}
 
