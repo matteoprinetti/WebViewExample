@@ -16,31 +16,33 @@
 		<IconTabBar id="idSelAngTabBar" class="sapUiResponsiveContentPadding" expanded="true" expandable="false" select="onAngebotBarSelect">
 			<items>
 				<IconTabFilter text="Angebote" key="Angebote">
-					<Table id="AngeboteTable" inset="false">
-						<dragDropConfig>
-							<dnd:DragInfo groupName="itemsgroup" sourceAggregation="items"/>
-							<dnd:DropInfo drop="onStellPlatzItemDelete"/>
-						</dragDropConfig>
-						<columns>
-							<Column width="40%">
-								<Text text="Angebot"/>
-							</Column>
-							<Column width="15%">
-								<Text text="Status"/>
-							</Column>
-							<Column width="25%">
-								<Text text="Kampagne"/>
-							</Column>
-							<Column width="20%">
-								<Text text="Prognose"/>
-							</Column>
-						</columns>
-					</Table>
+					<ScrollContainer height="500px" width="100%" vertical="true" focusable="true">
+						<Table id="AngeboteTable" inset="false">
+							<dragDropConfig>
+								<dnd:DragInfo groupName="itemsgroup" sourceAggregation="items"/>
+								<dnd:DropInfo drop="onStellPlatzItemDelete"/>
+							</dragDropConfig>
+							<columns>
+								<Column width="40%">
+									<Text text="Angebot"/>
+								</Column>
+								<Column width="15%">
+									<Text text="Status"/>
+								</Column>
+								<Column width="25%">
+									<Text text="Kampagne"/>
+								</Column>
+								<Column width="20%">
+									<Text text="Prognose"/>
+								</Column>
+							</columns>
+						</Table>
+					</ScrollContainer>
 				</IconTabFilter>
-				<IconTabFilter text="Artikel ohne Angebote" key="Artikel" >
+				<IconTabFilter text="Artikel ohne Angebote" key="Artikel">
 					<SearchField width="90%" class="sapUiSmallMargin" search="onArtikelSearch"/>
-					<ScrollContainer  height ="500px" width="100%" vertical="true" focusable="true">
-						<List id="idArtikelList" >
+					<ScrollContainer height="500px" width="100%" vertical="true" focusable="true">
+						<List id="idArtikelList">
 							<dragDropConfig>
 								<dnd:DragInfo groupName="itemsgroup" sourceAggregation="items"/>
 								<dnd:DropInfo drop="onStellPlatzItemDelete"/>
