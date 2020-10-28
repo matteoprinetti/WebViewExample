@@ -29,11 +29,12 @@
 								<Column width="16em">
 									<Text text="Bezeichnung"/>
 								</Column>
+							
 								<Column width="16em">
-									<Text text="Belegung"/>
+									<Text text="Sortimentsbereich / Direktion"/>
 								</Column>
-								<Column width="16em">
-									<Text text="Sortimentsbereich"/>
+									<Column width="16em">
+									<Text text="Belegung"/>
 								</Column>
 							</columns>
 						

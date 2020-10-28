@@ -17,12 +17,27 @@
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Name" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Name" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/></EntityType>
 			<EntityType Name="Stellplatz" sap:content-version="1">
-				<Key><PropertyRef Name="Key"/><PropertyRef Name="FlaecheId"/></Key><Property Name="Key" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"
+				<Key><PropertyRef Name="Key"/></Key><Property Name="Key" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="FlaecheId" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="Name" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="WtId" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="WtName" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="Anzahl" Type="Edm.Int32" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="Sortiment" sap:content-version="1">
+				<Key><PropertyRef Name="Id"/></Key><Property Name="Name" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Id" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/></EntityType>
+			<EntityType Name="Boss" sap:content-version="1">
+				<Key><PropertyRef Name="Key"/></Key><Property Name="Key" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="FlaecheId" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Bossnr" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Name" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="VorschlagBezeichnung" sap:content-version="1">
+				<Key><PropertyRef Name="Id"/><PropertyRef Name="Langu"/></Key><Property Name="Id" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/><Property Name="Langu" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Vorschlag" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/></EntityType>
 			<EntityType Name="Flaechen" sap:content-version="1">
 				<Key><PropertyRef Name="Id"/></Key><Property Name="Id" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"
@@ -32,7 +47,22 @@
 					sap:sortable="false" sap:filterable="false"/><Property Name="Sortber" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="Org" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"
 					sap:filterable="false"/><NavigationProperty Name="FlaecheToStellplatz" Relationship="ZISM_POLY_SRV.toStellplatz" FromRole="FromRole_toStellplatz"
-					ToRole="ToRole_toStellplatz"/></EntityType>
+					ToRole="ToRole_toStellplatz"/><NavigationProperty Name="FlaecheToBossnr" Relationship="ZISM_POLY_SRV.toBossnr" FromRole="FromRole_toBossnr" ToRole="ToRole_toBossnr"/></EntityType>
+			<EntityType Name="PlanungItem" sap:content-version="1">
+				<Key><PropertyRef Name="StellplatzId"/><PropertyRef Name="Woche"/><PropertyRef Name="Angebot"/><PropertyRef Name="ArtikelFlag"/></Key><Property Name="StellplatzId" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="Stellplatz Zuordnung" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Woche" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Kalenderwoche" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Angebot" Type="Edm.String" Nullable="false" MaxLength="36" sap:unicode="false" sap:label="ID externes Angebot"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ArtikelFlag" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Artikelflag" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Matnr" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Matnr" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="AnzWt" Type="Edm.Int32" Nullable="false" sap:unicode="false" sap:label="Anzahl Warenträger" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Hoehe" Type="Edm.Int32" Nullable="false" sap:unicode="false" sap:label="Höche" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/></EntityType>
+			<Association Name="toBossnr" sap:content-version="1"><End Type="ZISM_POLY_SRV.Flaechen" Multiplicity="1" Role="FromRole_toBossnr"/><End Type="ZISM_POLY_SRV.Boss" Multiplicity="*" Role="ToRole_toBossnr"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_toBossnr"><PropertyRef Name="Id"/></Principal>
+					<Dependent Role="ToRole_toBossnr"><PropertyRef Name="FlaecheId"/></Dependent>
+				</ReferentialConstraint>
+			</Association>
 			<Association Name="toStellplatz" sap:content-version="1"><End Type="ZISM_POLY_SRV.Flaechen" Multiplicity="1" Role="FromRole_toStellplatz"/><End Type="ZISM_POLY_SRV.Stellplatz" Multiplicity="*" Role="ToRole_toStellplatz"/>
 				<ReferentialConstraint>
 					<Principal Role="FromRole_toStellplatz"><PropertyRef Name="Id"/></Principal>
@@ -43,10 +73,16 @@
 				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="WarentraegerTypDescrSet" EntityType="ZISM_POLY_SRV.WarentraegerTypDescr" sap:creatable="false" sap:updatable="false"
 				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="OrganisationSet" EntityType="ZISM_POLY_SRV.Organisation" sap:creatable="false" sap:updatable="false" sap:deletable="false"
 				sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="StellplatzSet" EntityType="ZISM_POLY_SRV.Stellplatz" sap:creatable="false" sap:updatable="false" sap:deletable="false"
-				sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="FlaechenSet" EntityType="ZISM_POLY_SRV.Flaechen" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="SortimentSet" EntityType="ZISM_POLY_SRV.Sortiment" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="BossSet" EntityType="ZISM_POLY_SRV.Boss" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="VorschlagBezeichnungSet" EntityType="ZISM_POLY_SRV.VorschlagBezeichnung" sap:creatable="false" sap:updatable="false"
+				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="FlaechenSet" EntityType="ZISM_POLY_SRV.Flaechen" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="PlanungItemSet" EntityType="ZISM_POLY_SRV.PlanungItem" sap:creatable="false" sap:updatable="false" sap:deletable="false"
 				sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
 				<AssociationSet Name="toStellplatzSet" Association="ZISM_POLY_SRV.toStellplatz" sap:creatable="false" sap:updatable="false"
 					sap:deletable="false" sap:content-version="1"><End EntitySet="FlaechenSet" Role="FromRole_toStellplatz"/><End EntitySet="StellplatzSet" Role="ToRole_toStellplatz"/></AssociationSet>
+				<AssociationSet Name="toBossnrSet" Association="ZISM_POLY_SRV.toBossnr" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+					sap:content-version="1"><End EntitySet="FlaechenSet" Role="FromRole_toBossnr"/><End EntitySet="BossSet" Role="ToRole_toBossnr"/></AssociationSet>
 			</EntityContainer><atom:link rel="self" href="https://dgm.migros.ch:1490/sap/opu/odata/sap/ZISM_POLY_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/><atom:link rel="latest-version" href="https://dgm.migros.ch:1490/sap/opu/odata/sap/ZISM_POLY_SRV/$metadata"
 				xmlns:atom="http://www.w3.org/2005/Atom"/></Schema>
 	</edmx:DataServices>

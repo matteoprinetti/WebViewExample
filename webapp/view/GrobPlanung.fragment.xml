@@ -23,17 +23,23 @@
 								<dnd:DropInfo drop="onStellPlatzItemDelete"/>
 							</dragDropConfig>
 							<columns>
-								<Column width="40%">
+								<Column width="30%">
 									<Text text="Angebot"/>
 								</Column>
-								<Column width="15%">
+								<Column width="10%">
 									<Text text="Status"/>
 								</Column>
-								<Column width="25%">
+								<Column width="15%">
 									<Text text="Kampagne"/>
 								</Column>
-								<Column width="20%">
-									<Text text="Prognose"/>
+								<Column width="15%">
+									<Text text="Planungsart"/>
+								</Column>
+								<Column width="15%">
+									<Text text="Angebotsart"/>
+								</Column>
+								<Column width="15%">
+									<Text text="Kommunikationsrolle"/>
 								</Column>
 							</columns>
 						</Table>

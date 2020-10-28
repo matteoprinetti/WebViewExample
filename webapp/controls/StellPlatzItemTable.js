@@ -33,6 +33,9 @@ sap.ui.define([
 		init: function () {
 
 			this._vbox1 = new ObjectPageHeaderContent();
+
+			// Header part (on top of table)
+
 			var vert1 = new VerticalLayout();
 			vert1.addContent(new ObjectStatus({
 				title: "Stellplatz"
@@ -51,6 +54,8 @@ sap.ui.define([
 			}));
 			this._vbox1.addContent(vert2);
 
+			// Columns 
+
 			this.addColumn(new sap.m.Column({
 				width: "35%",
 				header: new sap.m.Text({
@@ -64,7 +69,13 @@ sap.ui.define([
 			}));
 			this.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
-					text: "Campagne"
+					text: "Angebotsart"
+				})
+			}));
+
+			this.addColumn(new sap.m.Column({
+				header: new sap.m.Text({
+					text: "Planungsart"
 				})
 			}));
 			this.addColumn(new sap.m.Column({
@@ -80,11 +91,6 @@ sap.ui.define([
 			this.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "G"
-				})
-			}));
-			this.addColumn(new sap.m.Column({
-				header: new sap.m.Text({
-					text: "ST"
 				})
 			}));
 
@@ -162,10 +168,10 @@ sap.ui.define([
 				_angebot_or_article_key = this.getModel("ZSRSDATAFEED").getProperty(_path).matnr;
 				_matnr = this.getModel("ZSRSDATAFEED").getProperty(_path).matnr;
 				_article_flag = "X";
-				
+
 			}
 
-			if(_angebot_or_article_key ==="") return; // we dropped something but we cannot handle it (for example itself)
+			if (_angebot_or_article_key === "") return; // we dropped something but we cannot handle it (for example itself)
 
 			// check if this key exist PlanungItemSet(StellplatzId=guid'525400d5-610f-1edb-84bf-25f3fcc806c7',Woche='432020',Angebot='OFFER1')
 			// this.getModel().createKey("PlanungItemSet", { StellplatzId: "123", Woche: "012020", Angebot: "123"})
@@ -215,18 +221,36 @@ sap.ui.define([
 
 				var _object = this.getModel("Offers").getProperty("/" + _objectkey);
 
+				// This is an OFFER 
+
 				if (_object) {
+
+					// Offer ID 
+
 					oItemTemplate.addCell(new sap.m.ObjectIdentifier({
 						title: _object.ZzExtOfrId,
 						text: _object.OfrName
 					}));
 
-					oItemTemplate.addCell(new sap.m.Label({
-						text: _object.OfrSubStateCd,
-						tooltip: _object.OfrSubStateDescr
+					// Status
+					oItemTemplate.addCell(new sap.ui.core.Icon({
+						src: "sap-icon://restart"
+					}).addStyleClass("zPolyLargeIcon"));
+
+					// Angebotsart 
+
+					oItemTemplate.addCell(new sap.m.ObjectIdentifier({
+						title: _object.PromoType,
+						text: _object.PromoTypeTxt.substring(0, 10)
 					}));
 
-					var campaignname = "";
+					// Planungsart 
+
+					oItemTemplate.addCell(new sap.m.Label({
+						text: _object.ZzPlaartTxt
+					}));
+
+					/*				var campaignname = "";
 					var campaigns = this.getModel("Offers").getProperty("/" + _objectkey + "/toCampaign");
 
 					// get the first campaign in case it has more - not sure if this is ok
@@ -241,22 +265,22 @@ sap.ui.define([
 					oItemTemplate.addCell(new sap.m.Text({
 						text: campaignname
 					}));
-
+*/
 					// warenträger selects 
 
-			/*		var _sel1 = new sap.m.Select().addStyleClass("sapUiTinyMargins");
-					_sel1.addItem(new sap.ui.core.Item({
-						key: "1",
-						text: "1"
-					}));
-					_sel1.addItem(new sap.ui.core.Item({
-						key: "2",
-						text: "2"
-					}));
-					_sel1.addItem(new sap.ui.core.Item({
-						key: "3",
-						text: "3"
-					}));*/
+					/*		var _sel1 = new sap.m.Select().addStyleClass("sapUiTinyMargins");
+							_sel1.addItem(new sap.ui.core.Item({
+								key: "1",
+								text: "1"
+							}));
+							_sel1.addItem(new sap.ui.core.Item({
+								key: "2",
+								text: "2"
+							}));
+							_sel1.addItem(new sap.ui.core.Item({
+								key: "3",
+								text: "3"
+							}));*/
 					//oItemTemplate.addCell(_sel1);
 					oItemTemplate.addCell(new sap.m.Input({
 						width: "5%"
@@ -267,27 +291,29 @@ sap.ui.define([
 					oItemTemplate.addCell(new sap.m.Label({
 						text: "10"
 					}));
-					oItemTemplate.addCell(new sap.ui.core.Icon({
-						src: "sap-icon://accept"
-					}));
+					/*	oItemTemplate.addCell(new sap.ui.core.Icon({
+							src: "sap-icon://accept"
+						}));*/
 				}
 			}
 
+			// this is ARTIKEL 
+
 			if (oContext.getObject().ArtikelFlag) {
-/*
-				var _artikeldetails = new sap.m.ObjectIdentifier({
-					title: '{ZSRSDATAFEED>matnr}',
-					text: '{ZSRSDATAFEED>maktx}'
-				});*/
-				
-					var _artikeldetails = new sap.m.StandardListItem({
+				/*
+								var _artikeldetails = new sap.m.ObjectIdentifier({
+									title: '{ZSRSDATAFEED>matnr}',
+									text: '{ZSRSDATAFEED>maktx}'
+								});*/
+
+				var _artikeldetails = new sap.m.StandardListItem({
 					title: "{ZSRSDATAFEED>matnr}",
-					description:  "{ZSRSDATAFEED>maktx}"
-				}).addStyleClass("sapUiTinyMargins");
-				
+					description: "{ZSRSDATAFEED>maktx}"
+				}).addStyleClass("zPolySqueezedArticle");
+
 				// I did not manage to get this one solved... expand does not understand that this is media not data
 				_artikeldetails.setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/HauptBildSet(Artnr='" + oContext.getObject().Matnr +
-							"',Format='web240x310')/$value" );
+					"',Format='web240x310')/$value");
 
 				var _articlekey = this.getModel("ZSRSDATAFEED").createKey("/ArtikelSet", {
 					matnr: _objectid
@@ -300,11 +326,32 @@ sap.ui.define([
 
 				oItemTemplate.addCell(_artikeldetails);
 
+				// 2 empty columns ..
+
+				oItemTemplate.addCell(new sap.m.Label({
+					width: "5%"
+				}));
+				oItemTemplate.addCell(new sap.m.Label({
+					width: "5%"
+				}));
+		oItemTemplate.addCell(new sap.m.Label({
+					width: "5%"
+				}));
+				// the input data for detail
+
+				oItemTemplate.addCell(new sap.m.Input({
+					width: "5%"
+				}));
+				oItemTemplate.addCell(new sap.m.Input({
+					width: "5%"
+				}));
+				oItemTemplate.addCell(new sap.m.Label({
+					text: "10"
+				}));
 			}
 
 			return oItemTemplate;
 		}
 	});
- 
 
 });
