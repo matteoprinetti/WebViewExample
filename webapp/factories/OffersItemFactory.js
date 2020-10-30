@@ -23,11 +23,21 @@ sap.ui.define([], function () {
 				type: "Inactive"
 			});
 
-			itemFactory.addCell(new sap.m.ObjectIdentifier({
-				title: oContext.getObject().ZzExtOfrId,
-				text: oContext.getObject().OfrName
-			}));
+			/*		itemFactory.addCell(new sap.m.ObjectIdentifier({
+						title: oContext.getObject().ZzExtOfrId,
+						text: oContext.getObject().OfrName
+					}));  */
 
+			var oItemTemplate = new sap.m.StandardListItem({
+				title: oContext.getObject().ZzExtOfrId,
+				description: oContext.getObject().OfrName
+			}).addStyleClass("zPolySqueezedArticle");
+
+			// I did not manage to get this one solved... expand does not understand that this is media not data
+			oItemTemplate.setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + oContext.getObject().ZzExtOfrId +
+				"')/$value");
+
+			itemFactory.addCell(oItemTemplate);
 			// Status is now an Icon.
 
 			/*			itemFactory.addCell(new sap.m.Label({
@@ -45,11 +55,11 @@ sap.ui.define([], function () {
 			// läuft (Angebot lief bereits in der Vorwoche)
 			// abgelaufen	SE Angebote (Sellout) dürfen nach dem Ablaufdatum auf der Fläche bleiben
 
-			var iconsrc="";
-			
-			if(actualweek[1]===startweek[1]) iconsrc="sap-icon://begin"; // start now
-			if(actualweek[1] > startweek[1]) iconsrc="sap-icon://restart"; // start already
-			if(actualweek[1] === endweek[1]) iconsrc="sap-icon://end"; // start already
+			var iconsrc = "";
+
+			if (actualweek[1] === startweek[1]) iconsrc = "sap-icon://begin"; // start now
+			if (actualweek[1] > startweek[1]) iconsrc = "sap-icon://restart"; // start already
+			if (actualweek[1] === endweek[1]) iconsrc = "sap-icon://end"; // start already
 
 			itemFactory.addCell(new sap.ui.core.Icon({
 				src: iconsrc

@@ -227,11 +227,21 @@ sap.ui.define([
 
 					// Offer ID 
 
-					oItemTemplate.addCell(new sap.m.ObjectIdentifier({
+	/*				oItemTemplate.addCell(new sap.m.ObjectIdentifier({
 						title: _object.ZzExtOfrId,
 						text: _object.OfrName
 					}));
+*/
+					var _angebotdetails = new sap.m.StandardListItem({
+						title: _object.ZzExtOfrId,
+						description: _object.OfrName
+					}).addStyleClass("zPolySqueezedArticle");
 
+					// I did not manage to get this one solved... expand does not understand that this is media not data
+					_angebotdetails.setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + _object.ZzExtOfrId +
+						"')/$value");
+
+					oItemTemplate.addCell(_angebotdetails);
 					// Status
 					oItemTemplate.addCell(new sap.ui.core.Icon({
 						src: "sap-icon://restart"
@@ -334,7 +344,7 @@ sap.ui.define([
 				oItemTemplate.addCell(new sap.m.Label({
 					width: "5%"
 				}));
-		oItemTemplate.addCell(new sap.m.Label({
+				oItemTemplate.addCell(new sap.m.Label({
 					width: "5%"
 				}));
 				// the input data for detail
