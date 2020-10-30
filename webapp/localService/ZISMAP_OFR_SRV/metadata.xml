@@ -1,13 +1,20 @@
-<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
-	xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData" Version="1.0">
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+	xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
 	<edmx:DataServices m:DataServiceVersion="2.0">
-		<Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="ZISMAP_OFR_SRV" xml:lang="de" sap:schema-version="1">
+		<Schema Namespace="ZISMAP_OFR_SRV" xml:lang="de" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
 			<EntityType Name="OfrHead" sap:content-version="1">
 				<Key><PropertyRef Name="OfferGuid"/></Key><Property Name="ImageUrl1" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Bild Url1" sap:creatable="false"
-					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Massnahme" Type="Edm.String" Nullable="false" MaxLength="72" sap:unicode="false" sap:label="Massnahme" sap:creatable="false"
-					sap:updatable="false" sap:sortable="false"/><Property Name="ZzSortimentTxt3" Type="Edm.String" Nullable="false" MaxLength="60" sap:unicode="false" sap:label="Sortimentstext 3"
-					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Locco" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Filiale" sap:creatable="false"
-					sap:updatable="false" sap:sortable="false"/><Property Name="UxinvisZzSortitypTxt" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Flag" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Startdat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Gültig ab" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Enddat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Gültig bis" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="OfrSubStateCd" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Substatus Angebot"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Massnahme" Type="Edm.String" Nullable="false" MaxLength="72" sap:unicode="false" sap:label="Massnahme" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false"/><Property Name="OfrSubStateDescr" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Beschreibung Status"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzSortimentTxt3" Type="Edm.String" Nullable="false" MaxLength="60" sap:unicode="false" sap:label="Sortimentstext 3"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzUmsbudget" Type="Edm.Decimal" Nullable="false" Precision="19" Scale="5" sap:unicode="false" sap:unit="ZzWaehr"
+					sap:label="Umsatz-Budget" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Locco" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Filiale" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false"/><Property Name="ZzWaehr" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Währung" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="currency-code"/><Property Name="UxinvisZzSortitypTxt" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Flag" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ImageUrl2" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Bild Url2" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="UxinvisZzSortitypTxt2" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Flag" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ZzAktrgTxt" Type="Edm.String" Nullable="false" MaxLength="60" sap:unicode="false" sap:label="Kommunikationsrolle"
@@ -43,10 +50,10 @@
 					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="currency-code"/><Property Name="Sortityp" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="S-Typ" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Sortiment" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Sortiment" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="CampaignName" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Kampagne"
-					sap:creatable="false" sap:updatable="false" sap:sortable="false"/><NavigationProperty Name="toCampaign" Relationship="ZISMAP_OFR_SRV.Assoc_Ofr_Campaign" FromRole="FromRole_Assoc_Ofr_Campaign"
-					ToRole="ToRole_Assoc_Ofr_Campaign"/><NavigationProperty Name="EventSet" Relationship="ZISMAP_OFR_SRV.Assoc_Ofr_Event" FromRole="FromRole_Assoc_Ofr_Event"
-					ToRole="ToRole_Assoc_Ofr_Event"/><NavigationProperty Name="toOfrItemSet" Relationship="ZISMAP_OFR_SRV.Assoc_Ofr_OfrItem" FromRole="FromRole_Assoc_Ofr_OfrItem"
-					ToRole="ToRole_Assoc_Ofr_OfrItem"/></EntityType>
+					sap:creatable="false" sap:updatable="false" sap:sortable="false"/><NavigationProperty Name="toOfrItemSet" Relationship="ZISMAP_OFR_SRV.Assoc_Ofr_OfrItem" FromRole="FromRole_Assoc_Ofr_OfrItem"
+					ToRole="ToRole_Assoc_Ofr_OfrItem"/><NavigationProperty Name="EventSet" Relationship="ZISMAP_OFR_SRV.Assoc_Ofr_Event" FromRole="FromRole_Assoc_Ofr_Event"
+					ToRole="ToRole_Assoc_Ofr_Event"/><NavigationProperty Name="toCampaign" Relationship="ZISMAP_OFR_SRV.Assoc_Ofr_Campaign" FromRole="FromRole_Assoc_Ofr_Campaign"
+					ToRole="ToRole_Assoc_Ofr_Campaign"/></EntityType>
 			<EntityType Name="OfrItem" sap:content-version="1">
 				<Key><PropertyRef Name="OfferGuid"/><PropertyRef Name="ExtProdId"/></Key><Property Name="Bezeichnung" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Bezeichnung"
 					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Waers" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Währung" sap:creatable="false"
@@ -121,7 +128,7 @@
 					sap:deletable="false" sap:content-version="1"><End EntitySet="OfrHeadSet" Role="FromRole_Assoc_Ofr_OfrItem"/><End EntitySet="OfrItemSet" Role="ToRole_Assoc_Ofr_OfrItem"/></AssociationSet>
 				<AssociationSet Name="Assoc_Ofr_Event_AssocSet" Association="ZISMAP_OFR_SRV.Assoc_Ofr_Event" sap:creatable="false" sap:updatable="false"
 					sap:deletable="false" sap:content-version="1"><End EntitySet="OfrHeadSet" Role="FromRole_Assoc_Ofr_Event"/><End EntitySet="EventSet" Role="ToRole_Assoc_Ofr_Event"/></AssociationSet>
-			</EntityContainer><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" href="https://dgm.migros.ch:1490/sap/opu/odata/sap/ZISMAP_OFR_SRV/$metadata"/><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="latest-version"
-				href="https://dgm.migros.ch:1490/sap/opu/odata/sap/ZISMAP_OFR_SRV/$metadata"/></Schema>
+			</EntityContainer><atom:link rel="self" href="https://dgm.migros.ch:1490/sap/opu/odata/sap/ZISMAP_OFR_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/><atom:link rel="latest-version" href="https://dgm.migros.ch:1490/sap/opu/odata/sap/ZISMAP_OFR_SRV/$metadata"
+				xmlns:atom="http://www.w3.org/2005/Atom"/></Schema>
 	</edmx:DataServices>
 </edmx:Edmx>
