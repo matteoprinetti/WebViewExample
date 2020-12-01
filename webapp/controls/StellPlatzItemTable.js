@@ -154,14 +154,21 @@ sap.ui.define([
 			// in case of dragging: if the row with that key, week and offer does not exist in /PlanungItemSet, 
 			// create it. 
 
+			// 1.12.2020 for some reason sometime draggedControl is empty ...
+
+			if (!oEvent.getParameters().draggedControl) return;
+
 			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
 			var _angebot_or_article_key = "";
+			var _von = null;
+			var _bis = null;
 			var _matnr = "";
 			var _article_flag = "";
 
 			if (_path.indexOf("/OfrHeadSet") >= 0) { // we just dropped an Angebot
 				_angebot_or_article_key = this.getModel("Offers").getProperty(_path).OfferGuid;
-
+				_von = this.getModel("Offers").getProperty(_path).Startdat;
+				_bis = this.getModel("Offers").getProperty(_path).Enddat;
 			}
 
 			if (_path.indexOf("/ArtikelsucheSet") >= 0) { // we just dropped an Artikel
@@ -184,14 +191,21 @@ sap.ui.define([
 				Matnr: _matnr
 			};
 
-			var _objectpath = "/" + this.getModel().createKey("PlanungItemSet", _objectkey);
+			// a CREATE need to be issued in any case. 
+			// because this could be a virtual or excluded entry, that needs to be made permanent
 
-			if (!this.getModel().getProperty(_objectpath)) {
-				// create
+			// create and also save the from..to date of angebot
 
-				this.getModel().create("/PlanungItemSet", _objectkey);
+			var _object;
+			if (_article_flag !== 'X')
+				_object = Object.assign(_objectkey, {
+					Von: _von,
+					Bis: _bis
+				});
+			else
+				_object = _objectkey;
 
-			}
+			this.getModel().create("/PlanungItemSet", _object);
 
 		},
 
@@ -227,7 +241,7 @@ sap.ui.define([
 
 					// Offer ID 
 
-	/*				oItemTemplate.addCell(new sap.m.ObjectIdentifier({
+					/*				oItemTemplate.addCell(new sap.m.ObjectIdentifier({
 						title: _object.ZzExtOfrId,
 						text: _object.OfrName
 					}));
@@ -260,43 +274,15 @@ sap.ui.define([
 						text: _object.ZzPlaartTxt
 					}));
 
-					/*				var campaignname = "";
-					var campaigns = this.getModel("Offers").getProperty("/" + _objectkey + "/toCampaign");
-
-					// get the first campaign in case it has more - not sure if this is ok
-					for (var x in campaigns) {
-						campaignname = this.getModel("Offers").getProperty("/" + campaigns[x]).CampaignName;
-						if (campaigns.length > 0) {
-							// campaignname = campaignname + "(*)";
-						}
-						break;
-					}
-
-					oItemTemplate.addCell(new sap.m.Text({
-						text: campaignname
-					}));
-*/
-					// warenträger selects 
-
-					/*		var _sel1 = new sap.m.Select().addStyleClass("sapUiTinyMargins");
-							_sel1.addItem(new sap.ui.core.Item({
-								key: "1",
-								text: "1"
-							}));
-							_sel1.addItem(new sap.ui.core.Item({
-								key: "2",
-								text: "2"
-							}));
-							_sel1.addItem(new sap.ui.core.Item({
-								key: "3",
-								text: "3"
-							}));*/
-					//oItemTemplate.addCell(_sel1);
 					oItemTemplate.addCell(new sap.m.Input({
-						width: "5%"
+						width: "5%",
+						value: oContext.getObject().AnzWt,
+						change: this.onWTChange
 					}));
 					oItemTemplate.addCell(new sap.m.Input({
-						width: "5%"
+						width: "5%",
+						value: oContext.getObject().Hoehe,
+						change: this.onHChange
 					}));
 					oItemTemplate.addCell(new sap.m.Label({
 						text: "10"
@@ -350,10 +336,14 @@ sap.ui.define([
 				// the input data for detail
 
 				oItemTemplate.addCell(new sap.m.Input({
-					width: "5%"
+					width: "5%",
+					value: oContext.getObject().AnzWt,
+					change: this.onWTChange
 				}));
 				oItemTemplate.addCell(new sap.m.Input({
-					width: "5%"
+					width: "5%",
+					value: oContext.getObject().Hoehe,
+					change: this.onHChange
 				}));
 				oItemTemplate.addCell(new sap.m.Label({
 					text: "10"
@@ -361,6 +351,20 @@ sap.ui.define([
 			}
 
 			return oItemTemplate;
+		},
+
+		onWTChange: function (oEvent) {
+			var _path = this.getBindingContext().getPath();
+			var data = {};
+			data["AnzWt"] = parseInt(oEvent.getParameters().value, 10);
+			this.getModel().update(_path, data, {});
+
+		},
+		onHChange: function (oEvent) {
+			var _path = this.getBindingContext().getPath();
+			this.getModel().update(_path, {
+				Hoehe: parseInt(oEvent.getParameters().value, 10)
+			}, {});
 		}
 	});
 

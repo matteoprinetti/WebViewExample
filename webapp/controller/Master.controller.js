@@ -58,12 +58,12 @@ sap.ui.define([
 			var oItemFactory = function (sId, oContext) {
 				var oItemTemplate = new sap.m.StandardListItem({
 					title: "{ZSRSDATAFEED>matnr}",
-					description:  "{ZSRSDATAFEED>maktx}"
+					description: "{ZSRSDATAFEED>maktx}"
 				}).addStyleClass("sapUiTinyMargins");
-				
+
 				// I did not manage to get this one solved... expand does not understand that this is media not data
 				oItemTemplate.setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/HauptBildSet(Artnr='" + oContext.getObject().matnr +
-							"',Format='web240x310')/$value" );
+					"',Format='web240x310')/$value");
 
 				//oItemTemplate.addContent(box);
 				return oItemTemplate;
@@ -251,6 +251,8 @@ sap.ui.define([
 			// dragging here means deleting from the stellplatzitem table
 			// but only if this really comes from there..
 
+			if (!oEvent.getParameters().draggedControl) return;
+			
 			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
 			if (_path.indexOf("/PlanungItemSet") >= 0) // prevent self-drop, only PlanungItems can be handled 
 				this.getModel().remove(_path, {});
