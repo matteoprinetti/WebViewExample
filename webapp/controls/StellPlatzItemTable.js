@@ -108,7 +108,7 @@ sap.ui.define([
 		},
 
 		setContainer: function (oContainer) {
-			if (!oContainer) return;
+			if (!oContainer) {return;}
 
 			oContainer.addItem(this._vbox1);
 
@@ -117,7 +117,7 @@ sap.ui.define([
 
 		setHeaderData: function (oData) {
 
-			if (!oData) return;
+			if (!oData) {return;}
 
 			this._vbox1.getContent()[0].getContent()[0].setText(oData.Name);
 			this._vbox1.getContent()[0].getContent()[1].setText(oData.Anzahl);
@@ -129,7 +129,7 @@ sap.ui.define([
 		},
 
 		setCustomBinding: function (oCustom) {
-			if (!oCustom) return;
+	 		if (!oCustom) {return;}
 
 			this.setProperty("key", oCustom.Key);
 			this.setProperty("week", oCustom.Week);
@@ -156,7 +156,7 @@ sap.ui.define([
 
 			// 1.12.2020 for some reason sometime draggedControl is empty ...
 
-			if (!oEvent.getParameters().draggedControl) return;
+			if (!oEvent.getParameters().draggedControl) {return;}
 
 			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
 			var _angebot_or_article_key = "";
@@ -167,6 +167,7 @@ sap.ui.define([
 
 			if (_path.indexOf("/OfrHeadSet") >= 0) { // we just dropped an Angebot
 				_angebot_or_article_key = this.getModel("Offers").getProperty(_path).OfferGuid;
+				_matnr =  this.getModel("Offers").getProperty(_path).ZzExtOfrId;  // also used for ofr id
 				_von = this.getModel("Offers").getProperty(_path).Startdat;
 				_bis = this.getModel("Offers").getProperty(_path).Enddat;
 			}
@@ -178,7 +179,7 @@ sap.ui.define([
 
 			}
 
-			if (_angebot_or_article_key === "") return; // we dropped something but we cannot handle it (for example itself)
+			if (_angebot_or_article_key === "") {return;} // we dropped something but we cannot handle it (for example itself)
 
 			// check if this key exist PlanungItemSet(StellplatzId=guid'525400d5-610f-1edb-84bf-25f3fcc806c7',Woche='432020',Angebot='OFFER1')
 			// this.getModel().createKey("PlanungItemSet", { StellplatzId: "123", Woche: "012020", Angebot: "123"})
@@ -186,7 +187,7 @@ sap.ui.define([
 			var _objectkey = {
 				StellplatzId: this.getKey(),
 				Woche: this.getWeek(),
-				ArtikelFlag: _article_flag === 'X' ? true : false,
+				ArtikelFlag: _article_flag === "X" ? true : false,
 				Angebot: _angebot_or_article_key,
 				Matnr: _matnr
 			};
@@ -197,13 +198,13 @@ sap.ui.define([
 			// create and also save the from..to date of angebot
 
 			var _object;
-			if (_article_flag !== 'X')
-				_object = Object.assign(_objectkey, {
+			if (_article_flag !== "X")
+				{_object = Object.assign(_objectkey, {
 					Von: _von,
 					Bis: _bis
-				});
+				});}
 			else
-				_object = _objectkey;
+				{_object = _objectkey;}
 
 			this.getModel().create("/PlanungItemSet", _object);
 
@@ -233,64 +234,88 @@ sap.ui.define([
 					OfferGuid: _objectid
 				});
 
-				var _object = this.getModel("Offers").getProperty("/" + _objectkey);
+				//2.12.2020 this is the error: we cannot map to the offer in the model  ! we need to map to the 
+				//oData entityset..
+ 
+				var _angebotPath = "/" + _objectkey;
+				var _angebotdetails = new sap.m.StandardListItem({
+					//title: _object.ZzExtOfrId,
+					//description: _object.OfrName
+				}).addStyleClass("zPolySqueezedArticle");
 
-				// This is an OFFER 
+				_angebotdetails.bindElement({
+					path: _angebotPath,
+					model: "Offers"
+				});
 
-				if (_object) {
+				//IMPORTANT NEVER FORGET THE MODEL NAME IN THE MAPPING !!!!
+				_angebotdetails.bindProperty("title", "Offers>ZzExtOfrId");
+				_angebotdetails.bindProperty("description", "Offers>OfrName");
 
-					// Offer ID 
-
-					/*				oItemTemplate.addCell(new sap.m.ObjectIdentifier({
-						title: _object.ZzExtOfrId,
-						text: _object.OfrName
-					}));
-*/
-					var _angebotdetails = new sap.m.StandardListItem({
-						title: _object.ZzExtOfrId,
-						description: _object.OfrName
-					}).addStyleClass("zPolySqueezedArticle");
-
-					// I did not manage to get this one solved... expand does not understand that this is media not data
-					_angebotdetails.setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + _object.ZzExtOfrId +
+				// I did not manage to get this one solved... expand does not understand that this is media not data
+				
+				_angebotdetails.setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + oContext.getObject().Matnr +
 						"')/$value");
 
-					oItemTemplate.addCell(_angebotdetails);
-					// Status
-					oItemTemplate.addCell(new sap.ui.core.Icon({
-						src: "sap-icon://restart"
-					}).addStyleClass("zPolyLargeIcon"));
+				oItemTemplate.addCell(_angebotdetails);
+				// Status
+				oItemTemplate.addCell(new sap.ui.core.Icon({
+					src: "sap-icon://restart"
+				}).addStyleClass("zPolyLargeIcon"));
 
-					// Angebotsart 
+				// Angebotsart 
 
-					oItemTemplate.addCell(new sap.m.ObjectIdentifier({
-						title: _object.PromoType,
-						text: _object.PromoTypeTxt.substring(0, 10)
-					}));
+				var _promotype = new sap.m.ObjectIdentifier({
+					//	title: _object.PromoType,
+					//	text: _object.PromoTypeTxt.substring(0, 10)
+				});
 
-					// Planungsart 
+				_promotype.bindElement({
+					path: _angebotPath,
+					model: "Offers"
+				});
 
-					oItemTemplate.addCell(new sap.m.Label({
-						text: _object.ZzPlaartTxt
-					}));
+				//IMPORTANT NEVER FORGET THE MODEL NAME IN THE MAPPING !!!!
+				_promotype.bindProperty("title", "Offers>PromoType");
+				_promotype.bindProperty("text", {path: "Offers>PromoTypeTxt", formatter:function(oValue) {
+					 return oValue === null ? "" : oValue.substring(0, 10);
+				} } );
 
-					oItemTemplate.addCell(new sap.m.Input({
-						width: "5%",
-						value: oContext.getObject().AnzWt,
-						change: this.onWTChange
-					}));
-					oItemTemplate.addCell(new sap.m.Input({
-						width: "5%",
-						value: oContext.getObject().Hoehe,
-						change: this.onHChange
-					}));
-					oItemTemplate.addCell(new sap.m.Label({
-						text: "10"
-					}));
-					/*	oItemTemplate.addCell(new sap.ui.core.Icon({
-							src: "sap-icon://accept"
-						}));*/
-				}
+				oItemTemplate.addCell(_promotype);
+
+				// Planungsart 
+
+				var planungsart = new sap.m.Label({
+					//	text: _object.ZzPlaartTxt
+				});
+
+				planungsart.bindElement({
+					path: _angebotPath,
+					model: "Offers"
+				});
+
+				//IMPORTANT NEVER FORGET THE MODEL NAME IN THE MAPPING !!!!
+				planungsart.bindProperty("text", "Offers>ZzPlaartTxt");
+
+				oItemTemplate.addCell(planungsart);
+
+				oItemTemplate.addCell(new sap.m.Input({
+					width: "5%",
+					value: oContext.getObject().AnzWt,
+					change: this.onWTChange
+				}));
+				oItemTemplate.addCell(new sap.m.Input({
+					width: "5%",
+					value: oContext.getObject().Hoehe,
+					change: this.onHChange
+				}));
+				oItemTemplate.addCell(new sap.m.Label({
+					text: "10"
+				}));
+				/*	oItemTemplate.addCell(new sap.ui.core.Icon({
+						src: "sap-icon://accept"
+					}));*/
+
 			}
 
 			// this is ARTIKEL 
@@ -356,7 +381,7 @@ sap.ui.define([
 		onWTChange: function (oEvent) {
 			var _path = this.getBindingContext().getPath();
 			var data = {};
-			data["AnzWt"] = parseInt(oEvent.getParameters().value, 10);
+			data.AnzWt = parseInt(oEvent.getParameters().value, 10);
 			this.getModel().update(_path, data, {});
 
 		},
