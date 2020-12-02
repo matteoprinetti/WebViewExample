@@ -61,9 +61,13 @@ sap.ui.define([], function () {
 			if (actualweek[1] > startweek[1]) iconsrc = "sap-icon://restart"; // start already
 			if (actualweek[1] === endweek[1]) iconsrc = "sap-icon://end"; // start already
 
-			itemFactory.addCell(new sap.ui.core.Icon({
-				src: iconsrc
-			}).addStyleClass("zPolyLargeIcon"));
+			// prevent error when src makes no sense.
+			
+			var _iconattr = {};
+			if (iconsrc !== "")
+			  _iconattr["src"]=iconsrc;
+			  
+			itemFactory.addCell(new sap.ui.core.Icon(_iconattr).addStyleClass("zPolyLargeIcon"));
 
 			var campaign = {
 				CampaignId: "",
