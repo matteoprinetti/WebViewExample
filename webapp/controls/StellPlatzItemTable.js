@@ -1,147 +1,173 @@
 sap.ui.define([
+	"sap/ui/core/Control",
 	"sap/m/Table",
+	"sap/m/VBox",
 	"sap/uxap/ObjectPageHeaderContent",
-	"sap/ui/layout/VerticalLayout",
-	"sap/m/ObjectStatus"
-], function (Table, ObjectPageHeaderContent, VerticalLayout, ObjectStatus) {
+	"sap/ui/layout/HorizontalLayout",
+	"sap/m/ObjectStatus",
+	"sap/m/Input",
+	"sap/m/Label"
+], function (Control, Table, VBox, ObjectPageHeaderContent, HorizontalLayout, ObjectStatus, Input, Label) {
 	"use strict";
-	return Table.extend("zpoly.zpolyplanung.controls.StellPlatzItemTable", {
+	return Control.extend("zpoly.zpolyplanung.controls.StellPlatzItemTable", {
 
 		// Tabelle für die Stellplatz Items rechts
 
-		_vbox1: null,
-
 		metadata: {
 			properties: {
-				container: {
-					type: "sap.m.FlexBox"
-				},
-				headerData: {
-					type: "object"
-				},
-				customBinding: {
-					type: "object"
-				},
-				key: {
+				StellplatzId: {
 					type: "string"
 				},
-				week: {
+				WtId: {
 					type: "string"
+				},
+				Woche: {
+					type: "string"
+				},
+				Anzahl: {
+					type: "string"
+				}
+
+			},
+			aggregations: {
+
+				_vbox: {
+					type: "sap.m.VBox",
+					multiple: false,
+					visibility: "hidden"
 				}
 			}
 		},
+
 		init: function () {
 
-			this._vbox1 = new ObjectPageHeaderContent();
+			// a VBOX containg a ObjectPageHeaderContent and a Table
+
+			this.setAggregation("_vbox", new VBox());
+
+			var pageheader = new ObjectPageHeaderContent();
 
 			// Header part (on top of table)
 
-			var vert1 = new VerticalLayout();
-			vert1.addContent(new ObjectStatus({
-				title: "Stellplatz"
-			}));
-			vert1.addContent(new ObjectStatus({
-				title: "Anzahl"
-			}));
-			this._vbox1.addContent(vert1);
+			var vert = new HorizontalLayout();
+			vert.addContent(new ObjectStatus({
+				title: "WT",
+				text: "{WtId} {WtName} "
+			}).addStyleClass("sapUiLargeMarginEnd"));
 
-			var vert2 = new VerticalLayout();
-			vert2.addContent(new ObjectStatus({
-				title: "WT"
-			}));
-			vert2.addContent(new ObjectStatus({
+			/*	vert.addContent(new ObjectStatus({
+					title: "Anzahl"
+				}).addStyleClass("sapUiLargeMarginEnd")); */
+
+			vert.addContent(new Label({
+				text: "Anzahl"
+			}).addStyleClass("sapUiLargeMarginEnd"));
+
+			vert.addContent(new Input({
+				value: "{WtAnz}",
+				width: "3em"
+			}).addStyleClass("sapUiLargeMarginEnd"));
+
+			vert.addContent(new ObjectStatus({
 				title: "Belegung"
-			}));
-			this._vbox1.addContent(vert2);
+			}).addStyleClass("sapUiLargeMarginEnd"));
+			pageheader.addContent(vert);
 
+			// table 
+
+			var _table = new Table();
 			// Columns 
 
-			this.addColumn(new sap.m.Column({
+			_table.addColumn(new sap.m.Column({
 				width: "35%",
 				header: new sap.m.Text({
 					text: "Angebot"
 				})
 			}));
-			this.addColumn(new sap.m.Column({
+			_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "Status"
 				})
 			}));
-			this.addColumn(new sap.m.Column({
+			_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "Angebotsart"
 				})
 			}));
 
-			this.addColumn(new sap.m.Column({
+			_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "Planungsart"
 				})
 			}));
-			this.addColumn(new sap.m.Column({
+			_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "WT"
 				})
 			}));
-			this.addColumn(new sap.m.Column({
+			_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "H"
 				})
 			}));
-			this.addColumn(new sap.m.Column({
+			_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "G"
 				})
 			}));
 
-			this.addStyleClass("zpolytableblack");
+			_table.addStyleClass("zpolytableblack");
 
 			// drag  
 
-			this.addDragDropConfig(new sap.ui.core.dnd.DropInfo({
+			_table.addDragDropConfig(new sap.ui.core.dnd.DropInfo({
 				drop: this.onDragDrop.bind(this)
 			}));
 
-			this.addDragDropConfig(new sap.ui.core.dnd.DragInfo({
+			_table.addDragDropConfig(new sap.ui.core.dnd.DragInfo({
 				sourceAggregation: "items"
 			}));
+
+			this.getAggregation("_vbox").addItem(pageheader);
+			this.getAggregation("_vbox").addItem(_table);
 		},
 
-		setContainer: function (oContainer) {
-			if (!oContainer) {return;}
-
-			oContainer.addItem(this._vbox1);
-
-			this.setProperty("container", oContainer);
+		setStellPlatzId: function (oValue) {
+			this.setProperty("StellPlatzId", oValue);
+			this.bindInternal();
 		},
-
-		setHeaderData: function (oData) {
-
-			if (!oData) {return;}
-
-			this._vbox1.getContent()[0].getContent()[0].setText(oData.Name);
-			this._vbox1.getContent()[0].getContent()[1].setText(oData.Anzahl);
-
-			this._vbox1.getContent()[1].getContent()[0].setText(oData.WtName);
-			this._vbox1.getContent()[1].getContent()[1].setText("20%");
-
-			this.setProperty("headerData", oData);
+		setWtId: function (oValue) {
+			this.setProperty("WtId", oValue);
+			this.bindInternal();
 		},
+		setWoche: function (oValue) {
+			this.setProperty("Woche", oValue);
+			this.bindInternal();
+		},
+		/*
+		bindItems: function (oBindingInfo) {
+			this.getAggregation("_vbox").getContent()[1].bindAggregation("items", oBindingInfo);
+		},*/
 
-		setCustomBinding: function (oCustom) {
-	 		if (!oCustom) {return;}
+		bindInternal: function () {
 
-			this.setProperty("key", oCustom.Key);
-			this.setProperty("week", oCustom.Week);
+			// when all 3 params are set, bind.
 
+			if (!(this.getStellplatzId() && this.getWtId() && this.getWoche())) return;
+
+			/*			this.getAggregation("_vbox").getContent()[1].setProperty("key", oCustom.Key);
+						this.getAggregation("_vbox").getContent()[1].setProperty("week", oCustom.Week);
+			*/
 			var _filters = [];
 			_filters.push(new sap.ui.model.Filter("StellplatzId",
-				sap.ui.model.FilterOperator.EQ, oCustom.Key));
+				sap.ui.model.FilterOperator.EQ, this.getStellplatzId()));
+			_filters.push(new sap.ui.model.Filter("WtId",
+				sap.ui.model.FilterOperator.EQ, this.getWtId()));
 
 			_filters.push(new sap.ui.model.Filter("Woche",
-				sap.ui.model.FilterOperator.EQ, oCustom.Week));
+				sap.ui.model.FilterOperator.EQ, this.getWoche()));
 
-			this.bindItems({
+			this.getAggregation("_vbox").getItems()[1].bindItems({
 				path: "/PlanungItemSet",
 				filters: _filters,
 				factory: this.tableDetailFactory.bind(this)
@@ -156,7 +182,9 @@ sap.ui.define([
 
 			// 1.12.2020 for some reason sometime draggedControl is empty ...
 
-			if (!oEvent.getParameters().draggedControl) {return;}
+			if (!oEvent.getParameters().draggedControl) {
+				return;
+			}
 
 			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
 			var _angebot_or_article_key = "";
@@ -167,7 +195,7 @@ sap.ui.define([
 
 			if (_path.indexOf("/OfrHeadSet") >= 0) { // we just dropped an Angebot
 				_angebot_or_article_key = this.getModel("Offers").getProperty(_path).OfferGuid;
-				_matnr =  this.getModel("Offers").getProperty(_path).ZzExtOfrId;  // also used for ofr id
+				_matnr = this.getModel("Offers").getProperty(_path).ZzExtOfrId; // also used for ofr id
 				_von = this.getModel("Offers").getProperty(_path).Startdat;
 				_bis = this.getModel("Offers").getProperty(_path).Enddat;
 			}
@@ -179,38 +207,36 @@ sap.ui.define([
 
 			}
 
-			if (_angebot_or_article_key === "") {return;} // we dropped something but we cannot handle it (for example itself)
+			if (_angebot_or_article_key === "") {
+				return;
+			} // we dropped something but we cannot handle it (for example itself)
 
-			// check if this key exist PlanungItemSet(StellplatzId=guid'525400d5-610f-1edb-84bf-25f3fcc806c7',Woche='432020',Angebot='OFFER1')
-			// this.getModel().createKey("PlanungItemSet", { StellplatzId: "123", Woche: "012020", Angebot: "123"})
+			// create the record
 
 			var _objectkey = {
-				StellplatzId: this.getKey(),
-				Woche: this.getWeek(),
+				StellplatzId: this.getStellplatzId(),
+				WtId: this.getWtId(),
+				Woche: this.getWoche(),
 				ArtikelFlag: _article_flag === "X" ? true : false,
 				Angebot: _angebot_or_article_key,
 				Matnr: _matnr
 			};
 
-			// a CREATE need to be issued in any case. 
-			// because this could be a virtual or excluded entry, that needs to be made permanent
-
 			// create and also save the from..to date of angebot
 
 			var _object;
-			if (_article_flag !== "X")
-				{_object = Object.assign(_objectkey, {
+			if (_article_flag !== "X") {
+				_object = Object.assign(_objectkey, {
 					Von: _von,
 					Bis: _bis
-				});}
-			else
-				{_object = _objectkey;}
+				});
+			} else {
+				_object = _objectkey;
+			}
 
 			this.getModel().create("/PlanungItemSet", _object);
 
 		},
-
-		renderer: {},
 
 		//================================================
 		// Utility functions 
@@ -236,7 +262,7 @@ sap.ui.define([
 
 				//2.12.2020 this is the error: we cannot map to the offer in the model  ! we need to map to the 
 				//oData entityset..
- 
+
 				var _angebotPath = "/" + _objectkey;
 				var _angebotdetails = new sap.m.StandardListItem({
 					//title: _object.ZzExtOfrId,
@@ -253,9 +279,9 @@ sap.ui.define([
 				_angebotdetails.bindProperty("description", "Offers>OfrName");
 
 				// I did not manage to get this one solved... expand does not understand that this is media not data
-				
+
 				_angebotdetails.setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + oContext.getObject().Matnr +
-						"')/$value");
+					"')/$value");
 
 				oItemTemplate.addCell(_angebotdetails);
 				// Status
@@ -277,9 +303,12 @@ sap.ui.define([
 
 				//IMPORTANT NEVER FORGET THE MODEL NAME IN THE MAPPING !!!!
 				_promotype.bindProperty("title", "Offers>PromoType");
-				_promotype.bindProperty("text", {path: "Offers>PromoTypeTxt", formatter:function(oValue) {
-					 return oValue === null ? "" : oValue.substring(0, 10);
-				} } );
+				_promotype.bindProperty("text", {
+					path: "Offers>PromoTypeTxt",
+					formatter: function (oValue) {
+						return oValue === null ? "" : oValue.substring(0, 10);
+					}
+				});
 
 				oItemTemplate.addCell(_promotype);
 
@@ -390,6 +419,9 @@ sap.ui.define([
 			this.getModel().update(_path, {
 				Hoehe: parseInt(oEvent.getParameters().value, 10)
 			}, {});
+		},
+		renderer: function (oRm, oControl) {
+			oRm.renderControl(oControl.getAggregation("_vbox"));
 		}
 	});
 

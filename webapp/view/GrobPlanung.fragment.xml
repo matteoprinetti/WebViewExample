@@ -1,6 +1,7 @@
 <core:FragmentDefinition xmlns:mvc="sap.ui.core.mvc" xmlns:html="http://www.w3.org/1999/xhtml" displayBlock="true" xmlns="sap.m"
 	xmlns:semantic="sap.m.semantic" xmlns:ism="zism.zismlibrary.controls" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core"
-	xmlns:l="sap.ui.layout" xmlns:grid="sap.ui.layout.cssgrid" xmlns:dnd="sap.ui.core.dnd" xmlns:uxap="sap.uxap">
+	xmlns:l="sap.ui.layout" xmlns:grid="sap.ui.layout.cssgrid" xmlns:dnd="sap.ui.core.dnd" xmlns:uxap="sap.uxap"
+	xmlns:poly="zpoly.zpolyplanung.controls">
 	<FlexBox direction="Row" alignItems="Center" class="sapUiResponsiveMargin">
 		<items>
 			<Label text="{i18n>FilialenAuswahl}" labelFor="filialeInput" class="sapUiSmallMargin"/>
@@ -61,7 +62,14 @@
 				<l:SplitterLayoutData size="50%" resizable="false"/>
 			</layoutData>
 		</IconTabBar>
-		<VBox id="itemsBox">
+		<VBox>
+			<Label text="Stellplätze"></Label>
+			<items>
+				<List id="idStellPlatz">
+			
+				</List>
+				<!--<poly:StellPlatz id="IdStellPlatz"></poly:StellPlatz>-->
+			</items>
 			<layoutData>
 				<l:SplitterLayoutData size="50%" resizable="false"/>
 			</layoutData>

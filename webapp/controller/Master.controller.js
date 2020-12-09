@@ -1,13 +1,14 @@
 sap.ui.define([
 	"./BaseController",
 	"zpoly/zpolyplanung/controls/StellPlatzItemTable",
+	"zpoly/zpolyplanung/controls/StellPlatz",
 	"zpoly/zpolyplanung/factories/FlaecheItemFactory",
 	"zpoly/zpolyplanung/factories/OffersItemFactory"
-], function (BaseController, StellPlatzItemTable, FlaecheItemFactory, OffersItemFactory) {
+], function (BaseController, StellPlatzItemTable, StellPlatz, FlaecheItemFactory, OffersItemFactory) {
 	"use strict";
 
 	return BaseController.extend("zpoly.zpolyplanung.controller.Master", {
-
+ 
 		onInit: function () {
 
 			// set up an event so I know when someone has deleted something
@@ -214,17 +215,38 @@ sap.ui.define([
 
 			// now generate a series of tables, one for each entry in zpp_flaeche_Stpl for that flaeche id 
 
-			var _box = this.getView().byId("itemsBox");
+			/*var _box = this.getView().byId("itemsBox");
 			_box.removeAllItems();
+			
+			var _stellplatzpanel = new StellPlatz();
+			_box.addItem(_stellplatzpanel);
+			*/
 
-			this.getModel().read("/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz", {
-				success: function (oData) {
+			var _stellplatz = this.getView().byId("idStellPlatz");
+		 
+
+			var _template = new sap.m.CustomListItem({
+				content: [
+					new StellPlatz({
+						week: '{local>/CalWeek}',
+						key: '{Key}'
+					})
+				]
+			});
+
+			_stellplatz.bindItems({
+				path: "/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz",
+				template: _template
+			});
+
+			/*		this.getModel().read("/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz", {
+				success: function (oData,oResponse) {
 					for (var x in oData.results) {
 						var _data = oData.results[x];
 
 						//var _table = new sap.m.Table().addStyleClass("zpolytableblack");
 
-						var _table = new StellPlatzItemTable({
+			/*			var _table = new StellPlatzItemTable({
 							container: _box
 						});
 
@@ -238,12 +260,17 @@ sap.ui.define([
 							Key: _data.Key,
 							Week: oWeek
 						});
+*/
+			/*
 
-						_box.addItem(_table);
-					}
+									var _stellplatzpanel = new StellPlatz();
+										_stellplatzpanel.setHeaderData(_data);
+									_stellplatzpanel.setHeaderData(_data);
+									_box.addItem(_stellplatzpanel);
+								}
 
-				}.bind(this)
-			});
+							}.bind(this)
+						}); */
 
 		},
 
@@ -252,7 +279,7 @@ sap.ui.define([
 			// but only if this really comes from there..
 
 			if (!oEvent.getParameters().draggedControl) return;
-			
+
 			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
 			if (_path.indexOf("/PlanungItemSet") >= 0) // prevent self-drop, only PlanungItems can be handled 
 				this.getModel().remove(_path, {});
