@@ -174,16 +174,7 @@ sap.ui.define([
 		onCalWeekChange: function (oEvent) {
 			var a = 1;
 		},
-		/*		
-				createSortBerContent: function (sId, oContext) {
-					var sortber = oContext.getProperty('Sortber');
-					var sortberText = new sap.m.Text();
-					sortberText.bindElement({
-						path: "/SortimentSet('" + sortber + "')"
-					});
-					sortberText.bindProperty("text", "Descr");
-					return sortberText;
-				},*/
+ 
 
 		onTabbarSelect: function (oEvent) {
 			if (oEvent.getParameters().key === "Ueber") {
@@ -224,6 +215,7 @@ sap.ui.define([
 
 			var _stellplatz = this.getView().byId("idStellPlatz");
 		 
+	 
 
 			var _template = new sap.m.CustomListItem({
 				content: [
@@ -273,6 +265,7 @@ sap.ui.define([
 						}); */
 
 		},
+	 
 
 		onStellPlatzItemDelete: function (oEvent) {
 			// dragging here means deleting from the stellplatzitem table
