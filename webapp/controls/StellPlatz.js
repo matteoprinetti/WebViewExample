@@ -5,8 +5,9 @@ sap.ui.define([
 	"sap/m/Button",
 	"sap/m/List",
 	"zpoly/zpolyplanung/controls/StellPlatzItemTable",
-	"sap/m/ColumnListItem"
-], function (Control, Panel, OverflowToolbar, Button, List, StellPlatzItemTable,ColumnListItem) {
+	"sap/m/ColumnListItem",
+	"sap/m/MessageBox"
+], function (Control, Panel, OverflowToolbar, Button, List, StellPlatzItemTable,ColumnListItem,MessageBox) {
 	"use strict";
 	return Control.extend("zpoly.zpolyplanung.controls.StellPlatz", {
 		
@@ -73,8 +74,11 @@ sap.ui.define([
 			var _list = new List();
 
 			_list.attachDelete(function(oEvent) {
-				var _path=oEvent.getParameters().listItem.getBindingContextPath();
-				this.getModel().remove(_path);
+				if(oEvent.getParameters().listItem.getContent()[0].getTable().getItems().length==0) {
+				var _path=oEvent.getParameters().listItem.getBindingContextPath(); 
+				this.getModel().remove(_path); }
+				else 
+						MessageBox.alert("Nur leere Warenträger können gelöscht werden");
 				
 			}.bind(this));
 			

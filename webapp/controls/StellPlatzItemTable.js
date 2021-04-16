@@ -6,8 +6,9 @@ sap.ui.define([
 	"sap/ui/layout/HorizontalLayout",
 	"sap/m/ObjectStatus",
 	"sap/m/Input",
-	"sap/m/Label"
-], function (Control, Table, VBox, ObjectPageHeaderContent, HorizontalLayout, ObjectStatus, Input, Label) {
+	"sap/m/Label",
+	"sap/ui/core/Icon"
+], function (Control, Table, VBox, ObjectPageHeaderContent, HorizontalLayout, ObjectStatus, Input, Label, Icon) {
 	"use strict";
 	return Control.extend("zpoly.zpolyplanung.controls.StellPlatzItemTable", {
 
@@ -26,7 +27,11 @@ sap.ui.define([
 				},
 				Anzahl: {
 					type: "string"
+				},
+				Table: {
+					type: "sap.m.Table"   // ref to inner Table
 				}
+			
 
 			},
 			aggregations: {
@@ -35,7 +40,7 @@ sap.ui.define([
 					type: "sap.m.VBox",
 					multiple: false,
 					visibility: "hidden"
-				}
+				} 
 			}
 		},
 
@@ -44,7 +49,7 @@ sap.ui.define([
 			// a VBOX containg a ObjectPageHeaderContent and a Table
 
 			this.setAggregation("_vbox", new VBox());
-
+		 
 			var pageheader = new ObjectPageHeaderContent();
 
 			// Header part (on top of table)
@@ -78,28 +83,34 @@ sap.ui.define([
 			var _table = new Table();
 			// Columns 
 
+			_table.addColumn(new sap.m.Column({   // the mehrfach flag
+				width: "5%",
+				header: new sap.m.Text({
+					text: ""
+				})
+			}));
 			_table.addColumn(new sap.m.Column({
 				width: "35%",
 				header: new sap.m.Text({
 					text: "Angebot"
 				})
 			}));
-			_table.addColumn(new sap.m.Column({
+			/*_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "Status"
 				})
-			}));
+			}));*/
 			_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "Angebotsart"
 				})
 			}));
-
+			/*
 			_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "Planungsart"
 				})
-			}));
+			}));*/
 			_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "WT"
@@ -130,8 +141,13 @@ sap.ui.define([
 
 			this.getAggregation("_vbox").addItem(pageheader);
 			this.getAggregation("_vbox").addItem(_table);
+			
+			// set ref to table
+			this.setProperty("Table",this.getAggregation("_vbox").getItems()[1]);
 		},
 
+		setTable: function(oValue) {},  // prevent tampering with table
+		
 		setStellPlatzId: function (oValue) {
 			this.setProperty("StellPlatzId", oValue);
 			this.bindInternal();
@@ -279,15 +295,19 @@ sap.ui.define([
 				_angebotdetails.bindProperty("description", "Offers>OfrName");
 
 				// I did not manage to get this one solved... expand does not understand that this is media not data
-
+				 if(oContext.getObject().Mehrfach)
+				       oItemTemplate.addCell(new Icon({ src: "sap-icon://warning", color: sap.ui.core.IconColor.Critical }));
+				    else
+				    oItemTemplate.addCell(new sap.m.Label(" "));
+				    
 				_angebotdetails.setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + oContext.getObject().Matnr +
 					"')/$value");
 
 				oItemTemplate.addCell(_angebotdetails);
 				// Status
-				oItemTemplate.addCell(new sap.ui.core.Icon({
+				/*oItemTemplate.addCell(new sap.ui.core.Icon({
 					src: "sap-icon://restart"
-				}).addStyleClass("zPolyLargeIcon"));
+				}).addStyleClass("zPolyLargeIcon"));*/
 
 				// Angebotsart 
 
@@ -314,7 +334,7 @@ sap.ui.define([
 
 				// Planungsart 
 
-				var planungsart = new sap.m.Label({
+				/*var planungsart = new sap.m.Label({
 					//	text: _object.ZzPlaartTxt
 				});
 
@@ -326,7 +346,7 @@ sap.ui.define([
 				//IMPORTANT NEVER FORGET THE MODEL NAME IN THE MAPPING !!!!
 				planungsart.bindProperty("text", "Offers>ZzPlaartTxt");
 
-				oItemTemplate.addCell(planungsart);
+				oItemTemplate.addCell(planungsart);*/
 
 				oItemTemplate.addCell(new sap.m.Input({
 					width: "5%",
@@ -374,16 +394,22 @@ sap.ui.define([
 					model: "ZSRSDATAFEED"
 				});
 
+				 if(oContext.getObject().Mehrfach)
+				     oItemTemplate.addCell(new Icon({ src: "sap-icon://warning", color: sap.ui.core.IconColor.Critical }));
+				    else
+				     oItemTemplate.addCell(new sap.m.Label({ text: " " }));
+		
+		
 				oItemTemplate.addCell(_artikeldetails);
 
 				// 2 empty columns ..
 
-				oItemTemplate.addCell(new sap.m.Label({
+				/*oItemTemplate.addCell(new sap.m.Label({
 					width: "5%"
 				}));
 				oItemTemplate.addCell(new sap.m.Label({
 					width: "5%"
-				}));
+				}));*/
 				oItemTemplate.addCell(new sap.m.Label({
 					width: "5%"
 				}));
