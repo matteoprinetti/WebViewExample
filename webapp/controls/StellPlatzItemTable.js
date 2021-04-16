@@ -183,7 +183,7 @@ sap.ui.define([
 			_filters.push(new sap.ui.model.Filter("Woche",
 				sap.ui.model.FilterOperator.EQ, this.getWoche()));
 
-			this.getAggregation("_vbox").getItems()[1].bindItems({
+			this.getTable().bindItems({
 				path: "/PlanungItemSet",
 				filters: _filters,
 				factory: this.tableDetailFactory.bind(this)
@@ -280,10 +280,7 @@ sap.ui.define([
 				//oData entityset..
 
 				var _angebotPath = "/" + _objectkey;
-				var _angebotdetails = new sap.m.StandardListItem({
-					//title: _object.ZzExtOfrId,
-					//description: _object.OfrName
-				}).addStyleClass("zPolySqueezedArticle");
+				var _angebotdetails = new sap.m.StandardListItem().addStyleClass("zPolySqueezedArticle");
 
 				_angebotdetails.bindElement({
 					path: _angebotPath,
