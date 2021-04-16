@@ -295,7 +295,7 @@ sap.ui.define([
 				 if(oContext.getObject().Mehrfach)
 				       oItemTemplate.addCell(new Icon({ src: "sap-icon://warning", color: sap.ui.core.IconColor.Critical }));
 				    else
-				    oItemTemplate.addCell(new sap.m.Label(" "));
+				    oItemTemplate.addCell(new sap.m.Label({ text: " " }));
 				    
 				_angebotdetails.setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + oContext.getObject().Matnr +
 					"')/$value");
