@@ -14,7 +14,7 @@ sap.ui.define([
 			// set up an event so I know when someone has deleted something
 
 			var bus = this.getOwnerComponent().getEventBus();
-			bus.subscribe("zpolyplanung", "delete", this.onDelete, this);
+			//bus.subscribe("zpolyplanung", "delete", this.onDelete, this);
 
 			// Note that locco is already there at this stage 
 

@@ -10,7 +10,7 @@ sap.ui.define([
 			this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
 
 			var bus = this.getOwnerComponent().getEventBus();
-			bus.subscribe("zpolyplanung", "hidedetail", this.onHideDetail, this);
+			//bus.subscribe("zpolyplanung", "hidedetail", this.onHideDetail, this);
 
 			// Template for boss nr display. The issue here is that the boss name is in another model
 			// and I could not work out if it is possible to do this in XML.
@@ -142,14 +142,14 @@ sap.ui.define([
 			this.getView().getModel().remove(oEvent.getParameters().listItem.getBindingContextPath(), {});
 		},
 
-		onBtnDelete: function (oEvent) {
+		/*onBtnDelete: function (oEvent) {
 			var bus = this.getOwnerComponent().getEventBus();
 			var sPath = this.getView().getBindingContext().getPath();
 			bus.publish("zpolyplanung", "delete", {
 				path: sPath
 			}); // broadcast the event
 
-		},
+		},*/
 
 		onBtnAddBossnr: function (oEvent) {
 			var _bossSelect = this.getView().byId("bossSelect");

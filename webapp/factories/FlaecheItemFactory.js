@@ -6,7 +6,7 @@ sap.ui.define([], function () {
 
 			var oItemTemplate = new sap.m.ColumnListItem({
 				type: "Navigation",
-				title: "{Name}",
+			//	title: "{Name}",
 				press: this.onSelectionChange.bind(this)
 			});
 			oItemTemplate.addCell(new sap.m.Text({
