@@ -214,8 +214,12 @@ sap.ui.define([
 			*/
 
 			var _stellplatz = this.getView().byId("idStellPlatz");
-		 
-	 
+
+			//20.04.2021 set Container height
+			
+			var _stellplatzcontainer = this.getView().byId("idStellPlatzContainer");
+			var _height = $("#"+this.getView().byId("idSplitter").getId()).css("height");
+			_stellplatzcontainer.setHeight(_height);
 
 			var _template = new sap.m.CustomListItem({
 				content: [

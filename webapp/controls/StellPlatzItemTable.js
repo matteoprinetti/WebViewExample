@@ -29,9 +29,8 @@ sap.ui.define([
 					type: "string"
 				},
 				Table: {
-					type: "sap.m.Table"   // ref to inner Table
+					type: "sap.m.Table" // ref to inner Table
 				}
-			
 
 			},
 			aggregations: {
@@ -40,7 +39,7 @@ sap.ui.define([
 					type: "sap.m.VBox",
 					multiple: false,
 					visibility: "hidden"
-				} 
+				}
 			}
 		},
 
@@ -49,7 +48,7 @@ sap.ui.define([
 			// a VBOX containg a ObjectPageHeaderContent and a Table
 
 			this.setAggregation("_vbox", new VBox());
-		 
+
 			var pageheader = new ObjectPageHeaderContent();
 
 			// Header part (on top of table)
@@ -83,7 +82,7 @@ sap.ui.define([
 			var _table = new Table();
 			// Columns 
 
-			_table.addColumn(new sap.m.Column({   // the mehrfach flag
+			_table.addColumn(new sap.m.Column({ // the mehrfach flag
 				width: "5%",
 				header: new sap.m.Text({
 					text: ""
@@ -141,13 +140,13 @@ sap.ui.define([
 
 			this.getAggregation("_vbox").addItem(pageheader);
 			this.getAggregation("_vbox").addItem(_table);
-			
+
 			// set ref to table
-			this.setProperty("Table",this.getAggregation("_vbox").getItems()[1]);
+			this.setProperty("Table", this.getAggregation("_vbox").getItems()[1]);
 		},
 
-		setTable: function(oValue) {},  // prevent tampering with table
-		
+		setTable: function (oValue) {}, // prevent tampering with table
+
 		setStellPlatzId: function (oValue) {
 			this.setProperty("StellPlatzId", oValue);
 			this.bindInternal();
@@ -209,6 +208,9 @@ sap.ui.define([
 			var _matnr = "";
 			var _article_flag = "";
 
+			// 20.04.2021 we can drag drop between warenträger. In this case we have a delete 
+			// followed by an Insert.
+
 			if (_path.indexOf("/OfrHeadSet") >= 0) { // we just dropped an Angebot
 				_angebot_or_article_key = this.getModel("Offers").getProperty(_path).OfferGuid;
 				_matnr = this.getModel("Offers").getProperty(_path).ZzExtOfrId; // also used for ofr id
@@ -221,6 +223,19 @@ sap.ui.define([
 				_matnr = this.getModel("ZSRSDATAFEED").getProperty(_path).matnr;
 				_article_flag = "X";
 
+			}
+
+			// warenträger to warenträger
+
+			if (_path.indexOf("/PlanungItemSet") >= 0) { // we just dropped from another warenträger
+				_angebot_or_article_key = this.getModel().getProperty(_path).Angebot;
+				_article_flag = this.getModel().getProperty(_path).ArtikelFlag ? "X" : "";
+				
+				if(_article_flag)
+					_matnr = this.getModel().getProperty(_path).Angebot; // also used for ofr id
+					
+				_von = this.getModel().getProperty(_path).Von;
+				_bis = this.getModel().getProperty(_path).Bis;
 			}
 
 			if (_angebot_or_article_key === "") {
@@ -250,7 +265,19 @@ sap.ui.define([
 				_object = _objectkey;
 			}
 
-			this.getModel().create("/PlanungItemSet", _object);
+			// between warentraeger delete then insert 
+			if (_path.indexOf("/PlanungItemSet") >= 0) {
+		 
+				// if the same key is there this is a insert / remove of the same item but so be it
+				
+				this.getModel().remove(_path, {
+					refreshAfterChange: false,
+					success: function () {
+						this.getModel().create("/PlanungItemSet", _object );
+					}.bind(this)
+				});
+			} else // or just insert
+				this.getModel().create("/PlanungItemSet", _object );
 
 		},
 
@@ -292,11 +319,16 @@ sap.ui.define([
 				_angebotdetails.bindProperty("description", "Offers>OfrName");
 
 				// I did not manage to get this one solved... expand does not understand that this is media not data
-				 if(oContext.getObject().Mehrfach)
-				       oItemTemplate.addCell(new Icon({ src: "sap-icon://warning", color: sap.ui.core.IconColor.Critical }));
-				    else
-				    oItemTemplate.addCell(new sap.m.Label({ text: " " }));
-				    
+				if (oContext.getObject().Mehrfach)
+					oItemTemplate.addCell(new Icon({
+						src: "sap-icon://warning",
+						color: sap.ui.core.IconColor.Critical
+					}));
+				else
+					oItemTemplate.addCell(new sap.m.Label({
+						text: " "
+					}));
+
 				_angebotdetails.setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + oContext.getObject().Matnr +
 					"')/$value");
 
@@ -391,12 +423,16 @@ sap.ui.define([
 					model: "ZSRSDATAFEED"
 				});
 
-				 if(oContext.getObject().Mehrfach)
-				     oItemTemplate.addCell(new Icon({ src: "sap-icon://warning", color: sap.ui.core.IconColor.Critical }));
-				    else
-				     oItemTemplate.addCell(new sap.m.Label({ text: " " }));
-		
-		
+				if (oContext.getObject().Mehrfach)
+					oItemTemplate.addCell(new Icon({
+						src: "sap-icon://warning",
+						color: sap.ui.core.IconColor.Critical
+					}));
+				else
+					oItemTemplate.addCell(new sap.m.Label({
+						text: " "
+					}));
+
 				oItemTemplate.addCell(_artikeldetails);
 
 				// 2 empty columns ..

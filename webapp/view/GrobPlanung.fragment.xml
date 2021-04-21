@@ -13,7 +13,7 @@
 			<Select id="selPP" enabled="true" forceSelection="false" selectedKey="{local>/selectedPPF}" change="onPPSelected" class="sapUiSmallMargin"></Select>
 		</items>
 	</FlexBox>
-	<l:Splitter>
+	<l:Splitter id="idSplitter">
 		<IconTabBar id="idSelAngTabBar" class="sapUiResponsiveContentPadding" expanded="true" expandable="false" select="onAngebotBarSelect">
 			<items>
 				<IconTabFilter text="Angebote" key="Angebote">
@@ -65,9 +65,11 @@
 		<VBox>
 			<Label text="Stellplätze"></Label>
 			<items>
+				<ScrollContainer id="idStellPlatzContainer" vertical="true">
 				<List id="idStellPlatz">
 			
 				</List>
+				</ScrollContainer>
 				<!--<poly:StellPlatz id="IdStellPlatz"></poly:StellPlatz>-->
 			</items>
 			<layoutData>
