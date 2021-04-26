@@ -8,7 +8,7 @@ sap.ui.define([
 	"use strict";
 
 	return BaseController.extend("zpoly.zpolyplanung.controller.Master", {
- 
+
 		onInit: function () {
 
 			// set up an event so I know when someone has deleted something
@@ -174,7 +174,6 @@ sap.ui.define([
 		onCalWeekChange: function (oEvent) {
 			var a = 1;
 		},
- 
 
 		onTabbarSelect: function (oEvent) {
 			if (oEvent.getParameters().key === "Ueber") {
@@ -186,40 +185,35 @@ sap.ui.define([
 			this.loadGrob(oEvent.getParameters().selectedItem.getKey(), this.getView().byId("calenderAuswahlGrob").getValue());
 		},
 
-		loadGrob: function (oId, oWeek) {
+		onBeforeRebindAngeboteTable: function (oEvent) {
 
+			var binding = oEvent.getParameter("bindingParams");
 			var oLoccoFilter = new sap.ui.model.Filter("Locco",
 				sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco);
 
 			var oWeekFilter = new sap.ui.model.Filter("Week",
-				sap.ui.model.FilterOperator.EQ, oWeek);
+				sap.ui.model.FilterOperator.EQ, this.getView().byId("calenderAuswahlGrob").getValue());
 
-			this.getView().byId("AngeboteTable").bindItems({
-				path: "Offers>/OfrHeadSet",
-				filters: [oLoccoFilter, oWeekFilter],
-				//template: itemTemplate,
-				factory: OffersItemFactory.factory.bind(this),
-				parameters: {
-					expand: "toCampaign"
-				}
-			});
+			binding.filters.push(oLoccoFilter);
+			binding.filters.push(oWeekFilter);
 
-			// now generate a series of tables, one for each entry in zpp_flaeche_Stpl for that flaeche id 
+		},
 
-			/*var _box = this.getView().byId("itemsBox");
-			_box.removeAllItems();
-			
-			var _stellplatzpanel = new StellPlatz();
-			_box.addItem(_stellplatzpanel);
-			*/
+		loadGrob: function (oId, oWeek) {
+
+			this.getView().byId("AngeboteTable").setModel(this.getView().getModel("Offers"));
 
 			var _stellplatz = this.getView().byId("idStellPlatz");
 
 			//20.04.2021 set Container height
-			
+
 			var _stellplatzcontainer = this.getView().byId("idStellPlatzContainer");
-			var _height = $("#"+this.getView().byId("idSplitter").getId()).css("height");
+			var _height = $("#" + this.getView().byId("idSplitter").getId()).css("height");
 			_stellplatzcontainer.setHeight(_height);
+
+			var _angebotcontainer = this.getView().byId("idAngeboteContainer");
+			_height = $("#" + this.getView().byId("idSplitter").getId()).css("height");
+			_angebotcontainer.setHeight(_height);
 
 			var _template = new sap.m.CustomListItem({
 				content: [
@@ -269,7 +263,6 @@ sap.ui.define([
 						}); */
 
 		},
-	 
 
 		onStellPlatzItemDelete: function (oEvent) {
 			// dragging here means deleting from the stellplatzitem table

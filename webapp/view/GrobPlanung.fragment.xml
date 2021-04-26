@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns:mvc="sap.ui.core.mvc" xmlns:html="http://www.w3.org/1999/xhtml" displayBlock="true" xmlns="sap.m"
 	xmlns:semantic="sap.m.semantic" xmlns:ism="zism.zismlibrary.controls" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core"
 	xmlns:l="sap.ui.layout" xmlns:grid="sap.ui.layout.cssgrid" xmlns:dnd="sap.ui.core.dnd" xmlns:uxap="sap.uxap"
-	xmlns:poly="zpoly.zpolyplanung.controls">
+	xmlns:poly="zpoly.zpolyplanung.controls" xmlns:smart="sap.ui.comp.smarttable">
 	<FlexBox direction="Row" alignItems="Center" class="sapUiResponsiveMargin">
 		<items>
 			<Label text="{i18n>FilialenAuswahl}" labelFor="filialeInput" class="sapUiSmallMargin"/>
@@ -17,33 +17,31 @@
 		<IconTabBar id="idSelAngTabBar" class="sapUiResponsiveContentPadding" expanded="true" expandable="false" select="onAngebotBarSelect">
 			<items>
 				<IconTabFilter text="Angebote" key="Angebote">
-					<ScrollContainer height="500px" width="100%" vertical="true" focusable="true">
-						<Table id="AngeboteTable" inset="false">
-							<dragDropConfig>
+					<ScrollContainer id="idAngeboteContainer" vertical="true" focusable="true">
+						<smart:SmartTable id="AngeboteTable" beforeRebindTable="onBeforeRebindAngeboteTable" entitySet="OfrHeadSet">
+							<smart:dragDropConfig>
 								<dnd:DragInfo groupName="itemsgroup" sourceAggregation="items"/>
 								<dnd:DropInfo drop="onStellPlatzItemDelete"/>
-							</dragDropConfig>
-							<columns>
-								<Column width="36%">
-									<Text text="Angebot"/>
-								</Column>
-								<Column width="10%">
-									<Text text="Status"/>
-								</Column>
-								<Column width="15%">
-									<Text text="Kampagne"/>
-								</Column>
-								<Column width="13%">
-									<Text text="Planungsart"/>
-								</Column>
-								<Column width="13%">
-									<Text text="Angebotsart"/>
-								</Column>
-								<Column width="13%">
-									<Text text="Kommunikationsrolle"/>
-								</Column>
-							</columns>
-						</Table>
+							</smart:dragDropConfig>
+							<Table>
+								<columns>
+									<Column id="ZzExtOfrId" hAlign="Begin">
+										<customData>
+											<core:CustomData key="p13nData"
+												value='\{"columnKey": "ZzExtOfrId", "columnIndex":"1", "leadingProperty": "ZzExtOfrId", "sortProperty": "ZzExtOfrId", "additionalProperty": "Name1", "description": "Name1", "displayBehaviour": "descriptionOnly", "width": "360px"}'/>
+										</customData>
+										<Text text="Ofrid"/>
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem>
+										<cells>
+											<Text text="{Offers>ZzExtOfrId}"/>
+										</cells>
+										</ColumnListItem>
+								</items>
+							</Table>
+						</smart:SmartTable>
 					</ScrollContainer>
 				</IconTabFilter>
 				<IconTabFilter text="Artikel ohne Angebote" key="Artikel">
@@ -66,9 +64,7 @@
 			<Label text="Stellplätze"></Label>
 			<items>
 				<ScrollContainer id="idStellPlatzContainer" vertical="true">
-				<List id="idStellPlatz">
-			
-				</List>
+					<List id="idStellPlatz"></List>
 				</ScrollContainer>
 				<!--<poly:StellPlatz id="IdStellPlatz"></poly:StellPlatz>-->
 			</items>
