@@ -28,3 +28,14 @@
 .zPolySqueezedArticle {
 	height: 3.8rem !important;
 }
+
+.zPolyFilterSelect {
+	width: 10% !important;
+}
+
+.zPolyIconHover {
+  transition: 0.2s;
+}
+.zPolyIconHover:hover {
+  transition-delay: 3s; /* delay hover animation only ON, not OFF */
+}

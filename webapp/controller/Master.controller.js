@@ -3,11 +3,14 @@ sap.ui.define([
 	"zpoly/zpolyplanung/controls/StellPlatzItemTable",
 	"zpoly/zpolyplanung/controls/StellPlatz",
 	"zpoly/zpolyplanung/factories/FlaecheItemFactory",
-	"zpoly/zpolyplanung/factories/OffersItemFactory"
-], function (BaseController, StellPlatzItemTable, StellPlatz, FlaecheItemFactory, OffersItemFactory) {
+	"zpoly/zpolyplanung/factories/OffersItemFactory",
+	"../model/formatter",
+	'sap/ui/core/Fragment'
+], function (BaseController, StellPlatzItemTable, StellPlatz, FlaecheItemFactory, OffersItemFactory, Formatter, Fragment) {
 	"use strict";
 
 	return BaseController.extend("zpoly.zpolyplanung.controller.Master", {
+		formatter: Formatter,
 
 		onInit: function () {
 
@@ -194,6 +197,7 @@ sap.ui.define([
 			var oWeekFilter = new sap.ui.model.Filter("Week",
 				sap.ui.model.FilterOperator.EQ, this.getView().byId("calenderAuswahlGrob").getValue());
 
+			binding.parameters["expand"] = "toCampaign";
 			binding.filters.push(oLoccoFilter);
 			binding.filters.push(oWeekFilter);
 
@@ -202,6 +206,8 @@ sap.ui.define([
 		loadGrob: function (oId, oWeek) {
 
 			this.getView().byId("AngeboteTable").setModel(this.getView().getModel("Offers"));
+			//this.getView().byId("AngeboteTable").setTableBindingPath("toCampaign");
+			this.getView().byId("AngeboteTable").rebindTable();
 
 			var _stellplatz = this.getView().byId("idStellPlatz");
 
@@ -274,6 +280,35 @@ sap.ui.define([
 			if (_path.indexOf("/PlanungItemSet") >= 0) // prevent self-drop, only PlanungItems can be handled 
 				this.getModel().remove(_path, {});
 
+		},
+
+		onAngebotSelectIconHover: function (oEvent) {
+
+			var _source = oEvent.getSource();
+			var _params = oEvent.getParameters();
+
+			if (!this._pPopover) {
+				this._pPopover = Fragment.load({
+					id: this.getView().getId(),
+					name: "zpoly.zpolyplanung.view.AngebotPopOver",
+					controller: this
+				}).then(function (oPopover) {
+					this.getView().addDependent(oPopover);
+					return oPopover;
+				}.bind(this));
+			}
+			this._pPopover.then(function (oPopover) {
+			
+				if (_params.state) {
+					oPopover.bindElement({ path: _params.path, model: "Offers" });
+					oPopover.openBy(_source);
+				}
+				else
+					oPopover.close();
+			}.bind(this));
+			var a = 1;
+			console.log("hover");
+			// show some picture 
 		}
 
 	});
