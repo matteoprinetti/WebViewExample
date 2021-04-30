@@ -22,6 +22,11 @@
 						<fb:FilterBar reset="onReset" search="onSearch" showRestoreButton="true" showClearButton="true" showGoOnFB="false"
 							filterContainerWidth="10rem">
 							<fb:filterGroupItems>
+								<fb:FilterGroupItem groupName="__$INTERNAL$" name="9" label="Selektion" partOfCurrentVariant="true" visibleInFilterBar="true">
+									<fb:control>
+										<CheckBox text="Alle Angebote" selected="true" />
+									</fb:control>
+								</fb:FilterGroupItem>
 								<fb:FilterGroupItem groupName="__$INTERNAL$" name="S" label="Status" partOfCurrentVariant="true" visibleInFilterBar="true">
 									<fb:control>
 										<Select class="zPolyFilterSelect">
