@@ -201,6 +201,35 @@ sap.ui.define([
 			binding.filters.push(oLoccoFilter);
 			binding.filters.push(oWeekFilter);
 
+			// now the custom filter 
+			// only if this.All is not true
+			
+			if(!this._all) {
+				if(this._status && this._status!==null) { 
+				   // special handling to find out the date range according to filter
+				}
+				
+				if(this._angebotText && this._angebotText!==null) { 
+				   // special handling to find out the date range according to filter
+				   binding.filters.push(new sap.ui.model.Filter("OfrName",
+						sap.ui.model.FilterOperator.EQ, this._angebotText));
+				}
+				
+				if(this._campaignText && this._campaignText!==null) { 
+				   // special handling to find out the date range according to filter
+				   binding.filters.push(new sap.ui.model.Filter("CampaignName",
+						sap.ui.model.FilterOperator.EQ, this._campaignText));
+				}
+	
+				if(this._angebotsArt && this._angebotsArt!==null) { 
+				   // special handling to find out the date range according to filter
+				   binding.filters.push(new sap.ui.model.Filter("ZzSortimentTxt2",
+						sap.ui.model.FilterOperator.EQ, this._angebotsArt));
+				}
+				
+        
+			}
+			
 		},
 
 		loadGrob: function (oId, oWeek) {
@@ -309,6 +338,17 @@ sap.ui.define([
 			var a = 1;
 			console.log("hover");
 			// show some picture 
+		},
+		
+		onSearch: function(oEvent) {
+			// the values, according to their position
+			
+			this._all=oEvent.getParameters().selectionSet[0].getSelected();
+            this._status=oEvent.getParameters().selectionSet[1].getSelectedItem().getKey();
+            this._angebotText=oEvent.getParameters().selectionSet[2].getValue();
+            this._campaignText=oEvent.getParameters().selectionSet[3].getValue();
+            this._angebotsArt=oEvent.getParameters().selectionSet[4].getSelectedItem().getKey();
+            this.getView().byId("AngeboteTable").rebindTable();
 		}
 
 	});

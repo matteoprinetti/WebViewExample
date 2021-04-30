@@ -19,7 +19,7 @@
 			<items>
 				<IconTabFilter text="Angebote" key="Angebote">
 					<ScrollContainer id="idAngeboteContainer" vertical="true" focusable="true">
-						<fb:FilterBar reset="onReset" search="onSearch" showRestoreButton="true" showClearButton="true" showGoOnFB="false"
+						<fb:FilterBar reset="onReset" search="onSearch" showRestoreButton="true" showClearButton="true" showGoOnFB="true"
 							filterContainerWidth="10rem">
 							<fb:filterGroupItems>
 								<fb:FilterGroupItem groupName="__$INTERNAL$" name="9" label="Selektion" partOfCurrentVariant="true" visibleInFilterBar="true">

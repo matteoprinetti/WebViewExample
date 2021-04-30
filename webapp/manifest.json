@@ -66,7 +66,10 @@
 			"tablet": true,
 			"phone": true
 		},
-		"supportedThemes": ["sap_hcb", "sap_bluecrystal"]
+		"supportedThemes": [
+			"sap_hcb",
+			"sap_bluecrystal"
+		]
 	},
 	"sap.ui5": {
 		"config": {
@@ -79,12 +82,9 @@
 		"dependencies": {
 			"minUI5Version": "1.66.0",
 			"libs": {
-				"sap.ui.layout": {},
-				"sap.ui.core": {},
 				"sap.m": {},
-				"zism.zismlibrary": {
-					"minVersion": "1.0.0"
-				}
+				"sap.ui.core": {},
+				"sap.ui.layout": {}
 			}
 		},
 		"contentDensities": {
@@ -150,9 +150,11 @@
 			}
 		},
 		"resources": {
-			"css": [{
-				"uri": "css/style.css"
-			}]
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
 		},
 		"routing": {
 			"config": {
@@ -167,11 +169,15 @@
 					"target": []
 				}
 			},
-			"routes": [{
-				"name": "TargetMaster",
-				"pattern": "",
-				"target": ["TargetMaster"]
-			}],
+			"routes": [
+				{
+					"name": "TargetMaster",
+					"pattern": "",
+					"target": [
+						"TargetMaster"
+					]
+				}
+			],
 			"targets": {
 				"TargetMaster": {
 					"viewType": "XML",
