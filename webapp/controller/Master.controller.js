@@ -190,6 +190,12 @@ sap.ui.define([
 
 		onBeforeRebindAngeboteTable: function (oEvent) {
 
+			// 12.05.2021 Prinetti
+			// check the search flags and ACT
+
+			var _default = this.getView().byId("idSelDefault").getSelected();
+			var _searchText = this.getView().byId("idSelSearch").getValue();
+
 			var binding = oEvent.getParameter("bindingParams");
 			var oLoccoFilter = new sap.ui.model.Filter("Locco",
 				sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco);
@@ -203,52 +209,33 @@ sap.ui.define([
 
 			// now the custom filter 
 			// only if this.All is not true
-			
-			if(!this._all) {
-				if(this._status && this._status!==null) { 
-				   // special handling to find out the date range according to filter
-				}
-				
-				if(this._angebotText && this._angebotText!==null) { 
-				   // special handling to find out the date range according to filter
-				   binding.filters.push(new sap.ui.model.Filter("OfrName",
-						sap.ui.model.FilterOperator.EQ, this._angebotText));
-				}
-				
-				if(this._campaignText && this._campaignText!==null) { 
-				   // special handling to find out the date range according to filter
-				   binding.filters.push(new sap.ui.model.Filter("CampaignName",
-						sap.ui.model.FilterOperator.EQ, this._campaignText));
-				}
-	
-				if(this._angebotsArt && this._angebotsArt!==null) { 
-				   // special handling to find out the date range according to filter
-				   binding.filters.push(new sap.ui.model.Filter("ZzSortimentTxt2",
-						sap.ui.model.FilterOperator.EQ, this._angebotsArt));
-				}
-				
-        
+
+			if (_default) {
+				// add the filters according to the type of polyflaeche				
 			}
-			
+
+			if (_searchText && _searchText !== "") {
+				binding.filters.push(new sap.ui.model.Filter("OfrName",
+					sap.ui.model.FilterOperator.EQ, _searchText));
+			}
+
 		},
 
 		loadGrob: function (oId, oWeek) {
 
-			this.getView().byId("AngeboteTable").setModel(this.getView().getModel("Offers"));
-			//this.getView().byId("AngeboteTable").setTableBindingPath("toCampaign");
-			this.getView().byId("AngeboteTable").rebindTable();
-
+		    this.internalRebind();
+		   
 			var _stellplatz = this.getView().byId("idStellPlatz");
 
 			//20.04.2021 set Container height
 
-			var _stellplatzcontainer = this.getView().byId("idStellPlatzContainer");
+			/*var _stellplatzcontainer = this.getView().byId("idMasterPage");
 			var _height = $("#" + this.getView().byId("idSplitter").getId()).css("height");
 			_stellplatzcontainer.setHeight(_height);
 
-			var _angebotcontainer = this.getView().byId("idAngeboteContainer");
+			var _angebotcontainer = this.getView().byId("AngeboteTable");
 			_height = $("#" + this.getView().byId("idSplitter").getId()).css("height");
-			_angebotcontainer.setHeight(_height);
+			_angebotcontainer.setHeight(_height);*/
 
 			var _template = new sap.m.CustomListItem({
 				content: [
@@ -327,28 +314,55 @@ sap.ui.define([
 				}.bind(this));
 			}
 			this._pPopover.then(function (oPopover) {
-			
+
 				if (_params.state) {
-					oPopover.bindElement({ path: _params.path, model: "Offers" });
+					oPopover.bindElement({
+						path: _params.path,
+						model: "Offers"
+					});
 					oPopover.openBy(_source);
-				}
-				else
+				} else
 					oPopover.close();
 			}.bind(this));
 			var a = 1;
 			console.log("hover");
 			// show some picture 
 		},
+
 		
-		onSearch: function(oEvent) {
-			// the values, according to their position
+		onSearch: function (oEvent) {
+			// call internalRebind
+			var _selected=this.getView().byId("idSelDefault").getSelected();
+			var _search=this.getView().byId("idSelSearch").getValue();
 			
-			this._all=oEvent.getParameters().selectionSet[0].getSelected();
-            this._status=oEvent.getParameters().selectionSet[1].getSelectedItem().getKey();
-            this._angebotText=oEvent.getParameters().selectionSet[2].getValue();
-            this._campaignText=oEvent.getParameters().selectionSet[3].getValue();
-            this._angebotsArt=oEvent.getParameters().selectionSet[4].getSelectedItem().getKey();
-            this.getView().byId("AngeboteTable").rebindTable();
+			// get the data for the polyflaeche and build a filter
+			
+			
+		},
+		
+		
+		internalRebind: function (_defsearch , _textfilter) {
+			// the values, according to their position
+			// if
+						var filters = [];
+			var oLoccoFilter = new sap.ui.model.Filter("Locco",
+				sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco);
+
+			var oWeekFilter = new sap.ui.model.Filter("Week",
+				sap.ui.model.FilterOperator.EQ, this.getView().byId("calenderAuswahlGrob").getValue());
+
+			filters.push(oLoccoFilter);
+			filters.push(oWeekFilter);
+
+			this.getView().byId("AngeboteTable").setModel(this.getView().getModel("Offers"));
+			this.getView().byId("AngeboteTable").bindItems({
+				path: "/OfrHeadSet",
+		
+				filters: filters,
+				template: this.getView().byId("AngeboteTableColumnListItem").clone(),
+				parameters: { expand: "toCampaign"}
+			});
+
 		}
 
 	});

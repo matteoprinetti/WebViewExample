@@ -15,106 +15,80 @@
 		</items>
 	</FlexBox>
 	<l:Splitter id="idSplitter">
-		<IconTabBar id="idSelAngTabBar" class="sapUiResponsiveContentPadding" expanded="true" expandable="false" select="onAngebotBarSelect">
+		<IconTabBar id="idSelAngTabBar" expanded="true" expandable="false" select="onAngebotBarSelect">
 			<items>
 				<IconTabFilter text="Angebote" key="Angebote">
-					<ScrollContainer id="idAngeboteContainer" vertical="true" focusable="true">
-						<fb:FilterBar reset="onReset" search="onSearch" showRestoreButton="true" showClearButton="true" showGoOnFB="true"
-							filterContainerWidth="10rem">
-							<fb:filterGroupItems>
-								<fb:FilterGroupItem groupName="__$INTERNAL$" name="9" label="Selektion" partOfCurrentVariant="true" visibleInFilterBar="true">
-									<fb:control>
-										<CheckBox text="Alle Angebote" selected="true" />
-									</fb:control>
-								</fb:FilterGroupItem>
-								<fb:FilterGroupItem groupName="__$INTERNAL$" name="S" label="Status" partOfCurrentVariant="true" visibleInFilterBar="true">
-									<fb:control>
-										<Select class="zPolyFilterSelect">
-											<items>
-												<core:Item/>
-												<core:ListItem icon="sap-icon://status-positive"/>
-												<core:ListItem icon="sap-icon://physical-activity"/>
-												<core:ListItem icon="sap-icon://past"/>
-												<core:ListItem icon="sap-icon://stop"/>
-											</items>
-										</Select>
-									</fb:control>
-								</fb:FilterGroupItem>
-								<fb:FilterGroupItem groupName="__$INTERNAL$" name="B" label="Angebot" partOfCurrentVariant="true" visibleInFilterBar="true">
-									<fb:control>
-										<Input value=""/>
-									</fb:control>
-								</fb:FilterGroupItem>
-								<fb:FilterGroupItem groupName="__$INTERNAL$" name="K" label="Kampagne" partOfCurrentVariant="true" visibleInFilterBar="true">
-									<fb:control>
-										<Input value=""/>
-									</fb:control>
-								</fb:FilterGroupItem>
-								<fb:FilterGroupItem groupName="__$INTERNAL$" name="R" label="Angebotsart" partOfCurrentVariant="true" visibleInFilterBar="true">
-									<fb:control>
-										<Select width="15%">
-											<items>
-												<core:Item text=""/>
-												<core:Item text="CAKT"/>
-												<core:Item text="CUMX"/>
-												<core:Item text="GUTX"/>
-												<core:Item text="GRAB"/>
-												<core:Item text="SA"/>
-												<core:Item text="SE"/>
-												<core:Item text="SORT"/>
-												<core:Item text="XFY"/>
-											</items>
-										</Select>
-									</fb:control>
-								</fb:FilterGroupItem>
-							</fb:filterGroupItems>
-						</fb:FilterBar>
-						<smart:SmartTable id="AngeboteTable" beforeRebindTable="onBeforeRebindAngeboteTable" entitySet="OfrHeadSet" enableAutoBinding="false"
-							useTablePersonalisation="false" useExportToExcel="false" useOnlyOneSolidToolbar="true" showTablePersonalisation="false"
-							tableType="ResponsiveTable"
-							requestAtLeastFields="ZzExtOfrId,Startdat,Enddat,OfrName,PromoType,PromoTypeTxt,OfferGuid,toCampaign/CampaignId,toCampaign/CampaignName">
-							<Table>
-								<dragDropConfig>
-									<dnd:DragInfo groupName="itemsgroup" sourceAggregation="items"/>
-									<dnd:DropInfo drop="onStellPlatzItemDelete"/>
-								</dragDropConfig>
-								<columns>
-									<Column width="10%">
-										<Text text=""/>
-									</Column>
-									<Column width="50%">
-										<Text text="Angebot"/>
-										<customData>
-											<core:CustomData key="p13nData"
-												value='\{"sortProperty": "OfrName", "filterProperty": "OfrName", "columnKey": "OfrName", "leadingProperty": "OfrName" , "columnIndex":"1"}'/>
-										</customData>
-									</Column>
-									<Column>
-										<Text text="Kampagne"/>
-									</Column>
-									<Column>
-										<customData>
-											<core:CustomData key="p13nData"
-												value='\{"sortProperty": "PromoTypeTxt", "filterProperty": "PromoTypeTxt", "columnKey": "PromoTypeTxt", "leadingProperty": "PromoTypeTxt" , "columnIndex":"3"}'/>
-										</customData>
-										<Text text="Art" width="20%"/>
-									</Column>
-								</columns>
-								<items>
-									<ColumnListItem>
-										<cells>
-											<poly:IconHover src="{ parts: [ {path: 'Startdat' }, { path: 'Enddat' } ], formatter: '.formatter.getAngebotStatus'}"
-												color="{ parts: [ {path: 'Startdat' }, { path: 'Enddat' } ], formatter: '.formatter.getAngebotColor'}" size="2.5em"
-												hover="onAngebotSelectIconHover" class="zPolyIconHover"></poly:IconHover>
-											<StandardListItem title="{ZzExtOfrId}" description="{OfrName}" class="zPolySqueezedArticle" wrapping="true"></StandardListItem>
-											<ObjectIdentifier title="{ parts: [ { path: 'toCampaign' } ], formatter: '.formatter.getFirstCampaignId' }"
-												text="{ parts: [ { path: 'toCampaign' } ], formatter: '.formatter.getFirstCampaignName' }"/>
-											<Text text="{path: 'PromoTypeTxt', formatter: '.formatter.getFirstWord' }"/>
-										</cells>
-									</ColumnListItem>
-								</items>
-							</Table>
-						</smart:SmartTable>
+					<!--<ScrollContainer id="idAngeboteContainer" vertical="true" horizontal="true" focusable="true">-->
+					<FlexBox alignItems="Start">
+						<CheckBox id="idSelDefault" text="Default" selected="true" select="onSearch">
+							<layoutData>
+								<FlexItemData growFactor="1"/>
+							</layoutData>
+						</CheckBox>
+						<Input id="idSelSearch" value="" class="sapUiSmallMarginEnd" submit="onSearch">
+							<layoutData>
+								<FlexItemData growFactor="4"/>
+							</layoutData>
+						</Input>
+					</FlexBox>
+					<Table id="AngeboteTableHead" showNoData="false">
+						<columns>
+							<Column width="10%">
+								<Text text=""/>
+							</Column>
+							<Column width="50%">
+								<Text text="Angebot"/>
+								<customData>
+									<core:CustomData key="p13nData"
+										value='\{"sortProperty": "OfrName", "filterProperty": "OfrName", "columnKey": "OfrName", "leadingProperty": "OfrName" , "columnIndex":"1"}'/>
+								</customData>
+							</Column>
+							<Column>
+								<Text text="Kampagne"/>
+							</Column>
+							<Column>
+								<customData>
+									<core:CustomData key="p13nData"
+										value='\{"sortProperty": "PromoTypeTxt", "filterProperty": "PromoTypeTxt", "columnKey": "PromoTypeTxt", "leadingProperty": "PromoTypeTxt" , "columnIndex":"3"}'/>
+								</customData>
+								<Text text="Art" width="20%"/>
+							</Column>
+						</columns>
+					</Table>
+					<ScrollContainer vertical="true" focusable="true" height="550px">
+						<!--<smart:SmartTable id="AngeboteTable" beforeRebindTable="onBeforeRebindAngeboteTable" entitySet="OfrHeadSet" enableAutoBinding="false"
+							useTablePersonalisation="false" useExportToExcel="false" useOnlyOneSolidToolbar="false" showTablePersonalisation="false"
+						
+							requestAtLeastFields="ZzExtOfrId,Startdat,Enddat,OfrName,PromoType,PromoTypeTxt,OfferGuid,toCampaign/CampaignId,toCampaign/CampaignName">-->
+						<Table id="AngeboteTable">
+							<dragDropConfig>
+								<dnd:DragInfo groupName="itemsgroup" sourceAggregation="items"/>
+								<dnd:DropInfo drop="onStellPlatzItemDelete"/>
+							</dragDropConfig>
+							<columns>
+								<Column width="10%"></Column>
+								<Column width="50%"></Column>
+								<Column></Column>
+								<Column width="20%"/>
+							</columns>
+							<items>
+								<ColumnListItem id="AngeboteTableColumnListItem">
+									<cells>
+										<poly:IconHover src="{ parts: [ {path: 'Startdat' }, { path: 'Enddat' } ], formatter: '.formatter.getAngebotStatus'}"
+											color="{ parts: [ {path: 'Startdat' }, { path: 'Enddat' } ], formatter: '.formatter.getAngebotColor'}" size="2.5em"
+											hover="onAngebotSelectIconHover" class="zPolyIconHover"></poly:IconHover>
+										<StandardListItem title="{ZzExtOfrId}" description="{OfrName}" class="zPolySqueezedArticle" wrapping="true"></StandardListItem>
+										<ObjectIdentifier title="{ parts: [ { path: 'toCampaign' } ], formatter: '.formatter.getFirstCampaignId' }"
+											text="{ parts: [ { path: 'toCampaign' } ], formatter: '.formatter.getFirstCampaignName' }"/>
+										<Text text="{path: 'PromoTypeTxt', formatter: '.formatter.getFirstWord' }"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+						<!--	<smart:layoutData>
+								<FlexItemData growFactor="1" baseSize="0%"/>
+							</smart:layoutData>
+					</smart:SmartTable>-->
 					</ScrollContainer>
 				</IconTabFilter>
 				<IconTabFilter text="Artikel ohne Angebote" key="Artikel">

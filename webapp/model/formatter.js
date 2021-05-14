@@ -5,6 +5,8 @@ sap.ui.define([], function () {
 		
 			
 		getWeekNumber: function(d) {
+			if(d===null) return"";
+			
 				// Copy date so don't modify original
 				d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
 				// Set to nearest Thursday: current date + 4 - current day number
@@ -72,28 +74,31 @@ sap.ui.define([], function () {
 		// 27.04.2021 new functions due to smarttable instead of normal tabel and OffersFactory no more usabe
 
 		getAngebotStatus: function (_startdat, _enddat,_week) {
-			
+			 if(_startdat===null) return "";
 			 return this.formatter._getAngebotAttribs(_startdat,_enddat,this.getView().byId("calenderAuswahl").getDateValue()).src; 
 		
 		},
 		
 		getAngebotColor: function (_startdat, _enddat,_week) {
-			
+			if(_startdat===null) return "";
 			 return this.formatter._getAngebotAttribs(_startdat,_enddat,this.getView().byId("calenderAuswahl").getDateValue()).color; 
 		
 		},
 		
 		getFirstWord: function (_value) {
+			if(_value===null) return "";
 			if(Object.prototype.toString.call(_value) === "[object String]")
 				return _value.replace(/ .*/,'');
 			return "";
 		},
 		getFirstCampaignId: function (_value) {
+			if(_value===null) return "";
 			if(_value.length > 0)
 				return this.getModel("Offers").getProperty("/"+_value[0]).CampaignId;
 			return "";
 		},
 		getFirstCampaignName: function (_value) {
+			if(_value===null) return "";
 			if(_value.length > 0)
 				return this.getModel("Offers").getProperty("/"+_value[0]).CampaignName;
 			return "";
