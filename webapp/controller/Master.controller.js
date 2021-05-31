@@ -9,11 +9,17 @@ sap.ui.define([
 ], function (BaseController, StellPlatzItemTable, StellPlatz, FlaecheItemFactory, OffersItemFactory, Formatter, Fragment) {
 	"use strict";
 
+				//template: this.getView().byId("AngeboteTableColumnListItem").clone(),
+
 	return BaseController.extend("zpoly.zpolyplanung.controller.Master", {
 		formatter: Formatter,
+    	_template_angebote: null,
 
 		onInit: function () {
 
+			// get a copy of the template
+			this._template_angebote=this.getView().byId("AngeboteTableColumnListItem").clone();
+		
 			// set up an event so I know when someone has deleted something
 
 			var bus = this.getOwnerComponent().getEventBus();
@@ -237,7 +243,7 @@ sap.ui.define([
 			_height = $("#" + this.getView().byId("idSplitter").getId()).css("height");
 			_angebotcontainer.setHeight(_height);*/
 
-			var _template = new sap.m.CustomListItem({
+			var _template_stellplatz = new sap.m.CustomListItem({
 				content: [
 					new StellPlatz({
 						week: '{local>/CalWeek}',
@@ -248,7 +254,7 @@ sap.ui.define([
 
 			_stellplatz.bindItems({
 				path: "/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz",
-				template: _template
+				template: _template_stellplatz
 			});
 
 			/*		this.getModel().read("/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz", {
@@ -357,9 +363,8 @@ sap.ui.define([
 			this.getView().byId("AngeboteTable").setModel(this.getView().getModel("Offers"));
 			this.getView().byId("AngeboteTable").bindItems({
 				path: "/OfrHeadSet",
-		
 				filters: filters,
-				template: this.getView().byId("AngeboteTableColumnListItem").clone(),
+				template: this._template_angebote,
 				parameters: { expand: "toCampaign"}
 			});
 
