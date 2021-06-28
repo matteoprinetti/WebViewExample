@@ -9,17 +9,17 @@ sap.ui.define([
 ], function (BaseController, StellPlatzItemTable, StellPlatz, FlaecheItemFactory, OffersItemFactory, Formatter, Fragment) {
 	"use strict";
 
-				//template: this.getView().byId("AngeboteTableColumnListItem").clone(),
+	//template: this.getView().byId("AngeboteTableColumnListItem").clone(),
 
 	return BaseController.extend("zpoly.zpolyplanung.controller.Master", {
 		formatter: Formatter,
-    	_template_angebote: null,
+		_template_angebote: null,
 
 		onInit: function () {
 
 			// get a copy of the template
-			this._template_angebote=this.getView().byId("AngeboteTableColumnListItem").clone();
-		
+			this._template_angebote = this.getView().byId("AngeboteTableColumnListItem").clone();
+
 			// set up an event so I know when someone has deleted something
 
 			var bus = this.getOwnerComponent().getEventBus();
@@ -229,8 +229,8 @@ sap.ui.define([
 
 		loadGrob: function (oId, oWeek) {
 
-		    this.internalRebind();
-		   
+			this.internalRebind();
+
 			var _stellplatz = this.getView().byId("idStellPlatz");
 
 			//20.04.2021 set Container height
@@ -335,22 +335,21 @@ sap.ui.define([
 			// show some picture 
 		},
 
-		
 		onSearch: function (oEvent) {
 			// call internalRebind
-			var _selected=this.getView().byId("idSelDefault").getSelected();
-			var _search=this.getView().byId("idSelSearch").getValue();
-			
+			var _selected = this.getView().byId("idSelDefault").getSelected();
+			var _search = this.getView().byId("idSelSearch").getValue();
+
 			// get the data for the polyflaeche and build a filter
-			
-			
+
+			this.internalRebind(_selected, _search);
+
 		},
-		
-		
-		internalRebind: function (_defsearch , _textfilter) {
-			// the values, according to their position
-			// if
-						var filters = [];
+
+		internalRebind: function (_defsearch, _textfilter) {
+			// rebind the filter
+
+			var filters = [];
 			var oLoccoFilter = new sap.ui.model.Filter("Locco",
 				sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco);
 
@@ -360,12 +359,23 @@ sap.ui.define([
 			filters.push(oLoccoFilter);
 			filters.push(oWeekFilter);
 
+			// 28.06.2021 Default search still to be implemented
+
+			// 28.06.2021 Text Filter
+
+			if (_textfilter) {
+				filters.push(new sap.ui.model.Filter("ExtSearch",
+					sap.ui.model.FilterOperator.EQ, _textfilter));
+			}
+
 			this.getView().byId("AngeboteTable").setModel(this.getView().getModel("Offers"));
 			this.getView().byId("AngeboteTable").bindItems({
 				path: "/OfrHeadSet",
 				filters: filters,
 				template: this._template_angebote,
-				parameters: { expand: "toCampaign"}
+				parameters: {
+					expand: "toCampaign"
+				}
 			});
 
 		}
