@@ -14,6 +14,7 @@ sap.ui.define([
 	return BaseController.extend("zpoly.zpolyplanung.controller.Master", {
 		formatter: Formatter,
 		_template_angebote: null,
+		_stellplatz_id: null,
 
 		onInit: function () {
 
@@ -39,7 +40,10 @@ sap.ui.define([
 						path: "/FlaechenSet",
 						filters: [oLoccoFilter],
 						factory: FlaecheItemFactory.factory.bind(this),
-						sorter: new sap.ui.model.Sorter("Name")
+						sorter: new sap.ui.model.Sorter("Name"),
+						parameters: {
+							expand: "FlaecheToBossnr"
+						}
 					});
 
 					// save the filiale for the next screens
@@ -174,8 +178,11 @@ sap.ui.define([
 			this.getView().byId("flTable").bindItems({
 				path: "/FlaechenSet",
 				filters: [oLoccoFilter],
-				factory: this.flaecheItemFactory.bind(this),
-				sorter: new sap.ui.model.Sorter("Name")
+				factory: FlaecheItemFactory.factory.bind(this),
+				sorter: new sap.ui.model.Sorter("Name"),
+				parameters: {
+					expand: "FlaecheToBossnr"
+				}
 			});
 
 		},
@@ -228,6 +235,8 @@ sap.ui.define([
 		},
 
 		loadGrob: function (oId, oWeek) {
+
+			this._stellplatz_id = oId;
 
 			this.internalRebind();
 
@@ -359,7 +368,30 @@ sap.ui.define([
 			filters.push(oLoccoFilter);
 			filters.push(oWeekFilter);
 
-			// 28.06.2021 Default search still to be implemented
+			//  Default search: entweder Direktion oder 
+
+			if (_defsearch === undefined || _defsearch === true) {
+				var _flaeche = this.getModel().getProperty("/FlaechenSet(guid'" + this._stellplatz_id + "')");
+
+				// if type = 1 - Direktion
+				if (_flaeche.Type === "1")
+					filters.push(
+						new sap.ui.model.Filter("Sortber",
+							sap.ui.model.FilterOperator.EQ, _flaeche.Org));
+
+				// if type = 2 - add boss filter 
+				if (_flaeche.Type === "2")
+					for (var [key, value] of Object.entries(this.getView().getModel().oData)) {
+					if (key.indexOf("BossSet") >= 0) {
+						if (value.FlaecheId === this._stellplatz_id) // yes this boss belongs to my stellplatz
+							filters.push(
+							new sap.ui.model.Filter("ZzBossnummer",
+								sap.ui.model.FilterOperator.EQ, value.Bossnr));
+
+					}
+				}
+
+			}
 
 			// 28.06.2021 Text Filter
 
