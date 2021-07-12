@@ -24,6 +24,13 @@
 							<layoutData>
 								<FlexItemData growFactor="1"/>
 							</layoutData>
+							<dependents>
+								<ResponsivePopover id="defaultPopover" showHeader="false">
+									<content>
+										<List id="defaultPopoverList"/>
+									</content>
+								</ResponsivePopover>
+							</dependents>
 						</CheckBox>
 						<Input id="idSelSearch" value="" class="sapUiSmallMarginEnd" submit="onSearch">
 							<layoutData>
@@ -36,7 +43,7 @@
 							<Column width="10%">
 								<Text text=""/>
 							</Column>
-							<Column width="50%">
+							<Column width="40%">
 								<Text text="Angebot"/>
 								<customData>
 									<core:CustomData key="p13nData"
@@ -51,7 +58,10 @@
 									<core:CustomData key="p13nData"
 										value='\{"sortProperty": "PromoTypeTxt", "filterProperty": "PromoTypeTxt", "columnKey": "PromoTypeTxt", "leadingProperty": "PromoTypeTxt" , "columnIndex":"3"}'/>
 								</customData>
-								<Text text="Art" width="20%"/>
+								<Text text="Art" width="15%"/>
+							</Column>
+							<Column width="15%">
+								<Text text="Prognose"/>
 							</Column>
 						</columns>
 					</Table>
@@ -67,9 +77,10 @@
 							</dragDropConfig>
 							<columns>
 								<Column width="10%"></Column>
-								<Column width="50%"></Column>
+								<Column width="40%"></Column>
 								<Column></Column>
-								<Column width="20%"/>
+								<Column width="15%"/>
+								<Column width="15%"/>
 							</columns>
 							<items>
 								<ColumnListItem id="AngeboteTableColumnListItem">
@@ -81,6 +92,7 @@
 										<ObjectIdentifier title="{ parts: [ { path: 'toCampaign' } ], formatter: '.formatter.getFirstCampaignId' }"
 											text="{ parts: [ { path: 'toCampaign' } ], formatter: '.formatter.getFirstCampaignName' }"/>
 										<Text text="{path: 'PromoTypeTxt', formatter: '.formatter.getFirstWord' }"/>
+										<Text text="{Prognose}"/>
 									</cells>
 								</ColumnListItem>
 							</items>

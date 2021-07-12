@@ -57,6 +57,42 @@ sap.ui.define([
 				}.bind(this)
 			});
 
+			this.byId("idSelDefault").addEventDelegate({
+				onmouseover: function () {
+					// Open popover here
+					this._timeId = setTimeout(() => {
+
+						// bind the list in case the switch is set
+
+						this.byId("defaultPopoverList").removeAllItems();
+						if (this.byId("idSelDefault").getSelected()) {
+
+							// print the filter that has been set.
+							for (var _filter in this.byId("AngeboteTable").getBindingInfo("items").filters) {
+								
+								// exclude some filter...
+								
+								var _filtervalue = this.byId("AngeboteTable").getBindingInfo("items").filters[_filter];
+								
+								if (_filtervalue.sPath.indexOf("Locco") >=0 || _filtervalue.sPath.indexOf("Week") >=0 ) continue;
+								
+								var _item = new sap.m.CustomListItem().addStyleClass("sapUiTinyMargin");
+								_item.addContent(new sap.m.Label({
+									text: _filtervalue.sPath + " = " + _filtervalue.oValue1
+								}));
+								this.byId("defaultPopoverList").addItem(_item);
+							}
+						};
+
+						this.byId("defaultPopover").openBy(this.byId("idSelDefault"));
+					}, 500);
+				}.bind(this),
+				onmouseout: function () {
+					clearTimeout(this._timeId);
+					this.byId("defaultPopover").close();
+				}.bind(this)
+			});
+
 		},
 
 		onArtikelSearch: function (oEvent) {
@@ -339,9 +375,37 @@ sap.ui.define([
 				} else
 					oPopover.close();
 			}.bind(this));
-			var a = 1;
-			console.log("hover");
+
 			// show some picture 
+		},
+
+		onAngebotDefaultHover: function (_params) {
+
+			if (!this._AngebotDefaultPopover) {
+				this._AngebotDefaultPopover = Fragment.load({
+					id: this.getView().getId(),
+					name: "zpoly.zpolyplanung.view.AngebotDefaultPopOver",
+					controller: this
+				}).then(function (oPopover) {
+					this.getView().addDependent(oPopover);
+					return oPopover;
+				}.bind(this));
+			}
+			this._AngebotDefaultPopover.then(function (oPopover) {
+
+				if (_params.state) {
+					/*oPopover.bindElement({
+						path: _params.path,
+						model: "Offers"
+					});*/
+					console.log("open");
+					oPopover.openBy(_source);
+				} else {
+					console.log("close");
+					oPopover.close();
+				}
+			}.bind(this));
+
 		},
 
 		onSearch: function (oEvent) {
@@ -382,14 +446,14 @@ sap.ui.define([
 				// if type = 2 - add boss filter 
 				if (_flaeche.Type === "2")
 					for (var [key, value] of Object.entries(this.getView().getModel().oData)) {
-					if (key.indexOf("BossSet") >= 0) {
-						if (value.FlaecheId === this._stellplatz_id) // yes this boss belongs to my stellplatz
-							filters.push(
-							new sap.ui.model.Filter("ZzBossnummer",
-								sap.ui.model.FilterOperator.EQ, value.Bossnr));
+						if (key.indexOf("BossSet") >= 0) {
+							if (value.FlaecheId === this._stellplatz_id) // yes this boss belongs to my stellplatz
+								filters.push(
+								new sap.ui.model.Filter("ZzBossnummer",
+									sap.ui.model.FilterOperator.EQ, value.Bossnr));
 
+						}
 					}
-				}
 
 			}
 
