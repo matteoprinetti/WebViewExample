@@ -69,13 +69,15 @@ sap.ui.define([
 
 							// print the filter that has been set.
 							for (var _filter in this.byId("AngeboteTable").getBindingInfo("items").filters) {
-								
+
 								// exclude some filter...
-								
+
 								var _filtervalue = this.byId("AngeboteTable").getBindingInfo("items").filters[_filter];
-								
-								if (_filtervalue.sPath.indexOf("Locco") >=0 || _filtervalue.sPath.indexOf("Week") >=0 ) continue;
-								
+
+								if (_filtervalue.sPath.indexOf("Locco") >= 0 || 
+								   _filtervalue.sPath.indexOf("Week") >= 0 || 
+								   _filtervalue.sPath.indexOf("IncludedOfr") >= 0) continue;
+
 								var _item = new sap.m.CustomListItem().addStyleClass("sapUiTinyMargin");
 								_item.addContent(new sap.m.Label({
 									text: _filtervalue.sPath + " = " + _filtervalue.oValue1
@@ -297,10 +299,25 @@ sap.ui.define([
 				]
 			});
 
-			_stellplatz.bindItems({
-				path: "/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz",
-				template: _template_stellplatz
-			});
+			// Read ExpiredSellouts then bind , we need the expired sellouts later in the angebot search
+
+			var _selloutFilters = [];
+			_selloutFilters.push(new sap.ui.model.Filter("Locco",
+				sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco));
+
+			_selloutFilters.push(new sap.ui.model.Filter("Week",
+				sap.ui.model.FilterOperator.EQ, this.getView().byId("calenderAuswahlGrob").getValue()));
+
+			this.getView().getModel().read("/ExpiredSelloutsSet", {
+				filters: _selloutFilters,
+				success: function (oData, oResponse) {
+					_stellplatz.bindItems({
+						path: "/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz",
+						template: _template_stellplatz
+					});
+
+				}.bind(this)
+			})
 
 			/*		this.getModel().read("/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz", {
 				success: function (oData,oResponse) {
@@ -462,6 +479,16 @@ sap.ui.define([
 			if (_textfilter) {
 				filters.push(new sap.ui.model.Filter("ExtSearch",
 					sap.ui.model.FilterOperator.EQ, _textfilter));
+			}
+
+			// 28.06.2021 sellouts filter
+
+			for (var [key, value] of Object.entries(this.getView().getModel().oData)) {
+				if (key.indexOf("ExpiredSelloutsSet") >= 0) {
+					filters.push(
+						new sap.ui.model.Filter("IncludedOfr",
+							sap.ui.model.FilterOperator.EQ, value.Angebot));
+				}
 			}
 
 			this.getView().byId("AngeboteTable").setModel(this.getView().getModel("Offers"));
