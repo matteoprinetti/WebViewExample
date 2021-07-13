@@ -72,17 +72,27 @@ sap.ui.define([], function () {
 	 
 
 		// 27.04.2021 new functions due to smarttable instead of normal tabel and OffersFactory no more usabe
-
-		getAngebotStatus: function (_startdat, _enddat,_week) {
-			 if(_startdat===null) return "";
-			 return this.formatter._getAngebotAttribs(_startdat,_enddat,this.getView().byId("calenderAuswahl").getDateValue()).src; 
+		// 13.07.2021 _duration is now one of NEU, AUSL und LAUF. 
+		getAngebotStatus: function (_startdat, _enddat,_duration) {
+			 if(_duration===null) return "";
+			 //return this.formatter._getAngebotAttribs(_startdat,_enddat,this.getView().byId("calenderAuswahl").getDateValue()).src; 
+			if(_duration === "NEU" ) return  "sap-icon://status-positive";
+			if(_duration === "AUSL" ) return  "sap-icon://physical-activity";
+			if(_duration === "LAUF" ) return   "sap-icon://past";
+			
 		
 		},
 		
-		getAngebotColor: function (_startdat, _enddat,_week) {
+		getAngebotColor: function (_startdat, _enddat,_duration) {
 			if(_startdat===null) return "";
-			 return this.formatter._getAngebotAttribs(_startdat,_enddat,this.getView().byId("calenderAuswahl").getDateValue()).color; 
+			// return this.formatter._getAngebotAttribs(_startdat,_enddat,this.getView().byId("calenderAuswahl").getDateValue()).color; 
+			if(_duration === "NEU" ) return  "green";
+			if(_duration === "AUSL" ) return  "blue";
+			if(_duration === "LAUF" ) return   "orange";
+			
 		
+			
+
 		},
 		
 		getFirstWord: function (_value) {
