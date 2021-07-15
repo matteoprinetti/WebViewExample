@@ -89,7 +89,7 @@ sap.ui.define([
 				})
 			}));
 			_table.addColumn(new sap.m.Column({
-				width: "35%",
+				width: "55%",
 				header: new sap.m.Text({
 					text: "Angebot"
 				})
@@ -115,7 +115,7 @@ sap.ui.define([
 					text: "WT"
 				})
 			}));
-			_table.addColumn(new sap.m.Column({
+		/*	_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "H"
 				})
@@ -125,7 +125,7 @@ sap.ui.define([
 					text: "G"
 				})
 			}));
-
+*/
 			_table.addStyleClass("zpolytableblack");
 
 			// drag  
@@ -382,6 +382,7 @@ sap.ui.define([
 					value: oContext.getObject().AnzWt,
 					change: this.onWTChange
 				}));
+				/*
 				oItemTemplate.addCell(new sap.m.Input({
 					width: "5%",
 					value: oContext.getObject().Hoehe,
@@ -389,7 +390,7 @@ sap.ui.define([
 				}));
 				oItemTemplate.addCell(new sap.m.Label({
 					text: "10"
-				}));
+				}));*/
 				/*	oItemTemplate.addCell(new sap.ui.core.Icon({
 						src: "sap-icon://accept"
 					}));*/
