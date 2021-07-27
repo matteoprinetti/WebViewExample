@@ -19,7 +19,7 @@
 							delete="onStellplatzDelete">
 							<headerToolbar>
 								<OverflowToolbar>
- 										<Title text="Polyflächen" level="H1"/>
+ 										<Title text="Promo und Polyflächen" level="H1"/>
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
@@ -29,7 +29,9 @@
 								<Column width="16em">
 									<Text text="Bezeichnung"/>
 								</Column>
-							
+								<Column width="16em">
+									<Text text="Typ"/>
+								</Column>
 								<Column width="16em">
 									<Text text="Sortimentsbereich / Direktion"/>
 								</Column>

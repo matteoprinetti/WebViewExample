@@ -120,6 +120,14 @@ sap.ui.define([], function () {
 			_res = _res + " Woche " + this.formatter.getWeekNumber(_date)[1];
 			//return this.formatter.getWeekNumber(_date);
 			return _res;
+		},
+		
+		stripTrailingZeroes: function(_value) {
+			if(!_value) return "";
+			if(_value.indexOf(".")<0) return "";
+			
+			// strip everything after the "."
+			return _value.substr(0,_value.indexOf("."));
 		}
 		
 		
