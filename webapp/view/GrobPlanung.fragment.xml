@@ -122,7 +122,7 @@
 		<VBox>
 			<Label text="Stellplätze"></Label>
 			<items>
-				<ScrollContainer id="idStellPlatzContainer" vertical="true"  height="550px">
+				<ScrollContainer id="idStellPlatzContainer" vertical="true"  height="700px">
 					<List id="idStellPlatz"></List>
 				</ScrollContainer>
 				<!--<poly:StellPlatz id="IdStellPlatz"></poly:StellPlatz>-->

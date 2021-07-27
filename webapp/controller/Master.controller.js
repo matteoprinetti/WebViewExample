@@ -432,7 +432,7 @@ sap.ui.define([
 
 			// get the data for the polyflaeche and build a filter
 
-			this.internalRebind(_selected, _search);
+			this.internalRebind(_selected, _search.trim());
 
 		},
 

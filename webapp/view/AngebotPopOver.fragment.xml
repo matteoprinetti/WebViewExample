@@ -5,9 +5,11 @@
 		id="angebotPopover"
 		title="{Offers>OfrName}"
 		class="sapUiResponsivePadding--header sapUiResponsivePadding--footer"
-		placement="Bottom"
+		placement="VerticalPreferredBottom"
+		verticalScrolling="false"
 		initialFocus="email">
 		<VBox>
+		<Text text="Status: {Offers>Duration}" class="sapUiSmallMargin" />
  		<Text text="Start: { path: 'Offers>Startdat',   formatter: '.formatter.getDateAsWeek'}" class="sapUiSmallMargin"/>
  		<Text text="End: { path: 'Offers>Enddat',   formatter: '.formatter.getDateAsWeek'}" class="sapUiSmallMargin"/>
  		</VBox>
