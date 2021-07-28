@@ -457,7 +457,7 @@ sap.ui.define([
 				// if type = 1 - Direktion
 				if (_flaeche.Type === "1")
 					filters.push(
-						new sap.ui.model.Filter("Sortber",
+						new sap.ui.model.Filter("Organisation",
 							sap.ui.model.FilterOperator.EQ, _flaeche.Org));
 
 				// if type = 2 - add boss filter 

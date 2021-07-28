@@ -51,7 +51,7 @@
 								</customData>
 							</Column>
 							<Column>
-								<Text text="Kampagne"/>
+								<Text text="Kampagne"  />
 							</Column>
 							<Column>
 								<customData>
@@ -77,9 +77,9 @@
 							</dragDropConfig>
 							<columns>
 								<Column width="10%"></Column>
-								<Column width="40%"></Column>
-								<Column></Column>
-								<Column width="15%"/>
+								<Column width="35%"></Column>
+								<Column ></Column> 
+								<Column width="20%"/>
 								<Column width="15%"/>
 							</columns>
 							<items>
