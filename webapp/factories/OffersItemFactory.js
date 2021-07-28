@@ -30,7 +30,8 @@ sap.ui.define([], function () {
 
 			var oItemTemplate = new sap.m.StandardListItem({
 				title: oContext.getObject().ZzExtOfrId,
-				description: oContext.getObject().OfrName
+				description: oContext.getObject().OfrName,
+				wrapping: true
 			}).addStyleClass("zPolySqueezedArticle");
 
 			// I did not manage to get this one solved... expand does not understand that this is media not data

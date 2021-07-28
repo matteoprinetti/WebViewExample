@@ -321,6 +321,7 @@ sap.ui.define([
 
 				var _angebotPath = "/" + _objectkey;
 				var _angebotdetails = new sap.m.StandardListItem().addStyleClass("zPolySqueezedArticle");
+				_angebotdetails.setWrapping(true);
 
 				_angebotdetails.bindElement({
 					path: _angebotPath,
