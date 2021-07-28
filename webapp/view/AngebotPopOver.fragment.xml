@@ -10,8 +10,8 @@
 		initialFocus="email">
 		<VBox>
 		<Text text="Status: {Offers>Duration}" class="sapUiSmallMargin" />
- 		<Text text="Start: { path: 'Offers>Startdat',   formatter: '.formatter.getDateAsWeek'}" class="sapUiSmallMargin"/>
- 		<Text text="End: { path: 'Offers>Enddat',   formatter: '.formatter.getDateAsWeek'}" class="sapUiSmallMargin"/>
+ 		<Text text="Start: { path: 'Offers>Startdat',   formatter: '.formatter.getDateAsWeekMigrosRule'}" class="sapUiSmallMargin"/>
+ 		<Text text="End: { path: 'Offers>Enddat',   formatter: '.formatter.getDateAsWeekMigrosRule'}" class="sapUiSmallMargin"/>
  		</VBox>
 	</Popover>
 </core:FragmentDefinition>

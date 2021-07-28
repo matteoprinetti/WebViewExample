@@ -7,8 +7,12 @@ sap.ui.define([
 	"sap/m/ObjectStatus",
 	"sap/m/Input",
 	"sap/m/Label",
-	"sap/ui/core/Icon"
-], function (Control, Table, VBox, ObjectPageHeaderContent, HorizontalLayout, ObjectStatus, Input, Label, Icon) {
+	"sap/ui/core/Icon",
+	"zpoly/zpolyplanung/model/formatter",
+	"zpoly/zpolyplanung/controls/IconHover",
+	'sap/ui/core/Fragment'
+], function (Control, Table, VBox, ObjectPageHeaderContent, HorizontalLayout, ObjectStatus, Input,
+	Label, Icon, Formatter, IconHover, Fragment) {
 	"use strict";
 	return Control.extend("zpoly.zpolyplanung.controls.StellPlatzItemTable", {
 
@@ -30,8 +34,7 @@ sap.ui.define([
 				},
 				Table: {
 					type: "sap.m.Table" // ref to inner Table
-				}
-
+				}  
 			},
 			aggregations: {
 
@@ -88,8 +91,15 @@ sap.ui.define([
 					text: ""
 				})
 			}));
+
+			_table.addColumn(new sap.m.Column({ // the status icon
+				width: "10%",
+				header: new sap.m.Text({
+					text: ""
+				})
+			}));
 			_table.addColumn(new sap.m.Column({
-				width: "55%",
+				width: "45%",
 				header: new sap.m.Text({
 					text: "Angebot"
 				})
@@ -115,7 +125,7 @@ sap.ui.define([
 					text: "WT"
 				})
 			}));
-		/*	_table.addColumn(new sap.m.Column({
+			/*	_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "H"
 				})
@@ -159,6 +169,9 @@ sap.ui.define([
 			this.setProperty("Woche", oValue);
 			this.bindInternal();
 		},
+		
+	 
+
 		/*
 		bindItems: function (oBindingInfo) {
 			this.getAggregation("_vbox").getContent()[1].bindAggregation("items", oBindingInfo);
@@ -230,10 +243,10 @@ sap.ui.define([
 			if (_path.indexOf("/PlanungItemSet") >= 0) { // we just dropped from another warenträger
 				_angebot_or_article_key = this.getModel().getProperty(_path).Angebot;
 				_article_flag = this.getModel().getProperty(_path).ArtikelFlag ? "X" : "";
-				
-				if(_article_flag)
+
+				if (_article_flag)
 					_matnr = this.getModel().getProperty(_path).Angebot; // also used for ofr id
-					
+
 				_von = this.getModel().getProperty(_path).Von;
 				_bis = this.getModel().getProperty(_path).Bis;
 			}
@@ -267,17 +280,17 @@ sap.ui.define([
 
 			// between warentraeger delete then insert 
 			if (_path.indexOf("/PlanungItemSet") >= 0) {
-		 
+
 				// if the same key is there this is a insert / remove of the same item but so be it
-				
+
 				this.getModel().remove(_path, {
 					refreshAfterChange: false,
 					success: function () {
-						this.getModel().create("/PlanungItemSet", _object );
+						this.getModel().create("/PlanungItemSet", _object);
 					}.bind(this)
 				});
 			} else // or just insert
-				this.getModel().create("/PlanungItemSet", _object );
+				this.getModel().create("/PlanungItemSet", _object);
 
 		},
 
@@ -329,8 +342,44 @@ sap.ui.define([
 						text: " "
 					}));
 
-				_angebotdetails.setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + oContext.getObject().Matnr +
-					"')/$value");
+				// 28.07.2021 iconhover instead of pic
+
+				//<poly:IconHover src="{ parts: [ {path: 'Startdat' }, { path: 'Enddat' } , { path: 'Duration' } ], formatter: '.formatter.getAngebotStatus'}"
+				//color="{ parts: [ {path: 'Startdat' }, { path: 'Enddat' } , { path: 'Duration' }], formatter: '.formatter.getAngebotColor'}" size="2.5em"
+				//hover="onAngebotSelectIconHover" class="zPolyIconHover"></poly:IconHover>
+
+				var _hover = new IconHover();
+				var _data = this.getModel("Offers").getProperty(_angebotPath);
+				_hover.setSrc(Formatter.getAngebotStatus(_data.Startdat, _data.Enddat, _data.Duration));
+				_hover.setColor(Formatter.getAngebotColor(_data.Startdat, _data.Enddat, _data.Duration));
+				_hover.setSize("2.5em");
+				_hover.addStyleClass("zPolyIconHover");
+
+			    _hover.attachHover(function (oEvent) {
+
+					var _source = oEvent.getSource();
+					var _params = oEvent.getParameters();
+
+					this.getParent().getParent().getParent().getParent().getPopOverControl().then(function (oPopover) {
+
+						if (_params.state) {
+							var _angebot = this.getModel().getProperty(_params.path).Angebot;
+							var _path = "/OfrHeadSet(guid'" + _angebot + "')" ;
+							oPopover.bindElement( {
+								path: _path,
+								model: "Offers"
+							});
+							oPopover.openBy(_source);
+						} else
+							oPopover.close();
+					}.bind(this));
+
+				}.bind(this));
+
+				oItemTemplate.addCell(_hover);
+
+				//				_angebotdetails.setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + oContext.getObject().Matnr +
+				//					"')/$value");
 
 				oItemTemplate.addCell(_angebotdetails);
 				// Status

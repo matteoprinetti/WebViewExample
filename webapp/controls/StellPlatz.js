@@ -21,7 +21,8 @@ sap.ui.define([
 				},
 				week: {
 					type: "string"
-				}
+				},
+				PopOverControl: { type: "any" }  
 			},
 			aggregations: {
 				_panel: {
@@ -120,6 +121,10 @@ sap.ui.define([
 
 		},
 
+	setPopOverControl: function (oValue) {
+			this.setProperty("PopOverControl", oValue);
+		},
+		
 		bindInternal: function () {
 			// if both week and Key are set, its time to bind.
 

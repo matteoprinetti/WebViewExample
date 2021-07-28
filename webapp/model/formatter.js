@@ -122,6 +122,18 @@ sap.ui.define([], function () {
 			return _res;
 		},
 		
+		getDateAsWeekMigrosRule: function(_date) {
+			//basically the monday is the week before so subtract 1 day.
+			
+			if(!_date) return "";
+			
+			var migrosdate = new Date(_date.getTime()- (24*60*60*1000));
+			
+			var _res=migrosdate.toLocaleString().split(',')[0];
+			_res = _res + " Woche " + this.formatter.getWeekNumber(migrosdate)[1];
+			//return this.formatter.getWeekNumber(_date);
+			return _res;
+		},
 		stripTrailingZeroes: function(_value) {
 			if(!_value) return "";
 			if(_value.indexOf(".")<0) return "";
@@ -133,4 +145,4 @@ sap.ui.define([], function () {
 		
 	};
 
-});
+},/*export*/true);

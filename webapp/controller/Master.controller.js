@@ -95,6 +95,16 @@ sap.ui.define([
 				}.bind(this)
 			});
 
+		if (!this.getOwnerComponent()._AngebotDetailPopover) {
+				this.getOwnerComponent()._AngebotDetailPopover = Fragment.load({
+					id: this.getView().getId(),
+					name: "zpoly.zpolyplanung.view.AngebotPopOver",
+					controller: this
+				}).then(function (oPopover) {
+					this.getView().addDependent(oPopover);
+					return oPopover;
+				}.bind(this));
+			}
 		},
 
 		onArtikelSearch: function (oEvent) {
@@ -294,7 +304,8 @@ sap.ui.define([
 				content: [
 					new StellPlatz({
 						week: '{local>/CalWeek}',
-						key: '{Key}'
+						key: '{Key}',
+						PopOverControl:  this.getOwnerComponent()._AngebotDetailPopover
 					})
 				]
 			});
@@ -371,17 +382,8 @@ sap.ui.define([
 			var _source = oEvent.getSource();
 			var _params = oEvent.getParameters();
 
-			if (!this._pPopover) {
-				this._pPopover = Fragment.load({
-					id: this.getView().getId(),
-					name: "zpoly.zpolyplanung.view.AngebotPopOver",
-					controller: this
-				}).then(function (oPopover) {
-					this.getView().addDependent(oPopover);
-					return oPopover;
-				}.bind(this));
-			}
-			this._pPopover.then(function (oPopover) {
+	
+			this.getOwnerComponent()._AngebotDetailPopover.then(function (oPopover) {
 
 				if (_params.state) {
 					oPopover.bindElement({

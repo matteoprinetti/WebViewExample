@@ -14,6 +14,7 @@ sap.ui.define([
 		// muss sie immer als Letzte erscheinen, damit sie nicht rumspringt beim Ändern vom Text
 		// wenn eine andere Zeile hinzugefügt wird, oder nochmal gelesen, ist dann normal sortiert.
 		last_new_stellplatz_id: null,
+		_AngebotDetailPopover: null,
 
 		metadata: {
 			manifest: "json"
