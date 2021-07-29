@@ -337,8 +337,8 @@ sap.ui.define([
 				});
 
 				//IMPORTANT NEVER FORGET THE MODEL NAME IN THE MAPPING !!!!
-				_angebotdetails.bindProperty("title", "Offers>ZzExtOfrId");
-				_angebotdetails.bindProperty("description", "Offers>OfrName");
+				_angebotdetails.bindProperty("description", "Offers>ZzExtOfrId");
+				_angebotdetails.bindProperty("title", "Offers>OfrName");
 
 				// I did not manage to get this one solved... expand does not understand that this is media not data
 				if (oContext.getObject().Mehrfach)
