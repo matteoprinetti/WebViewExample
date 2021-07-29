@@ -2,6 +2,7 @@ sap.ui.define([
 	"sap/ui/core/Control",
 	"sap/m/Table",
 	"sap/m/VBox",
+	"sap/m/FlexBox",
 	"sap/uxap/ObjectPageHeaderContent",
 	"sap/ui/layout/HorizontalLayout",
 	"sap/m/ObjectStatus",
@@ -11,7 +12,7 @@ sap.ui.define([
 	"zpoly/zpolyplanung/model/formatter",
 	"zpoly/zpolyplanung/controls/IconHover",
 	'sap/ui/core/Fragment'
-], function (Control, Table, VBox, ObjectPageHeaderContent, HorizontalLayout, ObjectStatus, Input,
+], function (Control, Table, VBox, FlexBox, ObjectPageHeaderContent, HorizontalLayout, ObjectStatus, Input,
 	Label, Icon, Formatter, IconHover, Fragment) {
 	"use strict";
 	return Control.extend("zpoly.zpolyplanung.controls.StellPlatzItemTable", {
@@ -56,30 +57,36 @@ sap.ui.define([
 
 			// Header part (on top of table)
 
-			var vert = new HorizontalLayout();
-			vert.addContent(new ObjectStatus({
+			var vert = new FlexBox();
+			vert.setDirection("Row");
+			vert.setAlignItems("Center");
+			vert.setBackgroundDesign(sap.m.BackgroundDesign.Translucent); 
+			vert.addStyleClass("sapUiResponsiveMargin");
+			
+			vert.addItem(new ObjectStatus({
 				title: "WT",
-				text: "{WtId} {WtName} "
+				text: "{WtId} {WtName} ",
+				width: "40%"
 			}).addStyleClass("sapUiLargeMarginEnd"));
 
 			/*	vert.addContent(new ObjectStatus({
 					title: "Anzahl"
 				}).addStyleClass("sapUiLargeMarginEnd")); */
 
-			vert.addContent(new Label({
+			vert.addItem(new Label({
 				text: "Anzahl"
 			}).addStyleClass("sapUiLargeMarginEnd"));
 
-			vert.addContent(new Input({
+			vert.addItem(new Input({
 				value: "{AnzWt}",
 				width: "3em",
 				change: this.onWTAnzChange
 			}).addStyleClass("sapUiLargeMarginEnd"));
 
-			vert.addContent(new ObjectStatus({
+			vert.addItem(new ObjectStatus({
 				title: "Belegung"
 			}).addStyleClass("sapUiLargeMarginEnd"));
-			pageheader.addContent(vert);
+			//pageheader.addContent(vert);
 
 			// table 
 
@@ -149,7 +156,7 @@ sap.ui.define([
 				sourceAggregation: "items"
 			}));
 
-			this.getAggregation("_vbox").addItem(pageheader);
+			this.getAggregation("_vbox").addItem(vert);
 			this.getAggregation("_vbox").addItem(_table);
 
 			// set ref to table
