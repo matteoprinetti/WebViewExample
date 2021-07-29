@@ -236,7 +236,7 @@ sap.ui.define([
 		},
 
 		onCalWeekChange: function (oEvent) {
-			var a = 1;
+			this.getView().byId("AngeboteTable").destroyItems();
 		},
 
 		onTabbarSelect: function (oEvent) {
@@ -285,8 +285,8 @@ sap.ui.define([
 		loadGrob: function (oId, oWeek) {
 
 			this._stellplatz_id = oId;
-
-			this.internalRebind();
+		
+			sap.ui.core.BusyIndicator.show();
 
 			var _stellplatz = this.getView().byId("idStellPlatz");
 
@@ -322,11 +322,16 @@ sap.ui.define([
 			this.getView().getModel().read("/ExpiredSelloutsSet", {
 				filters: _selloutFilters,
 				success: function (oData, oResponse) {
+					
+					this.internalRebind();
+					
 					_stellplatz.bindItems({
 						path: "/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz",
 						template: _template_stellplatz
 					});
-
+				
+					sap.ui.core.BusyIndicator.hide();
+							
 				}.bind(this)
 			})
 
@@ -484,9 +489,11 @@ sap.ui.define([
 			}
 
 			// 28.06.2021 sellouts filter
+			// 29.07.2021 show only the sellouts relevant to the week
 
 			for (var [key, value] of Object.entries(this.getView().getModel().oData)) {
-				if (key.indexOf("ExpiredSelloutsSet") >= 0) {
+				if (key.indexOf("ExpiredSelloutsSet") >= 0 && 
+				      value.Week === this.getView().byId("calenderAuswahlGrob").getValue()) {
 					filters.push(
 						new sap.ui.model.Filter("IncludedOfr",
 							sap.ui.model.FilterOperator.EQ, value.Angebot));

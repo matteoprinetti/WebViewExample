@@ -350,9 +350,9 @@ sap.ui.define([
 				//hover="onAngebotSelectIconHover" class="zPolyIconHover"></poly:IconHover>
 
 				var _hover = new IconHover();
-				var _data = this.getModel("Offers").getProperty(_angebotPath);
-				_hover.setSrc(Formatter.getAngebotStatus(_data.Startdat, _data.Enddat, _data.Duration));
-				_hover.setColor(Formatter.getAngebotColor(_data.Startdat, _data.Enddat, _data.Duration));
+				//var _data = this.getModel("Offers").getProperty(_angebotPath);
+				_hover.setSrc(Formatter.getAngebotStatus(oContext.getObject().Von, oContext.getObject().Bis,null,this.getWoche()));
+				_hover.setColor(Formatter.getAngebotColor(oContext.getObject().Von,oContext.getObject().Bis,null,this.getWoche()));
 				_hover.setSize("2.5em");
 				_hover.addStyleClass("zPolyIconHover");
 
