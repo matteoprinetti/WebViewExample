@@ -39,3 +39,7 @@
 .zPolyIconHover:hover {
   transition-delay: 3s; /* delay hover animation only ON, not OFF */
 }
+
+.zPolyGreenBorder {
+      border: 2px solid green;
+}

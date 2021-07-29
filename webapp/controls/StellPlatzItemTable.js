@@ -71,8 +71,9 @@ sap.ui.define([
 			}).addStyleClass("sapUiLargeMarginEnd"));
 
 			vert.addContent(new Input({
-				value: "{WtAnz}",
-				width: "3em"
+				value: "{AnzWt}",
+				width: "3em",
+				change: this.onWTAnzChange
 			}).addStyleClass("sapUiLargeMarginEnd"));
 
 			vert.addContent(new ObjectStatus({
@@ -522,8 +523,19 @@ sap.ui.define([
 			var data = {};
 			data.AnzWt = parseInt(oEvent.getParameters().value, 10);
 			this.getModel().update(_path, data, {});
+			oEvent.getSource().addStyleClass("zPolyGreenBorder");
 
 		},
+		
+		onWTAnzChange: function (oEvent) {
+			var _path = this.getBindingContext().getPath();
+			var data = {};
+			data.AnzWt = parseInt(oEvent.getParameters().value, 10);
+			this.getModel().update(_path, data, {});
+			oEvent.getSource().addStyleClass("zPolyGreenBorder");
+
+		},
+		
 		onHChange: function (oEvent) {
 			var _path = this.getBindingContext().getPath();
 			this.getModel().update(_path, {
