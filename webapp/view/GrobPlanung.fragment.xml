@@ -89,8 +89,8 @@
 											color="{ parts: [ {path: 'Startdat' }, { path: 'Enddat' } , { path: 'Duration' }], formatter: '.formatter.getAngebotColor'}" size="2.5em"
 											hover="onAngebotSelectIconHover" class="zPolyIconHover"></poly:IconHover>
 										<StandardListItem title="{OfrName}" description="{ZzExtOfrId}" class="zPolySqueezedArticle" wrapping="true"></StandardListItem>
-										<ObjectIdentifier title="{ parts: [ { path: 'toCampaign' } ], formatter: '.formatter.getFirstCampaignId' }"
-											text="{ parts: [ { path: 'toCampaign' } ], formatter: '.formatter.getFirstCampaignName' }"/>
+										<ObjectIdentifier text="{ parts: [ { path: 'toCampaign' } ], formatter: '.formatter.getFirstCampaignId' }"
+											title="{ parts: [ { path: 'toCampaign' } ], formatter: '.formatter.getFirstCampaignName' }"/>
 										<Text text="{path: 'PromoTypeTxt', formatter: '.formatter.getFirstWord' }"/>
 										<Text text="{path: 'Prognose', formatter: '.formatter.stripTrailingZeroes' }"/>
 									</cells>
