@@ -11,9 +11,10 @@ sap.ui.define([
 	"sap/ui/core/Icon",
 	"zpoly/zpolyplanung/model/formatter",
 	"zpoly/zpolyplanung/controls/IconHover",
-	'sap/ui/core/Fragment'
+	'sap/ui/core/Fragment',
+	"sap/m/InputType"
 ], function (Control, Table, VBox, FlexBox, ObjectPageHeaderContent, HorizontalLayout, ObjectStatus, Input,
-	Label, Icon, Formatter, IconHover, Fragment) {
+	Label, Icon, Formatter, IconHover, Fragment, InputType) {
 	"use strict";
 	return Control.extend("zpoly.zpolyplanung.controls.StellPlatzItemTable", {
 
@@ -35,7 +36,7 @@ sap.ui.define([
 				},
 				Table: {
 					type: "sap.m.Table" // ref to inner Table
-				}  
+				}
 			},
 			aggregations: {
 
@@ -60,9 +61,9 @@ sap.ui.define([
 			var vert = new FlexBox();
 			vert.setDirection("Row");
 			vert.setAlignItems("Center");
-			vert.setBackgroundDesign(sap.m.BackgroundDesign.Translucent); 
+			vert.setBackgroundDesign(sap.m.BackgroundDesign.Translucent);
 			vert.addStyleClass("sapUiResponsiveMargin");
-			
+
 			vert.addItem(new ObjectStatus({
 				title: "WT",
 				text: "{WtId} {WtName} ",
@@ -80,7 +81,14 @@ sap.ui.define([
 			vert.addItem(new Input({
 				value: "{AnzWt}",
 				width: "3em",
-				change: this.onWTAnzChange
+				type: InputType.Number,
+				change: this.onWTAnzChange,
+				liveChange: function (oEvent) {
+						var _oInput = oEvent.getSource();
+						var val = _oInput.getValue();
+						val = val.replace(/[^\d]/g, '');
+						_oInput.setValue(val);
+					}
 			}).addStyleClass("sapUiLargeMarginEnd"));
 
 			vert.addItem(new ObjectStatus({
@@ -177,8 +185,6 @@ sap.ui.define([
 			this.setProperty("Woche", oValue);
 			this.bindInternal();
 		},
-		
-	 
 
 		/*
 		bindItems: function (oBindingInfo) {
@@ -359,12 +365,12 @@ sap.ui.define([
 
 				var _hover = new IconHover();
 				//var _data = this.getModel("Offers").getProperty(_angebotPath);
-				_hover.setSrc(Formatter.getAngebotStatus(oContext.getObject().Von, oContext.getObject().Bis,null,this.getWoche()));
-				_hover.setColor(Formatter.getAngebotColor(oContext.getObject().Von,oContext.getObject().Bis,null,this.getWoche()));
+				_hover.setSrc(Formatter.getAngebotStatus(oContext.getObject().Von, oContext.getObject().Bis, null, this.getWoche()));
+				_hover.setColor(Formatter.getAngebotColor(oContext.getObject().Von, oContext.getObject().Bis, null, this.getWoche()));
 				_hover.setSize("2.5em");
 				_hover.addStyleClass("zPolyIconHover");
 
-			    _hover.attachHover(function (oEvent) {
+				_hover.attachHover(function (oEvent) {
 
 					var _source = oEvent.getSource();
 					var _params = oEvent.getParameters();
@@ -373,8 +379,8 @@ sap.ui.define([
 
 						if (_params.state) {
 							var _angebot = this.getModel().getProperty(_params.path).Angebot;
-							var _path = "/OfrHeadSet(guid'" + _angebot + "')" ;
-							oPopover.bindElement( {
+							var _path = "/OfrHeadSet(guid'" + _angebot + "')";
+							oPopover.bindElement({
 								path: _path,
 								model: "Offers"
 							});
@@ -438,7 +444,13 @@ sap.ui.define([
 				oItemTemplate.addCell(new sap.m.Input({
 					width: "5%",
 					value: oContext.getObject().AnzWt,
-					change: this.onWTChange
+					change: this.onWTChange,
+					liveChange: function (oEvent) {
+						var _oInput = oEvent.getSource();
+						var val = _oInput.getValue();
+						val = val.replace(/[^\d]/g, '');
+						_oInput.setValue(val);
+					}
 				}));
 				/*
 				oItemTemplate.addCell(new sap.m.Input({
@@ -510,7 +522,14 @@ sap.ui.define([
 				oItemTemplate.addCell(new sap.m.Input({
 					width: "5%",
 					value: oContext.getObject().AnzWt,
-					change: this.onWTChange
+					type: InputType.Number,
+					change: this.onWTChange,
+					liveChange: function (oEvent) {
+						var _oInput = oEvent.getSource();
+						var val = _oInput.getValue();
+						val = val.replace(/[^\d]/g, '');
+						_oInput.setValue(val);
+					}
 				}));
 				oItemTemplate.addCell(new sap.m.Input({
 					width: "5%",
@@ -533,7 +552,7 @@ sap.ui.define([
 			oEvent.getSource().addStyleClass("zPolyGreenBorder");
 
 		},
-		
+
 		onWTAnzChange: function (oEvent) {
 			var _path = this.getBindingContext().getPath();
 			var data = {};
@@ -542,7 +561,7 @@ sap.ui.define([
 			oEvent.getSource().addStyleClass("zPolyGreenBorder");
 
 		},
-		
+
 		onHChange: function (oEvent) {
 			var _path = this.getBindingContext().getPath();
 			this.getModel().update(_path, {
