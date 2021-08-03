@@ -113,7 +113,7 @@
 				"settings": {
 					"defaultOperationMode": "Server",
 					"defaultBindingMode": "OneWay",
-					"defaultCountMode": "None"
+					"defaultCountMode": "None" 
 				},
 				"dataSource": "ZRSETTINGS_SRV",
 				"preload": true

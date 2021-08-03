@@ -82,13 +82,13 @@ sap.ui.define([
 				value: "{AnzWt}",
 				width: "3em",
 				type: InputType.Number,
-				change: this.onWTAnzChange,
+				change: this.onWTAnzChange/*,
 				liveChange: function (oEvent) {
 						var _oInput = oEvent.getSource();
 						var val = _oInput.getValue();
 						val = val.replace(/[^\d]/g, '');
 						_oInput.setValue(val);
-					}
+					}*/
 			}).addStyleClass("sapUiLargeMarginEnd"));
 
 			vert.addItem(new ObjectStatus({
@@ -444,13 +444,13 @@ sap.ui.define([
 				oItemTemplate.addCell(new sap.m.Input({
 					width: "5%",
 					value: oContext.getObject().AnzWt,
-					change: this.onWTChange,
+					change: this.onWTChange/*,
 					liveChange: function (oEvent) {
 						var _oInput = oEvent.getSource();
 						var val = _oInput.getValue();
 						val = val.replace(/[^\d]/g, '');
 						_oInput.setValue(val);
-					}
+					}*/
 				}));
 				/*
 				oItemTemplate.addCell(new sap.m.Input({
@@ -523,13 +523,13 @@ sap.ui.define([
 					width: "5%",
 					value: oContext.getObject().AnzWt,
 					type: InputType.Number,
-					change: this.onWTChange,
+					change: this.onWTChange/*,
 					liveChange: function (oEvent) {
 						var _oInput = oEvent.getSource();
 						var val = _oInput.getValue();
 						val = val.replace(/[^\d]/g, '');
 						_oInput.setValue(val);
-					}
+					}*/
 				}));
 				oItemTemplate.addCell(new sap.m.Input({
 					width: "5%",
