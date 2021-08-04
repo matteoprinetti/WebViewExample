@@ -19,7 +19,8 @@ sap.ui.define([
 	return Control.extend("zpoly.zpolyplanung.controls.StellPlatzItemTable", {
 
 		// Tabelle für die Stellplatz Items rechts
-
+		_lastDraggedControl: null,
+		
 		metadata: {
 			properties: {
 				StellplatzId: {
@@ -234,6 +235,7 @@ sap.ui.define([
 			}
 
 			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
+			this._lastDraggedControl = oEvent.getParameters().draggedControl;
 			var _angebot_or_article_key = "";
 			var _von = null;
 			var _bis = null;
@@ -305,11 +307,19 @@ sap.ui.define([
 				this.getModel().remove(_path, {
 					refreshAfterChange: false,
 					success: function () {
-						this.getModel().create("/PlanungItemSet", _object);
+						this.getModel().create("/PlanungItemSet", _object, {
+							success: function () {
+								this._lastDraggedControl.setVisible(false);
+							}.bind(this)
+						});
 					}.bind(this)
 				});
 			} else // or just insert
-				this.getModel().create("/PlanungItemSet", _object);
+				this.getModel().create("/PlanungItemSet", _object,{
+							success: function () {
+								this._lastDraggedControl.setVisible(false);
+							}.bind(this)
+						});
 
 		},
 

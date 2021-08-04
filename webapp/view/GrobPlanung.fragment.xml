@@ -32,6 +32,11 @@
 								</ResponsivePopover>
 							</dependents>
 						</CheckBox>
+						<CheckBox id="idUngeplant" text="Ungeplante" selected="true" select="onSearch">
+							<layoutData>
+								<FlexItemData growFactor="1"/>
+							</layoutData>
+						</CheckBox>
 						<Input id="idSelSearch" value="" class="sapUiSmallMarginEnd" submit="onSearch">
 							<layoutData>
 								<FlexItemData growFactor="4"/>
@@ -51,7 +56,7 @@
 								</customData>
 							</Column>
 							<Column>
-								<Text text="Kampagne"  />
+								<Text text="Kampagne"/>
 							</Column>
 							<Column>
 								<customData>
@@ -78,7 +83,7 @@
 							<columns>
 								<Column width="10%"></Column>
 								<Column width="35%"></Column>
-								<Column ></Column> 
+								<Column ></Column>
 								<Column width="20%"/>
 								<Column width="15%"/>
 							</columns>
@@ -88,7 +93,12 @@
 										<poly:IconHover src="{ parts: [ {path: 'Startdat' }, { path: 'Enddat' } , { path: 'Duration' } ], formatter: '.formatter.getAngebotStatus'}"
 											color="{ parts: [ {path: 'Startdat' }, { path: 'Enddat' } , { path: 'Duration' }], formatter: '.formatter.getAngebotColor'}" size="2.5em"
 											hover="onAngebotSelectIconHover" class="zPolyIconHover"></poly:IconHover>
-										<StandardListItem title="{OfrName}" description="{ZzExtOfrId}" class="zPolySqueezedArticle" wrapping="true"></StandardListItem>
+										<StandardListItem title="{OfrName}" description="{ZzExtOfrId}" class="zPolySqueezedArticle"
+										wrapping="true" >
+											<customData>
+												<core:CustomData key="offerguid" value="{OfferGuid}"/>
+											</customData>
+										</StandardListItem>
 										<ObjectIdentifier text="{ parts: [ { path: 'toCampaign' } ], formatter: '.formatter.getFirstCampaignId' }"
 											title="{ parts: [ { path: 'toCampaign' } ], formatter: '.formatter.getFirstCampaignName' }"/>
 										<Text text="{path: 'PromoTypeTxt', formatter: '.formatter.getFirstWord' }"/>
@@ -122,7 +132,7 @@
 		<VBox>
 			<Label text="Stellplätze"></Label>
 			<items>
-				<ScrollContainer id="idStellPlatzContainer" vertical="true"  height="700px">
+				<ScrollContainer id="idStellPlatzContainer" vertical="true" height="700px">
 					<List id="idStellPlatz"></List>
 				</ScrollContainer>
 				<!--<poly:StellPlatz id="IdStellPlatz"></poly:StellPlatz>-->

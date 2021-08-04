@@ -7,13 +7,13 @@ sap.ui.define([
 	"zpoly/zpolyplanung/controls/StellPlatzItemTable",
 	"sap/m/ColumnListItem",
 	"sap/m/MessageBox"
-], function (Control, Panel, OverflowToolbar, Button, List, StellPlatzItemTable,ColumnListItem,MessageBox) {
+], function (Control, Panel, OverflowToolbar, Button, List, StellPlatzItemTable, ColumnListItem, MessageBox) {
 	"use strict";
 	return Control.extend("zpoly.zpolyplanung.controls.StellPlatz", {
-		
+
 		_oValueHelpDialog: null,
 		_wtid: null,
-		
+
 		metadata: {
 			properties: {
 				key: {
@@ -22,7 +22,9 @@ sap.ui.define([
 				week: {
 					type: "string"
 				},
-				PopOverControl: { type: "any" }  
+				PopOverControl: {
+					type: "any"
+				}
 			},
 			aggregations: {
 				_panel: {
@@ -46,17 +48,15 @@ sap.ui.define([
 				icon: "sap-icon://add",
 				visible: false,
 				press: function () {
-					var _thelist =this.getAggregation("_panel").getContent()[0]; // to get the stellplatz
+					var _thelist = this.getAggregation("_panel").getContent()[0]; // to get the stellplatz
 
 					var _newPlanungItemHeadSet = {};
 					_newPlanungItemHeadSet.StellplatzId = _thelist._getBindingContext().getObject().Key;
-					
-					
-				
+
 					_newPlanungItemHeadSet.Woche = this.getWeek();
 
-					this.onWtValueDialog( _newPlanungItemHeadSet);
-				 
+					this.onWtValueDialog(_newPlanungItemHeadSet);
+
 				}.bind(this)
 			});
 
@@ -74,15 +74,15 @@ sap.ui.define([
 
 			var _list = new List();
 
-			_list.attachDelete(function(oEvent) {
-				if(oEvent.getParameters().listItem.getContent()[0].getTable().getItems().length==0) {
-				var _path=oEvent.getParameters().listItem.getBindingContextPath(); 
-				this.getModel().remove(_path); }
-				else 
-						MessageBox.alert("Nur leere Warenträger können gelöscht werden");
-				
+			_list.attachDelete(function (oEvent) {
+				if (oEvent.getParameters().listItem.getContent()[0].getTable().getItems().length == 0) {
+					var _path = oEvent.getParameters().listItem.getBindingContextPath();
+					this.getModel().remove(_path);
+				} else
+					MessageBox.alert("Nur leere Warenträger können gelöscht werden");
+
 			}.bind(this));
-			
+
 			var _overflowtoolbar = new sap.m.OverflowToolbar();
 			var _text = new sap.m.Text();
 
@@ -121,10 +121,10 @@ sap.ui.define([
 
 		},
 
-	setPopOverControl: function (oValue) {
+		setPopOverControl: function (oValue) {
 			this.setProperty("PopOverControl", oValue);
 		},
-		
+
 		bindInternal: function () {
 			// if both week and Key are set, its time to bind.
 
@@ -141,7 +141,7 @@ sap.ui.define([
 				],
 
 				factory: function (sId, oContext) {
-					var _item = new  sap.m.CustomListItem();
+					var _item = new sap.m.CustomListItem();
 					_item.addContent(
 						new StellPlatzItemTable({
 							StellplatzId: oContext.getObject().StellplatzId,
@@ -155,36 +155,37 @@ sap.ui.define([
 
 		},
 
-		onWtValueDialog: function(_newEntry) {
-			if(!this._oValueHelpDialog) {
-			this._oValueHelpDialog = new sap.m.Dialog({
+		onWtValueDialog: function (_newEntry) {
+			if (!this._oValueHelpDialog) {
+				this._oValueHelpDialog = new sap.m.Dialog({
 					title: "Warenträgertyp wählen",
 					content: new List({
 						mode: "SingleSelect",
-						selectionChange: function(oEvent) {
+						selectionChange: function (oEvent) {
 							this._oValueHelpDialog.getBeginButton().setEnabled(true);
-							this._wtid=oEvent.getParameters().listItem.getProperty("title");
-							
+							this._wtid = oEvent.getParameters().listItem.getProperty("title");
+
 						}.bind(this),
 						items: {
 							path: "toFreieWarenTraeger",
 							filters: [
-							new sap.ui.model.Filter("Woche",
-								sap.ui.model.FilterOperator.EQ, this.getWeek())
+								new sap.ui.model.Filter("Woche",
+									sap.ui.model.FilterOperator.EQ, this.getWeek())
 							],
 							template: new sap.m.StandardListItem({
 								title: "{WtId}",
 								info: "{WtName}"
-								
+
 							})
 						}
 					}),
 					beginButton: new Button({
 						type: sap.m.ButtonType.Emphasized,
-						text: "OK",enabled: false,
+						text: "OK",
+						enabled: false,
 						press: function () {
-								_newEntry.WtId = this._wtid; // should come from a popup list
-							this.getModel().create('/PlanungItemHeadSet', _newEntry );
+							_newEntry.WtId = this._wtid; // should come from a popup list
+							this.getModel().create('/PlanungItemHeadSet', _newEntry);
 							this._oValueHelpDialog.close();
 						}.bind(this)
 					}),
@@ -196,9 +197,7 @@ sap.ui.define([
 					})
 				});
 
-		 
-			
-			this.getParent().addDependent(this._oValueHelpDialog);
+				this.getParent().addDependent(this._oValueHelpDialog);
 			}
 
 			//this._oValueHelpDialog.setTokens(this._oMultiInput.getTokens());

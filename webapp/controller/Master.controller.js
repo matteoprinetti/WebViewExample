@@ -15,7 +15,8 @@ sap.ui.define([
 		formatter: Formatter,
 		_template_angebote: null,
 		_stellplatz_id: null,
-
+		_lastDraggedControl: null,
+		
 		onInit: function () {
 
 			// get a copy of the template
@@ -74,9 +75,9 @@ sap.ui.define([
 
 								var _filtervalue = this.byId("AngeboteTable").getBindingInfo("items").filters[_filter];
 
-								if (_filtervalue.sPath.indexOf("Locco") >= 0 || 
-								   _filtervalue.sPath.indexOf("Week") >= 0 || 
-								   _filtervalue.sPath.indexOf("IncludedOfr") >= 0) continue;
+								if (_filtervalue.sPath.indexOf("Locco") >= 0 ||
+									_filtervalue.sPath.indexOf("Week") >= 0 ||
+									_filtervalue.sPath.indexOf("IncludedOfr") >= 0) continue;
 
 								var _item = new sap.m.CustomListItem().addStyleClass("sapUiTinyMargin");
 								_item.addContent(new sap.m.Label({
@@ -95,7 +96,7 @@ sap.ui.define([
 				}.bind(this)
 			});
 
-		if (!this.getOwnerComponent()._AngebotDetailPopover) {
+			if (!this.getOwnerComponent()._AngebotDetailPopover) {
 				this.getOwnerComponent()._AngebotDetailPopover = Fragment.load({
 					id: this.getView().getId(),
 					name: "zpoly.zpolyplanung.view.AngebotPopOver",
@@ -285,7 +286,7 @@ sap.ui.define([
 		loadGrob: function (oId, oWeek) {
 
 			this._stellplatz_id = oId;
-		
+
 			sap.ui.core.BusyIndicator.show();
 
 			var _stellplatz = this.getView().byId("idStellPlatz");
@@ -305,7 +306,7 @@ sap.ui.define([
 					new StellPlatz({
 						week: '{local>/CalWeek}',
 						key: '{Key}',
-						PopOverControl:  this.getOwnerComponent()._AngebotDetailPopover
+						PopOverControl: this.getOwnerComponent()._AngebotDetailPopover
 					})
 				]
 			});
@@ -322,51 +323,22 @@ sap.ui.define([
 			this.getView().getModel().read("/ExpiredSelloutsSet", {
 				filters: _selloutFilters,
 				success: function (oData, oResponse) {
-					
-					this.internalRebind();
-					
+
+					//this.internalRebind();
+
 					_stellplatz.bindItems({
 						path: "/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz",
-						template: _template_stellplatz
+						template: _template_stellplatz,
+						events: {
+							dataReceived: this.internalRebind.bind(this)
+						}
+
 					});
-				
+
 					sap.ui.core.BusyIndicator.hide();
-							
+
 				}.bind(this)
 			})
-
-			/*		this.getModel().read("/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz", {
-				success: function (oData,oResponse) {
-					for (var x in oData.results) {
-						var _data = oData.results[x];
-
-						//var _table = new sap.m.Table().addStyleClass("zpolytableblack");
-
-			/*			var _table = new StellPlatzItemTable({
-							container: _box
-						});
-
-						_table.setHeaderData(_data);
-
-						//this.addDetailTable(_table, _box, _data); // Header and co.
-
-						// bind the items with a custom binding using a filter on key and week
-
-						_table.setCustomBinding({
-							Key: _data.Key,
-							Week: oWeek
-						});
-*/
-			/*
-
-									var _stellplatzpanel = new StellPlatz();
-										_stellplatzpanel.setHeaderData(_data);
-									_stellplatzpanel.setHeaderData(_data);
-									_box.addItem(_stellplatzpanel);
-								}
-
-							}.bind(this)
-						}); */
 
 		},
 
@@ -376,9 +348,20 @@ sap.ui.define([
 
 			if (!oEvent.getParameters().draggedControl) return;
 
+			this._lastDraggedControl = oEvent.getParameters().draggedControl;
+			
 			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
 			if (_path.indexOf("/PlanungItemSet") >= 0) // prevent self-drop, only PlanungItems can be handled 
-				this.getModel().remove(_path, {});
+				this.getModel().remove(_path, {
+					success: function() {
+						for (var _x in this.getView().byId("AngeboteTable").getItems()) {
+							var _item = this.getView().byId("AngeboteTable").getItems()[_x];
+							if(this._lastDraggedControl.getCells()[2].getDescription() === 
+							   _item.getCells()[1].getDescription() )
+								_item.setVisible(true);							
+						}
+					}.bind(this)
+				});
 
 		},
 
@@ -387,7 +370,6 @@ sap.ui.define([
 			var _source = oEvent.getSource();
 			var _params = oEvent.getParameters();
 
-	
 			this.getOwnerComponent()._AngebotDetailPopover.then(function (oPopover) {
 
 				if (_params.state) {
@@ -443,6 +425,36 @@ sap.ui.define([
 
 		},
 
+		disablePlannedOffers: function () {
+
+			// turn the offers that are already in the stellplatz not selectable
+			for (var _x in this.getView().byId("AngeboteTable").getItems()) {
+				var _item = this.getView().byId("AngeboteTable").getItems()[_x];
+
+				// get the ofr id 
+
+				var _ofr_id = _item.getCells()[1].data("offerguid");
+
+				// look up in PlanungItemSet for this week and if there - set it disabled.
+
+				for (var [key, value] of Object.entries(this.getView().getModel().oData)) {
+					if (key.indexOf("PlanungItemSet") >= 0) {
+
+						if (value.Woche === this.getView().byId("calenderAuswahlGrob").getValue()) {
+							if (_ofr_id === value.Angebot) {
+								if (this.getView().byId("idUngeplant").getSelected())
+								// but only when Default is not set
+									_item.setVisible(false);
+								
+							}
+						}
+					}
+				}
+
+			}
+
+		},
+
 		internalRebind: function (_defsearch, _textfilter) {
 			// rebind the filter
 
@@ -492,8 +504,8 @@ sap.ui.define([
 			// 29.07.2021 show only the sellouts relevant to the week
 
 			for (var [key, value] of Object.entries(this.getView().getModel().oData)) {
-				if (key.indexOf("ExpiredSelloutsSet") >= 0 && 
-				      value.Week === this.getView().byId("calenderAuswahlGrob").getValue()) {
+				if (key.indexOf("ExpiredSelloutsSet") >= 0 &&
+					value.Week === this.getView().byId("calenderAuswahlGrob").getValue()) {
 					filters.push(
 						new sap.ui.model.Filter("IncludedOfr",
 							sap.ui.model.FilterOperator.EQ, value.Angebot));
@@ -507,6 +519,9 @@ sap.ui.define([
 				template: this._template_angebote,
 				parameters: {
 					expand: "toCampaign"
+				},
+				events: {
+					dataReceived: this.disablePlannedOffers.bind(this)
 				}
 			});
 

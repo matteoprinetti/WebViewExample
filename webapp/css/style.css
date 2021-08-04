@@ -43,3 +43,9 @@
 .zPolyGreenBackground .sapMInputBaseContentWrapper {
       border: 2px solid green;
 }
+
+.zPolyDisabled {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.6;
+}
