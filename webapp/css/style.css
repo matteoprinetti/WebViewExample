@@ -40,6 +40,6 @@
   transition-delay: 3s; /* delay hover animation only ON, not OFF */
 }
 
-.zPolyGreenBorder {
+.zPolyGreenBackground .sapMInputBaseContentWrapper {
       border: 2px solid green;
 }

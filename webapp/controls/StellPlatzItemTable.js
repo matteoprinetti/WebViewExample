@@ -82,14 +82,19 @@ sap.ui.define([
 				value: "{AnzWt}",
 				width: "3em",
 				type: InputType.Number,
-				change: this.onWTAnzChange/*,
-				liveChange: function (oEvent) {
-						var _oInput = oEvent.getSource();
-						var val = _oInput.getValue();
-						val = val.replace(/[^\d]/g, '');
-						_oInput.setValue(val);
-					}*/
-			}).addStyleClass("sapUiLargeMarginEnd"));
+				change: this.onWTAnzChange
+					/*,
+									liveChange: function (oEvent) {
+											var _oInput = oEvent.getSource();
+											var val = _oInput.getValue();
+											val = val.replace(/[^\d]/g, '');
+											_oInput.setValue(val);
+										}*/
+			}).addStyleClass("sapUiLargeMarginEnd")).addEventDelegate({
+				onfocusin: function (oEvent) {
+					$("#" + oEvent.originalEvent.target.id).select();
+				}
+			});
 
 			vert.addItem(new ObjectStatus({
 				title: "Belegung"
@@ -444,13 +449,18 @@ sap.ui.define([
 				oItemTemplate.addCell(new sap.m.Input({
 					width: "5%",
 					value: oContext.getObject().AnzWt,
-					change: this.onWTChange/*,
-					liveChange: function (oEvent) {
-						var _oInput = oEvent.getSource();
-						var val = _oInput.getValue();
-						val = val.replace(/[^\d]/g, '');
-						_oInput.setValue(val);
-					}*/
+					change: this.onWTChange
+						/*,
+											liveChange: function (oEvent) {
+												var _oInput = oEvent.getSource();
+												var val = _oInput.getValue();
+												val = val.replace(/[^\d]/g, '');
+												_oInput.setValue(val);
+											}*/
+				}).addEventDelegate({
+					onfocusin: function (oEvent) {
+						$("#" + oEvent.originalEvent.target.id).select();
+					}
 				}));
 				/*
 				oItemTemplate.addCell(new sap.m.Input({
@@ -523,13 +533,14 @@ sap.ui.define([
 					width: "5%",
 					value: oContext.getObject().AnzWt,
 					type: InputType.Number,
-					change: this.onWTChange/*,
-					liveChange: function (oEvent) {
-						var _oInput = oEvent.getSource();
-						var val = _oInput.getValue();
-						val = val.replace(/[^\d]/g, '');
-						_oInput.setValue(val);
-					}*/
+					change: this.onWTChange
+						/*,
+											liveChange: function (oEvent) {
+												var _oInput = oEvent.getSource();
+												var val = _oInput.getValue();
+												val = val.replace(/[^\d]/g, '');
+												_oInput.setValue(val);
+											}*/
 				}));
 				oItemTemplate.addCell(new sap.m.Input({
 					width: "5%",
@@ -548,8 +559,18 @@ sap.ui.define([
 			var _path = this.getBindingContext().getPath();
 			var data = {};
 			data.AnzWt = parseInt(oEvent.getParameters().value, 10);
-			this.getModel().update(_path, data, {});
-			oEvent.getSource().addStyleClass("zPolyGreenBorder");
+			if (!isNaN(data.AnzWt) && !isNaN(parseFloat(data.AnzWt))) {
+				this.getModel().update(_path, data, {
+					refreshAfterChange: false,
+					success: function (oData) {
+						this.addStyleClass("zPolyGreenBackground");
+						//this.setValueState(sap.ui.core.ValueState.Information);//red
+					}.bind(this)
+
+				});
+			} else sap.m.MessageToast.show("Bitte numerischen Wert eingeben !", {
+				"duration": 3000
+			});
 
 		},
 
@@ -557,8 +578,21 @@ sap.ui.define([
 			var _path = this.getBindingContext().getPath();
 			var data = {};
 			data.AnzWt = parseInt(oEvent.getParameters().value, 10);
-			this.getModel().update(_path, data, {});
-			oEvent.getSource().addStyleClass("zPolyGreenBorder");
+
+			if (!isNaN(data.AnzWt) && !isNaN(parseFloat(data.AnzWt))) {
+
+				this.getModel().update(_path, data, {
+					refreshAfterChange: false,
+					success: function (oData) {
+						this.addStyleClass("zPolyGreenBackground");
+						//this.setValueState(sap.ui.core.ValueState.Information);//red
+					}.bind(this)
+
+				});
+				//oEvent.getSource().addStyleClass("zPolyGreenBorder");
+			} else sap.m.MessageToast.show("Bitte numerischen Wert eingeben !", {
+				"duration": 3000
+			});
 
 		},
 
