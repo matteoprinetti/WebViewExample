@@ -53,7 +53,8 @@ sap.ui.define([
 
 					// init the calendar control
 
-					this.getView().byId("calenderAuswahl").setDateValue(new Date());
+					this.getView().byId("calenderAuswahl").setDateValue(this.getModel("local").getProperty("/CalWeekAsDate"));
+					
 
 				}.bind(this)
 			});

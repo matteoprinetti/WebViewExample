@@ -47,16 +47,20 @@ sap.ui.define([
 			
 			this.setModel(new sap.ui.model.json.JSONModel(), "local");
 			
-					// also set the date of the picker to today 
+			// also set the date of the picker to today 
+			// 6.8.2021 and + 1 week ! 
 
 			var today = new Date();
-			var dd = String(today.getDate()).padStart(2, '0');
-			var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-			var yyyy = today.getFullYear();
+			var nextweek = new Date(today.getTime() + 86400000*7);
+			
+			var dd = String(nextweek.getDate()).padStart(2, '0');
+			var mm = String(nextweek.getMonth() + 1).padStart(2, '0'); //January is 0!
+			var yyyy = nextweek.getFullYear();
 
-			today = dd + '.' + mm + '.' + yyyy;
+			var week = dd + '.' + mm + '.' + yyyy;
 
-			this.getModel("local").setProperty("/CalWeek", today);
+			this.getModel("local").setProperty("/CalWeek", week);
+			this.getModel("local").setProperty("/CalWeekAsDate", nextweek);
 			
 			
 			// size limit of Suggestions and error Handler
