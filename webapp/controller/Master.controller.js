@@ -16,7 +16,7 @@ sap.ui.define([
 		_template_angebote: null,
 		_stellplatz_id: null,
 		_lastDraggedControl: null,
-		
+
 		onInit: function () {
 
 			// get a copy of the template
@@ -54,7 +54,6 @@ sap.ui.define([
 					// init the calendar control
 
 					this.getView().byId("calenderAuswahl").setDateValue(this.getModel("local").getProperty("/CalWeekAsDate"));
-					
 
 				}.bind(this)
 			});
@@ -251,7 +250,7 @@ sap.ui.define([
 			this.loadGrob(oEvent.getParameters().selectedItem.getKey(), this.getView().byId("calenderAuswahlGrob").getValue());
 		},
 
-		onBeforeRebindAngeboteTable: function (oEvent) {
+		/*onBeforeRebindAngeboteTable: function (oEvent) {
 
 			// 12.05.2021 Prinetti
 			// check the search flags and ACT
@@ -282,7 +281,7 @@ sap.ui.define([
 					sap.ui.model.FilterOperator.EQ, _searchText));
 			}
 
-		},
+		},*/
 
 		loadGrob: function (oId, oWeek) {
 
@@ -331,7 +330,9 @@ sap.ui.define([
 						path: "/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz",
 						template: _template_stellplatz,
 						events: {
-							dataReceived: this.internalRebind.bind(this)
+							dataReceived: function () {
+								this.internalRebind(this.getView().byId("idSelDefault").getSelected());
+							}.bind(this)
 						}
 
 					});
@@ -350,19 +351,19 @@ sap.ui.define([
 			if (!oEvent.getParameters().draggedControl) return;
 
 			this._lastDraggedControl = oEvent.getParameters().draggedControl;
-			
+
 			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
 			if (_path.indexOf("/PlanungItemSet") >= 0) // prevent self-drop, only PlanungItems can be handled 
 				this.getModel().remove(_path, {
-					success: function() {
-						for (var _x in this.getView().byId("AngeboteTable").getItems()) {
-							var _item = this.getView().byId("AngeboteTable").getItems()[_x];
-							if(this._lastDraggedControl.getCells()[2].getDescription() === 
-							   _item.getCells()[1].getDescription() )
-								_item.setVisible(true);							
-						}
-					}.bind(this)
-				});
+				success: function () {
+					for (var _x in this.getView().byId("AngeboteTable").getItems()) {
+						var _item = this.getView().byId("AngeboteTable").getItems()[_x];
+						if (this._lastDraggedControl.getCells()[2].getDescription() ===
+							_item.getCells()[1].getDescription())
+							_item.setVisible(true);
+					}
+				}.bind(this)
+			});
 
 		},
 
@@ -446,7 +447,7 @@ sap.ui.define([
 								if (this.getView().byId("idUngeplant").getSelected())
 								// but only when Default is not set
 									_item.setVisible(false);
-								
+
 							}
 						}
 					}

@@ -20,7 +20,7 @@
 				<IconTabFilter text="Angebote" key="Angebote">
 					<!--<ScrollContainer id="idAngeboteContainer" vertical="true" horizontal="true" focusable="true">-->
 					<FlexBox alignItems="Start">
-						<CheckBox id="idSelDefault" text="Default" selected="true" select="onSearch">
+						<CheckBox id="idSelDefault" text="Zugewiesene" selected="true" select="onSearch">
 							<layoutData>
 								<FlexItemData growFactor="1"/>
 							</layoutData>

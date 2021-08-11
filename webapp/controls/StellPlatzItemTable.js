@@ -20,7 +20,7 @@ sap.ui.define([
 
 		// Tabelle für die Stellplatz Items rechts
 		_lastDraggedControl: null,
-		
+
 		metadata: {
 			properties: {
 				StellplatzId: {
@@ -315,11 +315,11 @@ sap.ui.define([
 					}.bind(this)
 				});
 			} else // or just insert
-				this.getModel().create("/PlanungItemSet", _object,{
-							success: function () {
-								this._lastDraggedControl.setVisible(false);
-							}.bind(this)
-						});
+				this.getModel().create("/PlanungItemSet", _object, {
+				success: function () {
+					this._lastDraggedControl.setVisible(false);
+				}.bind(this)
+			});
 
 		},
 
@@ -587,6 +587,7 @@ sap.ui.define([
 		onWTAnzChange: function (oEvent) {
 			var _path = this.getBindingContext().getPath();
 			var data = {};
+			var _id=oEvent.getSource().getId();
 			data.AnzWt = parseInt(oEvent.getParameters().value, 10);
 
 			if (!isNaN(data.AnzWt) && !isNaN(parseFloat(data.AnzWt))) {
@@ -595,6 +596,10 @@ sap.ui.define([
 					refreshAfterChange: false,
 					success: function (oData) {
 						this.addStyleClass("zPolyGreenBackground");
+						// focus on next input
+						var inputs = $(':input');
+						var index = $(':input').index($("#" + _id + "-inner")[0]);
+						inputs.get(index + 1).focus();
 						//this.setValueState(sap.ui.core.ValueState.Information);//red
 					}.bind(this)
 
