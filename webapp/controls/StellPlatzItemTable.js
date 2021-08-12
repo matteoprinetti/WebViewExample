@@ -20,6 +20,8 @@ sap.ui.define([
 
 		// Tabelle für die Stellplatz Items rechts
 		_lastDraggedControl: null,
+		_belegungIcon: null,
+		_anzwtInput: null,
 
 		metadata: {
 			properties: {
@@ -37,6 +39,9 @@ sap.ui.define([
 				},
 				Table: {
 					type: "sap.m.Table" // ref to inner Table
+				},
+				AnzahlBelegt: {
+					type: "int"
 				}
 			},
 			aggregations: {
@@ -54,6 +59,7 @@ sap.ui.define([
 			// a VBOX containg a ObjectPageHeaderContent and a Table
 
 			this.setAggregation("_vbox", new VBox());
+			this.setProperty("AnzahlBelegt", 0);
 
 			var pageheader = new ObjectPageHeaderContent();
 
@@ -79,7 +85,7 @@ sap.ui.define([
 				text: "Anzahl"
 			}).addStyleClass("sapUiLargeMarginEnd"));
 
-			vert.addItem(new Input({
+			this._anzwtInput = new Input({
 				value: "{AnzWt}",
 				width: "3em",
 				type: InputType.Number,
@@ -91,15 +97,26 @@ sap.ui.define([
 											val = val.replace(/[^\d]/g, '');
 											_oInput.setValue(val);
 										}*/
-			}).addStyleClass("sapUiLargeMarginEnd")).addEventDelegate({
+			});
+
+			vert.addItem(this._anzwtInput.addStyleClass("sapUiTinyMarginEnd")).addEventDelegate({
 				onfocusin: function (oEvent) {
 					$("#" + oEvent.originalEvent.target.id).select();
 				}
 			});
 
-			vert.addItem(new ObjectStatus({
-				title: "Belegung"
-			}).addStyleClass("sapUiLargeMarginEnd"));
+			// new Icon.
+			this._belegungIcon = new Icon( {
+						src: "sap-icon://alert",
+						color: sap.ui.core.IconColor.Critical,
+						size: "2.5em",
+						visible: false } ); 
+						
+			vert.addItem(this._belegungIcon.addStyleClass("sapUiLargeMarginEnd"));
+
+			//vert.addItem(new ObjectStatus({
+			//	title: "Belegung"
+			//}).addStyleClass("sapUiLargeMarginEnd"));
 			//pageheader.addContent(vert);
 
 			// table 
@@ -323,6 +340,26 @@ sap.ui.define([
 
 		},
 
+		refreshIconBelegt: function (_lastWt) {
+
+			// find out offer/article wt anzahl
+			var _wt_items = 0;
+
+			for (var x in this.getTable().getItems()) {
+				_wt_items += parseInt(this.getTable().getItems()[x].getCells()[4].getValue(),10);
+			}
+
+			if (_lastWt) _wt_items += parseInt(_lastWt,10);
+
+			// now the icon
+			if (parseInt(this._anzwtInput.getValue(),10) !== _wt_items) {
+				this._belegungIcon.setVisible(true);
+		
+			}
+			else
+				this._belegungIcon.setVisible(false) ;
+		},
+
 		//================================================
 		// Utility functions 
 		//===============================================
@@ -339,6 +376,11 @@ sap.ui.define([
 			// ACTUALL it should READ or better bind the element to OfrHeadSet ! 
 
 			var _objectid = oContext.getObject().Angebot;
+
+			// 11.08.2021 also take care of the icon src in the parent
+
+			// 12.08 the current WT is not in the table yet.
+			this.refreshIconBelegt(oContext.getObject().AnzWt);
 
 			if (oContext.getObject().ArtikelFlag === false) {
 				var _objectkey = this.getModel("Offers").createKey("OfrHeadSet", {
@@ -543,7 +585,7 @@ sap.ui.define([
 					width: "5%",
 					value: oContext.getObject().AnzWt,
 					type: InputType.Number,
-					change: this.onWTChange
+					change: this.onWTChange.bind(this)
 						/*,
 											liveChange: function (oEvent) {
 												var _oInput = oEvent.getSource();
@@ -574,6 +616,7 @@ sap.ui.define([
 					refreshAfterChange: false,
 					success: function (oData) {
 						this.addStyleClass("zPolyGreenBackground");
+						this.getParent().getParent().getParent().getParent().refreshIconBelegt();
 						//this.setValueState(sap.ui.core.ValueState.Information);//red
 					}.bind(this)
 
@@ -587,7 +630,7 @@ sap.ui.define([
 		onWTAnzChange: function (oEvent) {
 			var _path = this.getBindingContext().getPath();
 			var data = {};
-			var _id=oEvent.getSource().getId();
+			var _id = oEvent.getSource().getId();
 			data.AnzWt = parseInt(oEvent.getParameters().value, 10);
 
 			if (!isNaN(data.AnzWt) && !isNaN(parseFloat(data.AnzWt))) {
@@ -596,6 +639,7 @@ sap.ui.define([
 					refreshAfterChange: false,
 					success: function (oData) {
 						this.addStyleClass("zPolyGreenBackground");
+						this.getParent().getParent().getParent().refreshIconBelegt();
 						// focus on next input
 						var inputs = $(':input');
 						var index = $(':input').index($("#" + _id + "-inner")[0]);
