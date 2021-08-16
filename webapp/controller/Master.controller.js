@@ -482,7 +482,13 @@ sap.ui.define([
 							sap.ui.model.FilterOperator.EQ, _flaeche.Org));
 
 				// if type = 2 - add boss filter 
-				if (_flaeche.Type === "2")
+				if (_flaeche.Type === "2") {
+
+					// Prinetti 16.08.2021 added Sortber
+					filters.push(
+						new sap.ui.model.Filter("Sortber",
+							sap.ui.model.FilterOperator.EQ, _flaeche.Sortber));
+
 					for (var [key, value] of Object.entries(this.getView().getModel().oData)) {
 						if (key.indexOf("BossSet") >= 0) {
 							if (value.FlaecheId === this._stellplatz_id) // yes this boss belongs to my stellplatz
@@ -492,6 +498,7 @@ sap.ui.define([
 
 						}
 					}
+				}
 
 			}
 
