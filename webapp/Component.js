@@ -51,7 +51,7 @@ sap.ui.define([
 			// 6.8.2021 and + 1 week ! 
 
 			var today = new Date();
-			var nextweek = new Date(today.getTime() + 86400000*7);
+			var nextweek = new Date(today.getTime() + 86400000*6);
 			
 			var dd = String(nextweek.getDate()).padStart(2, '0');
 			var mm = String(nextweek.getMonth() + 1).padStart(2, '0'); //January is 0!
