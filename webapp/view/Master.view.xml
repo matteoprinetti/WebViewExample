@@ -43,11 +43,13 @@
 						</Table>
 					</IconTabFilter>
 					<IconTabSeparator icon="sap-icon://open-command-field"/>
-					<IconTabFilter id="tabGrob" text="Grobplanung" key="Grob" enabled="false">
+					<IconTabFilter id="Detail" text="Grobplanung" key="Grob" enabled="false">
 						<core:Fragment fragmentName= "zpoly.zpolyplanung.view.GrobPlanung" type="XML"/>
 						</IconTabFilter>
 					<IconTabSeparator icon="sap-icon://open-command-field"/>
-					<IconTabFilter id="tabDetail" text="Detailplanung" key="Detail" enabled="false"/>
+					<IconTabFilter id="tabDetail" text="Detailplanung" key="Detail" enabled="false" >
+						<core:Fragment fragmentName= "zpoly.zpolyplanung.view.DetailPlanung" type="XML"/>
+					</IconTabFilter>
 				</items>
 			</IconTabBar>
 		</content>

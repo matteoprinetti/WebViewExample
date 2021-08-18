@@ -1,0 +1,27 @@
+<core:FragmentDefinition xmlns:mvc="sap.ui.core.mvc" xmlns:html="http://www.w3.org/1999/xhtml" displayBlock="true" xmlns="sap.m"
+	xmlns:semantic="sap.m.semantic" xmlns:ism="zism.zismlibrary.controls" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" xmlns:grid="sap.ui.layout.cssgrid" xmlns:dnd="sap.ui.core.dnd" xmlns:uxap="sap.uxap"
+	xmlns:poly="zpoly.zpolyplanung.controls" xmlns:smart="sap.ui.comp.smarttable" xmlns:smartFilter="sap.ui.comp.smartfilterbar"
+	xmlns:fb="sap.ui.comp.filterbar" xmlns:ui="sap.ui">
+	<FlexBox direction="Row" alignItems="Center" class="sapUiResponsiveMargin">
+		<items>
+			<Label text="{i18n>FilialenAuswahl}" labelFor="filialeInput" class="sapUiSmallMargin"/>
+			<Text id="filialeInputDetail" text='{local>/Filiale}'/>
+			<Text id="filialeInputDescrDetail" text="{local>/FilialeDescr}" class="sapUiSmallMargin"/>
+			<DatePicker id="calenderAuswahlDetail" placeholder="{i18n>Kalenderwoche}" displayFormat="w.YYYY" valueFormat="wwYYYY"
+				class="sapUiSmallMargin" value="{local>/CalWeek}" editable="false" width="40%"/>
+			<Label text="{i18n>PPFlaeche}" class="sapUiSmallMargin"/>
+		    <Select id="selPPDetail" enabled="true" forceSelection="false" selectedKey="{local>/selectedPPF}" change="onPPSelected"
+				class="sapUiSmallMargin"></Select> 
+		</items>
+	</FlexBox>
+	<VBox>
+		<Label text="Stellplätze"></Label>
+		<items>
+			<ScrollContainer id="idStellPlatzContainerDetail" vertical="true" height="700px">
+				<List id="idStellPlatzDetail"></List>
+			</ScrollContainer>
+			<!--<poly:StellPlatz id="IdStellPlatz"></poly:StellPlatz>-->
+		</items>
+	</VBox>
+</core:FragmentDefinition>

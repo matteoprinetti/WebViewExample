@@ -16,7 +16,7 @@ sap.ui.define([
 ], function (Control, Table, VBox, FlexBox, ObjectPageHeaderContent, HorizontalLayout, ObjectStatus, Input,
 	Label, Icon, Formatter, IconHover, Fragment, InputType) {
 	"use strict";
-	return Control.extend("zpoly.zpolyplanung.controls.StellPlatzItemTableDetail", {
+	return Control.extend("zpoly.zpolyplanung.controls.StellPlatzItemTable", {
 
 		// Tabelle für die Stellplatz Items rechts
 		_lastDraggedControl: null,

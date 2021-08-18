@@ -106,6 +106,7 @@ sap.ui.define([
 			this.getAggregation("_panel").addContent(_list);
 
 		},
+			
 
 		setWeek: function (oValue) {
 			this.setProperty("week", oValue);
@@ -146,11 +147,11 @@ sap.ui.define([
 						new StellPlatzItemTable({
 							StellplatzId: oContext.getObject().StellplatzId,
 							WtId: oContext.getObject().WtId,
-							Woche: oContext.getObject().Woche
+							Woche: oContext.getObject().Woche 
 						})
 					);
 					return _item;
-				}
+				}.bind(this)
 			});
 
 		},

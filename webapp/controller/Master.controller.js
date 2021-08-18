@@ -1,12 +1,12 @@
 sap.ui.define([
 	"./BaseController",
-	"zpoly/zpolyplanung/controls/StellPlatzItemTable",
-	"zpoly/zpolyplanung/controls/StellPlatz",
+ 	"zpoly/zpolyplanung/controls/StellPlatz",
+	"zpoly/zpolyplanung/controls/StellPlatzDetail",
 	"zpoly/zpolyplanung/factories/FlaecheItemFactory",
 	"zpoly/zpolyplanung/factories/OffersItemFactory",
 	"../model/formatter",
 	'sap/ui/core/Fragment'
-], function (BaseController, StellPlatzItemTable, StellPlatz, FlaecheItemFactory, OffersItemFactory, Formatter, Fragment) {
+], function (BaseController, StellPlatz, StellPlatzDetail, FlaecheItemFactory, OffersItemFactory, Formatter, Fragment) {
 	"use strict";
 
 	//template: this.getView().byId("AngeboteTableColumnListItem").clone(),
@@ -165,7 +165,8 @@ sap.ui.define([
 			if (!(oList.getMode() === "MultiSelect" && !bSelected)) {
 				// get the list item, either from the listItem parameter or from the event's source itself (will depend on the device-dependent mode).
 				// enable the filter before selecting
-				this.getView().byId("tabGrob").setEnabled(true);
+				this.getView().byId("Detail").setEnabled(true);
+				this.getView().byId("tabDetail").setEnabled(true);
 				this.getView().byId("idIconTabBar").setSelectedKey("Grob");
 
 				// set the binding for the selPP element 
@@ -189,12 +190,40 @@ sap.ui.define([
 									this.getView().byId("selPP").setSelectedItem(item);
 
 									this.loadGrob(oData.Id, this.getView().byId("calenderAuswahl").getValue());
+									
+									this.loadDetail(oData.Id, this.getView().byId("calenderAuswahl").getValue());
 								}
 							}
 
 						}.bind(this)
 					}
 				});
+
+				// same for the select element im Detail
+
+				this.getView().byId("selPPDetail").bindItems({
+					path: "/FlaechenSet",
+					filters: [oLoccoFilter],
+					factory: selPPFactory.bind(this),
+					sorter: new sap.ui.model.Sorter("Name"),
+					events: {
+						dataReceived: function (oData2) {
+
+							// position on the Id that was chosen 
+
+							for (var x = 0; x < this.getView().byId("selPPDetail").getItems().length; x++) {
+								var item = this.getView().byId("selPPDetail").getItems()[x];
+								if (item.getKey() === oData.Id) { // the chosen one 
+									this.getView().byId("selPPDetail").setSelectedItem(item);
+
+									this.loadGrob(oData.Id, this.getView().byId("calenderAuswahl").getValue());
+								}
+							}
+
+						}.bind(this)
+					}
+				});
+
 
 				// if there is at least on
 
@@ -242,7 +271,12 @@ sap.ui.define([
 
 		onTabbarSelect: function (oEvent) {
 			if (oEvent.getParameters().key === "Ueber") {
-				this.getView().byId("tabGrob").setEnabled(false);
+				this.getView().byId("Detail").setEnabled(false);
+				this.getView().byId("tabDetail").setEnabled(false);
+			}
+			// Detail 
+			if (oEvent.getParameters().key === "Detail") {
+				var _ppf=this.getModel("local").getProperty("/selectedPPF");
 			}
 		},
 
@@ -250,6 +284,9 @@ sap.ui.define([
 			this.loadGrob(oEvent.getParameters().selectedItem.getKey(), this.getView().byId("calenderAuswahlGrob").getValue());
 		},
 
+		onPPSelectedDetail: function (oEvent) {
+			this.loadDetail(oEvent.getParameters().selectedItem.getKey(), this.getView().byId("calenderAuswahlDetail").getValue());
+		},
 		/*onBeforeRebindAngeboteTable: function (oEvent) {
 
 			// 12.05.2021 Prinetti
@@ -341,6 +378,48 @@ sap.ui.define([
 
 				}.bind(this)
 			})
+
+		},
+
+		loadDetail: function (oId, oWeek) {
+
+			this._stellplatz_id = oId;
+
+			sap.ui.core.BusyIndicator.show();
+
+			var _stellplatz_detail = this.getView().byId("idStellPlatzDetail");
+
+			//20.04.2021 set Container height
+
+			/*var _stellplatzcontainer = this.getView().byId("idMasterPage");
+			var _height = $("#" + this.getView().byId("idSplitter").getId()).css("height");
+			_stellplatzcontainer.setHeight(_height);
+
+			var _angebotcontainer = this.getView().byId("AngeboteTable");
+			_height = $("#" + this.getView().byId("idSplitter").getId()).css("height");
+			_angebotcontainer.setHeight(_height);*/
+
+			var _template_stellplatz_detail = new sap.m.CustomListItem({
+				content: [
+					new StellPlatzDetail({
+						week: '{local>/CalWeek}',
+						key: '{Key}',
+						mode: 'Detail',
+						PopOverControl: this.getOwnerComponent()._AngebotDetailPopover
+					})
+				]
+			});
+
+			_stellplatz_detail.bindItems({
+				path: "/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz",
+				template: _template_stellplatz_detail,
+				events: {
+					dataReceived: function () {
+						//this.internalRebind(this.getView().byId("idSelDefault").getSelected());
+					}.bind(this)
+				}
+
+			});
 
 		},
 
