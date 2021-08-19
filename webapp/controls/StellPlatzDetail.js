@@ -7,8 +7,9 @@ sap.ui.define([
 	"zpoly/zpolyplanung/controls/StellPlatzItemTableDetail",
 	"sap/m/ColumnListItem",
 	"sap/m/MessageBox",
-	"sap/m/Text"
-], function (Control, Panel, OverflowToolbar, Button, Table, StellPlatzItemTableDetail, ColumnListItem, MessageBox, Text) {
+	"sap/m/Text",
+	"sap/m/ListType"
+], function (Control, Panel, OverflowToolbar, Button, Table, StellPlatzItemTableDetail, ColumnListItem, MessageBox, Text, ListType) {
 	"use strict";
 	return Control.extend("zpoly.zpolyplanung.controls.StellPlatzDetail", {
 
@@ -23,7 +24,7 @@ sap.ui.define([
 				week: {
 					type: "string"
 				},
-				PopOverControl: {
+				dialog: {
 					type: "any"
 				}
 			},
@@ -43,7 +44,6 @@ sap.ui.define([
 				expandable: true
 			}));
 
-	 
 			var _table = new Table();
 
 			var _overflowtoolbar = new sap.m.OverflowToolbar();
@@ -74,33 +74,40 @@ sap.ui.define([
 					text: "Angebot"
 				})
 			}));
- 
- 			_table.addColumn(new sap.m.Column({
+
+			_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "Artikel"
 				})
 			}));
-			
- 			_table.addColumn(new sap.m.Column({
+
+			_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "Zusatzartikel"
 				})
 			}));
 
-			
 			_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "WT_Typ"
 				})
 			}));
-			
+
 			_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
 					text: "WT Anzahl"
 				})
 			}));
-			 
+
 			_table.addStyleClass("zpolytableblack");
+
+			// itempress event 
+
+			_table.attachItemPress(function (oEvent) {
+				this.getDialog().then(function (_dia) {
+					_dia.open();
+				});
+			}.bind(this));
 
 			this.getAggregation("_panel").addContent(_table);
 
@@ -120,8 +127,8 @@ sap.ui.define([
 
 		},
 
-		setPopOverControl: function (oValue) {
-			this.setProperty("PopOverControl", oValue);
+		setDialog: function (oValue) {
+			this.setProperty("dialog", oValue);
 		},
 
 		bindInternal: function () {
@@ -142,7 +149,7 @@ sap.ui.define([
 				factory: function (sId, oContext) {
 
 					var oItemTemplate = new sap.m.ColumnListItem({
-						type: "Inactive"
+						type: ListType.Active
 					});
 
 					// take care of the fact that this could be an artikel. 
@@ -183,12 +190,19 @@ sap.ui.define([
 						//					"')/$value");
 
 						oItemTemplate.addCell(_angebotdetails);
-	 
-						oItemTemplate.addCell(new Text({ text:"Art"}));
-						oItemTemplate.addCell(new Text({ text:"Zusa"}));
-						oItemTemplate.addCell(new Text({ text:oContext.getObject().WtId}));
-						oItemTemplate.addCell(new Text({ text:oContext.getObject().AnzWt}));
 
+						oItemTemplate.addCell(new Text({
+							text: "Art"
+						}));
+						oItemTemplate.addCell(new Text({
+							text: "Zusa"
+						}));
+						oItemTemplate.addCell(new Text({
+							text: oContext.getObject().WtId
+						}));
+						oItemTemplate.addCell(new Text({
+							text: oContext.getObject().AnzWt
+						}));
 
 					}
 
@@ -218,14 +232,21 @@ sap.ui.define([
 							path: _articlekey,
 							model: "ZSRSDATAFEED"
 						});
- 
 
 						oItemTemplate.addCell(_artikeldetails);
 
-						oItemTemplate.addCell(new Text({ text:"Art"}));
-						oItemTemplate.addCell(new Text({ text:"Zusa"}));
-						oItemTemplate.addCell(new Text({ text:oContext.getObject().WtId}));
-						oItemTemplate.addCell(new Text({ text:oContext.getObject().AnzWt}));
+						oItemTemplate.addCell(new Text({
+							text: "Art"
+						}));
+						oItemTemplate.addCell(new Text({
+							text: "Zusa"
+						}));
+						oItemTemplate.addCell(new Text({
+							text: oContext.getObject().WtId
+						}));
+						oItemTemplate.addCell(new Text({
+							text: oContext.getObject().AnzWt
+						}));
 					}
 
 					return oItemTemplate;
@@ -235,7 +256,6 @@ sap.ui.define([
 
 		},
 
- 
 		renderer: function (oRm, oControl) {
 			oRm.renderControl(oControl.getAggregation("_panel"));
 		}

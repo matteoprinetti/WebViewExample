@@ -16,7 +16,8 @@ sap.ui.define([
 		_template_angebote: null,
 		_stellplatz_id: null,
 		_lastDraggedControl: null,
-
+		_detailPlanungDialog: null,
+		
 		onInit: function () {
 
 			// get a copy of the template
@@ -106,6 +107,17 @@ sap.ui.define([
 					return oPopover;
 				}.bind(this));
 			}
+			
+			// DetailPlanung Dialog
+			
+			if (!this._detailPlanungDialog) {
+              	this._detailPlanungDialog = Fragment.load({
+					id: this.getView().getId(),
+					name: "zpoly.zpolyplanung.view.DetailPlanungAngebot",
+					controller: this
+				});
+            }
+			
 		},
 
 		onArtikelSearch: function (oEvent) {
@@ -405,7 +417,7 @@ sap.ui.define([
 						week: '{local>/CalWeek}',
 						key: '{Key}',
 						mode: 'Detail',
-						PopOverControl: this.getOwnerComponent()._AngebotDetailPopover
+						dialog: this._detailPlanungDialog
 					})
 				]
 			});
