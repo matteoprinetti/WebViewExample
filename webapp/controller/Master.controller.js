@@ -110,13 +110,13 @@ sap.ui.define([
 			
 			// DetailPlanung Dialog
 			
-			if (!this._detailPlanungDialog) {
+/*			if (!this._detailPlanungDialog) {
               	this._detailPlanungDialog = Fragment.load({
 					id: this.getView().getId(),
 					name: "zpoly.zpolyplanung.view.DetailPlanungAngebot",
 					controller: this
 				});
-            }
+            }*/
 			
 		},
 
@@ -415,9 +415,7 @@ sap.ui.define([
 				content: [
 					new StellPlatzDetail({
 						week: '{local>/CalWeek}',
-						key: '{Key}',
-						mode: 'Detail',
-						dialog: this._detailPlanungDialog
+						key: '{Key}'
 					})
 				]
 			});

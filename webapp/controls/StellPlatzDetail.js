@@ -5,16 +5,20 @@ sap.ui.define([
 	"sap/m/Button",
 	"sap/m/Table",
 	"zpoly/zpolyplanung/controls/StellPlatzItemTableDetail",
+	"zpoly/zpolyplanung/controls/AngebotDetailDialog",
 	"sap/m/ColumnListItem",
 	"sap/m/MessageBox",
 	"sap/m/Text",
 	"sap/m/ListType"
-], function (Control, Panel, OverflowToolbar, Button, Table, StellPlatzItemTableDetail, ColumnListItem, MessageBox, Text, ListType) {
+], function (Control, Panel, OverflowToolbar, Button, Table, StellPlatzItemTableDetail, 
+    AngebotDetailDialog, ColumnListItem, MessageBox, Text, ListType) {
 	"use strict";
 	return Control.extend("zpoly.zpolyplanung.controls.StellPlatzDetail", {
 
 		_oValueHelpDialog: null,
+		_oDetailDialog: null,
 		_wtid: null,
+		_currentDetailObject: null,
 
 		metadata: {
 			properties: {
@@ -49,6 +53,9 @@ sap.ui.define([
 			var _overflowtoolbar = new sap.m.OverflowToolbar();
 			var _text = new sap.m.Text();
 
+		   this._oDetailDialog = new AngebotDetailDialog();
+		   				
+		   
 			_text.bindProperty("text", "Name");
 
 			_overflowtoolbar.addContent(_text);
@@ -104,9 +111,11 @@ sap.ui.define([
 			// itempress event 
 
 			_table.attachItemPress(function (oEvent) {
-				this.getDialog().then(function (_dia) {
-					_dia.open();
-				});
+				this._currentDetailObject = oEvent.getParameters().listItem.getBindingContext().getObject();
+                this._oDetailDialog.setModel(this.getModel("Offers"),"Offers");
+                this._oDetailDialog.setModel(this.getModel());
+				this._oDetailDialog.bindAngebot(this._currentDetailObject);
+				
 			}.bind(this));
 
 			this.getAggregation("_panel").addContent(_table);

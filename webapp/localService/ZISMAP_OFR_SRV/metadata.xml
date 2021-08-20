@@ -5,7 +5,8 @@
 		<Schema Namespace="ZISMAP_OFR_SRV" xml:lang="it" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
 			<EntityType Name="OfrHead" sap:content-version="1">
 				<Key><PropertyRef Name="OfferGuid"/></Key><Property Name="Duration" Type="Edm.String" Nullable="false" MaxLength="5" sap:filter-restriction="single-value" sap:unicode="false"
-					sap:label="Stato" sap:creatable="false" sap:updatable="false" sap:sortable="false"/><Property Name="TacticType" Type="Edm.String" Nullable="false" MaxLength="4" sap:filter-restriction="single-value" sap:unicode="false"
+					sap:label="Stato" sap:creatable="false" sap:updatable="false" sap:sortable="false"/><Property Name="ZzBossnummer" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Numero BoSS"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false"/><Property Name="TacticType" Type="Edm.String" Nullable="false" MaxLength="4" sap:filter-restriction="single-value" sap:unicode="false"
 					sap:label="Tipo strategia" sap:creatable="false" sap:updatable="false" sap:sortable="false"/><Property Name="ImageUrl1" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="Startdat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Inizio validità" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Enddat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Fine validità" sap:creatable="false"
@@ -38,7 +39,7 @@
 					sap:sortable="false"/><Property Name="ZzSortitypTxt" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Sortimentstyp"
 					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Fromto" Type="Edm.String" Nullable="false" MaxLength="23" sap:unicode="false" sap:label="Zeitraum" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="PromoType" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Angebotsart"
-					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="PromoTypeTxt" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Angebotsart"
+					sap:creatable="false" sap:updatable="false" sap:sortable="false"/><Property Name="PromoTypeTxt" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Angebotsart"
 					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Sortber" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false"/><Property Name="Organisation" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false"/><Property Name="ZzExtOfrId" Type="Edm.String" Nullable="false" MaxLength="36" sap:unicode="false" sap:label="Angebot-ID"
@@ -53,7 +54,9 @@
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Sortiment" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="CampaignName" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Kampagne"
 					sap:creatable="false" sap:updatable="false" sap:sortable="false"/><Property Name="ExtSearch" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="" sap:creatable="false" sap:updatable="false"
-					sap:sortable="false" sap:filterable="false"/><NavigationProperty Name="toOfrItemSet" Relationship="ZISMAP_OFR_SRV.Assoc_Ofr_OfrItem" FromRole="FromRole_Assoc_Ofr_OfrItem"
+					sap:sortable="false" sap:filterable="false"/><Property Name="IncludedOfr" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Prognose" Type="Edm.Decimal" Nullable="false" Precision="19" Scale="5" sap:unicode="false" sap:label=""
+					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><NavigationProperty Name="toOfrItemSet" Relationship="ZISMAP_OFR_SRV.Assoc_Ofr_OfrItem" FromRole="FromRole_Assoc_Ofr_OfrItem"
 					ToRole="ToRole_Assoc_Ofr_OfrItem"/><NavigationProperty Name="EventSet" Relationship="ZISMAP_OFR_SRV.Assoc_Ofr_Event" FromRole="FromRole_Assoc_Ofr_Event"
 					ToRole="ToRole_Assoc_Ofr_Event"/><NavigationProperty Name="toCampaign" Relationship="ZISMAP_OFR_SRV.Assoc_Ofr_Campaign" FromRole="FromRole_Assoc_Ofr_Campaign"
 					ToRole="ToRole_Assoc_Ofr_Campaign"/></EntityType>
@@ -92,6 +95,10 @@
 			<EntityType Name="Organisation" sap:content-version="1">
 				<Key><PropertyRef Name="OrgId"/></Key><Property Name="OrgId" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="OrgDescr" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="PromoType" sap:content-version="1">
+				<Key><PropertyRef Name="PromoTypeId"/></Key><Property Name="PromoTypeId" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Description" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/></EntityType>
 			<EntityType Name="OfrAggr" sap:content-version="1">
 				<Key><PropertyRef Name="Type"/></Key><Property Name="Kpi" Type="Edm.Decimal" Nullable="false" Precision="7" Scale="2" sap:unicode="false" sap:creatable="false"
@@ -137,6 +144,7 @@
 				sap:pageable="false" sap:content-version="1"/><EntitySet Name="OfrRunStatusSet" EntityType="ZISMAP_OFR_SRV.OfrRunStatus" sap:creatable="false" sap:updatable="false" sap:deletable="false"
 				sap:pageable="false" sap:content-version="1"/><EntitySet Name="TacticTypeSet" EntityType="ZISMAP_OFR_SRV.TacticType" sap:creatable="false" sap:updatable="false" sap:deletable="false"
 				sap:pageable="false" sap:content-version="1"/><EntitySet Name="OrganisationSet" EntityType="ZISMAP_OFR_SRV.Organisation" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:content-version="1"/><EntitySet Name="PromoTypeSet" EntityType="ZISMAP_OFR_SRV.PromoType" sap:creatable="false" sap:updatable="false" sap:deletable="false"
 				sap:pageable="false" sap:content-version="1"/><EntitySet Name="OfrAggrSet" EntityType="ZISMAP_OFR_SRV.OfrAggr" sap:creatable="false" sap:updatable="false" sap:deletable="false"
 				sap:pageable="false" sap:content-version="1"/><EntitySet Name="CampaignSet" EntityType="ZISMAP_OFR_SRV.Campaign" sap:creatable="false" sap:updatable="false" sap:deletable="false"
 				sap:pageable="false" sap:content-version="1"/>

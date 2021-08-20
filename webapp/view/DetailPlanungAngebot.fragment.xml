@@ -5,18 +5,24 @@
 			<Table id="DetailTab"/>
 			<IconTabBar id="DetailTabBar" expanded="true" expandable="false">
 				<items>
-					<IconTabFilter   text="Angebot" key="Grob" enabled="tue">
-							<Table id="DetailTabAngebot"/>
+					<IconTabFilter text="Angebot" key="Grob" enabled="tue">
+						<Table id="DetailTabAngebot">
+							<columns>
+								<Column width="10%">
+									<Text text="Artikel"/>
+								</Column>
+							</columns>
+						</Table>
 					</IconTabFilter>
 					<IconTabSeparator icon="sap-icon://open-command-field"/>
-					<IconTabFilter   text="Zusatz" key="Detail" enabled="true">
-							<Table id="DetailTabZusatz"/>
+					<IconTabFilter text="Zusatz" key="Detail" enabled="true">
+						<Table id="DetailTabZusatz"/>
 					</IconTabFilter>
 				</items>
 			</IconTabBar>
 		</VBox>
 		<endButton>
-			<Button text="Close"/> 
+			<Button text="Close"/>
 		</endButton>
 	</Dialog>
 </core:FragmentDefinition>
