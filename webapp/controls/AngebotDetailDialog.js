@@ -14,9 +14,11 @@ sap.ui.define([
 	"sap/ui/layout/SplitterLayoutData",
 	"sap/m/SearchField",
 	"sap/m/ScrollContainer",
-	"sap/ui/core/Icon"
-], function (Control, Dialog, Table, VBox, HBox, IconTabBar, IconTabFilter, Label, Column, Text, 
-		ObjectHeader, Splitter, SplitterLayoutData, SearchField, ScrollContainer, Icon) {
+	"sap/ui/core/Icon",
+	"sap/m/Image",
+	"sap/m/ObjectAttribute"
+], function (Control, Dialog, Table, VBox, HBox, IconTabBar, IconTabFilter, Label, Column, Text,
+	ObjectHeader, Splitter, SplitterLayoutData, SearchField, ScrollContainer, Icon, Image, ObjectAttribute) {
 	"use strict";
 	return Control.extend("zpoly.zpolyplanung.controls.AngebotDetailDialog", {
 
@@ -43,6 +45,15 @@ sap.ui.define([
 				},
 				TableZusatz: {
 					type: "sap.m.Table" // ref to inner Table
+				},
+				StellplatzId: {
+					type: "string"
+				},
+				WtId: {
+					type: "string"
+				},
+				Woche: {
+					type: "string"
 				}
 			}
 		},
@@ -53,7 +64,10 @@ sap.ui.define([
 				stretch: true
 			}));
 
-			var _tabletop = new Table().setLayoutData(new SplitterLayoutData({minSize: 300, resizable: false}) );
+			var _tabletop = new Table().setLayoutData(new SplitterLayoutData({
+				minSize: 300,
+				resizable: false
+			}));
 			var _tableangebot = new Table();
 			var _tablezusatz = new Table();
 
@@ -61,58 +75,144 @@ sap.ui.define([
 			this.setProperty("TableAngebot", _tableangebot);
 			this.setProperty("TableZusatz", _tablezusatz);
 
+			// ANGEBOT (Unten Links)
+
 			_tableangebot.addColumn(new Column().setHeader(new Text({
-				text: "Artikel"
+				text: "ArtikelBezeichnung"
 			})));
 
 			_tableangebot.addColumn(new Column().setHeader(new Text({
-				text: "Bezeichnung"
+				text: "ArtikelNummer"
+			})));
+
+			_tableangebot.addColumn(new Column().setHeader(new Text({
+				text: "Zuteilung aus Aufteiler"
+			})));
+
+			_tableangebot.addColumn(new Column().setHeader(new Text({
+				text: "Bestand"
+			})));
+
+			_tableangebot.addColumn(new Column().setHeader(new Text({
+				text: "Prognose"
+			})));
+
+			_tableangebot.addColumn(new Column().setHeader(new Text({
+				text: "Werbeartikel"
+			})));
+
+			// ZUSATZ (Unten Rechts)
+
+			_tablezusatz.addColumn(new Column().setHeader(new Text({
+				text: "Artikelbezeichnung"
 			})));
 
 			_tablezusatz.addColumn(new Column().setHeader(new Text({
-				text: "Artikel"
+				text: "Artikelnummer"
 			})));
 
 			_tablezusatz.addColumn(new Column().setHeader(new Text({
-				text: "Bezeichnung"
+				text: "Zuteilung aus Aufteiler"
+			})));
+
+			_tablezusatz.addColumn(new Column().setHeader(new Text({
+				text: "Bestand"
+			})));
+
+			_tablezusatz.addColumn(new Column().setHeader(new Text({
+				text: "Prognose"
+			})));
+
+			_tablezusatz.addColumn(new Column().setHeader(new Text({
+				text: "Werbeartikel"
+			})));
+
+			// TOP
+
+			_tabletop.addColumn(new Column().setHeader(new Text({
+				text: "Artikelbezeichnung"
 			})));
 
 			_tabletop.addColumn(new Column().setHeader(new Text({
-				text: "Artikel"
+				text: "Artikelnummer"
 			})));
 
 			_tabletop.addColumn(new Column().setHeader(new Text({
-				text: "Bezeichnung"
+				text: "Zuteilung aus Aufteiler"
 			})));
 
+			_tabletop.addColumn(new Column().setHeader(new Text({
+				text: "Bestand"
+			})));
 
-			var _vbox = new VBox( { width:"100%",
-									height:"100%" });
-									
-			var _tabbar = new IconTabBar().setLayoutData(new SplitterLayoutData({minSize: 300, resizable: false}) );
+			_tabletop.addColumn(new Column().setHeader(new Text({
+				text: "Prognose"
+			})));
 
-			
-			this._topcontainer = new HBox();
-			
-			var _objheader = new ObjectHeader({
-			 
+			_tabletop.addColumn(new Column().setHeader(new Text({
+				text: "Werbeartikel"
+			})));
+
+			// drag and drops 
+
+			_tabletop.addDragDropConfig(new sap.ui.core.dnd.DropInfo({
+				drop: this.onDragDropTop.bind(this)
+			}));
+
+			_tabletop.addDragDropConfig(new sap.ui.core.dnd.DragInfo({
+				sourceAggregation: "items"
+			}));
+
+			_tableangebot.addDragDropConfig(new sap.ui.core.dnd.DropInfo({
+				drop: this.onDragDropAngebot.bind(this)
+			}));
+
+			_tableangebot.addDragDropConfig(new sap.ui.core.dnd.DragInfo({
+				sourceAggregation: "items"
+			}));
+
+			_tablezusatz.addDragDropConfig(new sap.ui.core.dnd.DropInfo({
+				drop: this.onDragDropZusatz.bind(this)
+			}));
+
+			_tablezusatz.addDragDropConfig(new sap.ui.core.dnd.DragInfo({
+				sourceAggregation: "items"
+			}));
+
+			var _vbox = new VBox({
+				width: "100%",
+				height: "100%"
 			});
 
+			var _tabbar = new IconTabBar().setLayoutData(new SplitterLayoutData({
+				minSize: 300,
+				resizable: false
+			}));
+
+			this._topcontainer = new HBox();
+
+			var _objheader = new ObjectHeader({
+
+			});
+
+			this._topcontainer.addItem(new Image({height: "10rem"}).addStyleClass("sapUiSmallMargin"));
+			
 			this._topcontainer.addItem(_objheader);
 			_vbox.addItem(this._topcontainer);
-			
+
 			//this.setAggregation("_topcontainer",_vbox.getItems()[0]);	
-		
+
 			// Splitter 
-			
-			var _splitter = new Splitter({orientation: "Vertical"});
-			
+
+			var _splitter = new Splitter({
+				orientation: "Vertical"
+			});
+
 			_splitter.addContentArea(this.getProperty("TableTop"));
 			_splitter.addContentArea(_tabbar);
 
 			_vbox.addItem(_splitter);
-			
-			
+
 			var _tabfilter1 = new IconTabFilter({
 				text: "Angebot"
 			});
@@ -122,12 +222,18 @@ sap.ui.define([
 
 			var _searchFieldAngebot = new SearchField();
 			var _searchFieldZusatz = new SearchField();
-			
+
 			_tabfilter1.addContent(_searchFieldAngebot);
-			_tabfilter1.addContent(new ScrollContainer({height : "150px", vertical: true }).addContent(this.getProperty("TableAngebot")));
-			
+			_tabfilter1.addContent(new ScrollContainer({
+				height: "150px",
+				vertical: true
+			}).addContent(this.getProperty("TableAngebot")));
+
 			_tabfilter2.addContent(_searchFieldZusatz);
-			_tabfilter2.addContent(new ScrollContainer({height : "150px", vertical: true }).addContent(this.getProperty("TableZusatz")));
+			_tabfilter2.addContent(new ScrollContainer({
+				height: "150px",
+				vertical: true
+			}).addContent(this.getProperty("TableZusatz")));
 
 			_tabbar.addItem(_tabfilter1);
 			_tabbar.addItem(_tabfilter2);
@@ -143,13 +249,24 @@ sap.ui.define([
 		},
 
 		bindAngebot: function (oAngebot) {
-	
+
 			// head
+			// note this needs to be done for the other 2 tables 
+
 			
-			this._topcontainer.getItems()[0].setTitle(oAngebot.Matnr);
-			this._topcontainer.getItems()[0].setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + oAngebot.Matnr +
+			this._topcontainer.getItems()[0].setSrc("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + oAngebot.Matnr +
 				"')/$value");
 
+			var _path = "/OfrHeadSet(guid'" + oAngebot.Angebot + "')";
+			
+			this._topcontainer.getItems()[1].bindElement({
+								path: _path,
+								model: "Offers"
+							});
+							
+			this._topcontainer.getItems()[1].bindProperty("title", "Offers>PromoTypeTxt");
+			this._topcontainer.getItems()[1].addAttribute(new ObjectAttribute({ title:"Angebotsnr", text:"{Offers>ZzExtOfrId}"}));
+							
 			this.getTableAngebot().bindAggregation("items", {
 				path: "/OfrHeadSet(guid'" + oAngebot.Angebot + "')/toOfrItemSet",
 				model: "Offers",
@@ -163,11 +280,24 @@ sap.ui.define([
 						type: "Inactive"
 					});
 					oItemTemplate.addCell(new Text({
+						text: oContext.getObject().Bezeichnung
+					}));
+					oItemTemplate.addCell(new Text({
 						text: oContext.getObject().ExtProdId
 					}));
 					oItemTemplate.addCell(new Text({
-						text: oContext.getObject().Bezeichnung
+						text: "0"
 					}));
+					oItemTemplate.addCell(new Text({
+						text: "0"
+					}));
+					oItemTemplate.addCell(new Text({
+						text: "0"
+					}));
+					oItemTemplate.addCell(new Text({
+						text: oContext.getObject().Werbeartikel ? "Ja" : "Nein"
+					}));
+
 					return oItemTemplate;
 				},
 				events: {
@@ -176,6 +306,52 @@ sap.ui.define([
 					}.bind(this)
 				}
 			});
+		},
+
+		onDragDropTop: function (oEvent) {
+
+			if (!oEvent.getParameters().draggedControl) {
+				return;
+			}
+
+			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
+			this._lastDraggedControl = oEvent.getParameters().draggedControl;
+			var _object = this.getModel("Offers").getProperty(_path);
+
+			var _objectkey = this.getModel().createKey("PlanungItemDetailSet", {
+				StellplatzId: this.getStellplatzId(),
+				WtId: this.getWtId(),
+				Woche: this.getWoche(),
+				Angebot: _object.OfferGuid,
+				Artikel: _object.ExtProdId
+			});
+
+			this.getModel().create("/"+_objectkey, {}, {
+					success: function () {
+						var a = 1 ; 
+					}.bind(this)
+				});
+		},
+		onDragDropAngebot: function (oEvent) {
+
+			if (!oEvent.getParameters().draggedControl) {
+				return;
+			}
+
+			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
+			this._lastDraggedControl = oEvent.getParameters().draggedControl;
+
+		},
+		onDragDropZusatz: function (oEvent) {
+
+			if (!oEvent.getParameters().draggedControl) {
+				return;
+			}
+
+			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
+			this._lastDraggedControl = oEvent.getParameters().draggedControl;
+
 		}
+
 	});
 });

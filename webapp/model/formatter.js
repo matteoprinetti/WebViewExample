@@ -79,7 +79,9 @@ sap.ui.define([], function () {
 		},
 
 		// 27.04.2021 new functions due to smarttable instead of normal tabel and OffersFactory no more usabe
-		// 13.07.2021 _duration is now one of NEU, AUSL und LAUF. 
+		// 13.07.2021 _duration is now one of NEU, AUSL und LAUF, 
+		// 24.08.2021 new status ABGL
+		
 		getAngebotStatus: function (_startdat, _enddat, _duration, _woche) {
 			if (_startdat === null) return "";
 			//
@@ -87,6 +89,7 @@ sap.ui.define([], function () {
 				if (_duration === "NEU") return "sap-icon://status-positive";
 				if (_duration === "AUSL") return "sap-icon://physical-activity";
 				if (_duration === "LAUF") return "sap-icon://past";
+				if (_duration === "ABGL") return "sap-icon://stop";
 			} else {
 				return zpoly.zpolyplanung.model.formatter._getAngebotAttribs(_startdat, _enddat, _woche).src;
 			}
@@ -100,6 +103,7 @@ sap.ui.define([], function () {
 				if (_duration === "NEU") return "green";
 				if (_duration === "AUSL") return "blue";
 				if (_duration === "LAUF") return "orange";
+				if (_duration === "ABGL") return "red";
 			} else {
 				return zpoly.zpolyplanung.model.formatter._getAngebotAttribs(_startdat, _enddat,_woche).color;
 			}
