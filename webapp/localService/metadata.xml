@@ -24,9 +24,9 @@
 				<Key><PropertyRef Name="Key"/></Key><Property Name="Key" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="FlaecheId" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="Name" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
-					sap:sortable="false" sap:filterable="false"/><NavigationProperty Name="StellplatzToWt" Relationship="ZISM_POLY_SRV.stellPlatzToWt" FromRole="FromRole_stellPlatzToWt"
-					ToRole="ToRole_stellPlatzToWt"/><NavigationProperty Name="toFreieWarenTraeger" Relationship="ZISM_POLY_SRV.stellPlartzToFreieWt" FromRole="FromRole_stellPlartzToFreieWt"
-					ToRole="ToRole_stellPlartzToFreieWt"/></EntityType>
+					sap:sortable="false" sap:filterable="false"/><NavigationProperty Name="toFreieWarenTraeger" Relationship="ZISM_POLY_SRV.stellPlartzToFreieWt" FromRole="FromRole_stellPlartzToFreieWt"
+					ToRole="ToRole_stellPlartzToFreieWt"/><NavigationProperty Name="StellplatzToWt" Relationship="ZISM_POLY_SRV.stellPlatzToWt" FromRole="FromRole_stellPlatzToWt"
+					ToRole="ToRole_stellPlatzToWt"/></EntityType>
 			<EntityType Name="Sortiment" sap:content-version="1">
 				<Key><PropertyRef Name="Id"/></Key><Property Name="Name" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="Id" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"
@@ -62,7 +62,7 @@
 				<Key><PropertyRef Name="StellplatzId"/><PropertyRef Name="WtId"/><PropertyRef Name="Woche"/><PropertyRef Name="Angebot"/><PropertyRef Name="Artikel"/></Key><Property Name="StellplatzId" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="Stellplatz Zuordnung" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="WtId" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="WtId" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="Woche" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Kalenderwoche" sap:creatable="false"
-					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Angebot" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="ID externes Angebot" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Angebot" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="ID externes Angebot" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Artikel" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Artikelflag" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Ausschluss" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Ausschluss" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Virtual" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Virtual" sap:creatable="false"

@@ -318,15 +318,15 @@ sap.ui.define([
 			this._lastDraggedControl = oEvent.getParameters().draggedControl;
 			var _object = this.getModel("Offers").getProperty(_path);
 
-			var _objectkey = this.getModel().createKey("PlanungItemDetailSet", {
+			var _objectData  =  {
 				StellplatzId: this.getStellplatzId(),
 				WtId: this.getWtId(),
 				Woche: this.getWoche(),
 				Angebot: _object.OfferGuid,
 				Artikel: _object.ExtProdId
-			});
+			};
 
-			this.getModel().create("/"+_objectkey, {}, {
+			this.getModel().create("/PlanungItemDetailSet", _objectData, {
 					success: function () {
 						var a = 1 ; 
 					}.bind(this)
