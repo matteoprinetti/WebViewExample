@@ -24,9 +24,9 @@
 				<Key><PropertyRef Name="Key"/></Key><Property Name="Key" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="FlaecheId" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="Name" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
-					sap:sortable="false" sap:filterable="false"/><NavigationProperty Name="toFreieWarenTraeger" Relationship="ZISM_POLY_SRV.stellPlartzToFreieWt" FromRole="FromRole_stellPlartzToFreieWt"
-					ToRole="ToRole_stellPlartzToFreieWt"/><NavigationProperty Name="StellplatzToWt" Relationship="ZISM_POLY_SRV.stellPlatzToWt" FromRole="FromRole_stellPlatzToWt"
-					ToRole="ToRole_stellPlatzToWt"/></EntityType>
+					sap:sortable="false" sap:filterable="false"/><NavigationProperty Name="StellplatzToWt" Relationship="ZISM_POLY_SRV.stellPlatzToWt" FromRole="FromRole_stellPlatzToWt"
+					ToRole="ToRole_stellPlatzToWt"/><NavigationProperty Name="toFreieWarenTraeger" Relationship="ZISM_POLY_SRV.stellPlartzToFreieWt" FromRole="FromRole_stellPlartzToFreieWt"
+					ToRole="ToRole_stellPlartzToFreieWt"/></EntityType>
 			<EntityType Name="Sortiment" sap:content-version="1">
 				<Key><PropertyRef Name="Id"/></Key><Property Name="Name" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="Id" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"
@@ -67,6 +67,8 @@
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Ausschluss" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Ausschluss" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Virtual" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Virtual" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zusatz" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Zusatz" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Beschreibung" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Beschreibung" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="WerbeArtikel" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="WerbeArtikel" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
 			<EntityType Name="Flaechen" sap:content-version="1">
 				<Key><PropertyRef Name="Id"/></Key><Property Name="Id" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"

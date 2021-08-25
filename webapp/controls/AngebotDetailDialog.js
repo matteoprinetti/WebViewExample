@@ -54,6 +54,9 @@ sap.ui.define([
 				},
 				Woche: {
 					type: "string"
+				},
+				Angebot: {
+					type: "any"
 				}
 			}
 		},
@@ -195,8 +198,19 @@ sap.ui.define([
 
 			});
 
-			this._topcontainer.addItem(new Image({height: "10rem"}).addStyleClass("sapUiSmallMargin"));
-			
+
+			_objheader.bindProperty("title", "Offers>PromoTypeTxt");
+	 
+			_objheader.addAttribute(new ObjectAttribute({
+				title: "Angebotsnr",
+				text: "{Offers>ZzExtOfrId}"
+			}));
+
+
+			this._topcontainer.addItem(new Image({
+				height: "10rem"
+			}).addStyleClass("sapUiSmallMargin"));
+
 			this._topcontainer.addItem(_objheader);
 			_vbox.addItem(this._topcontainer);
 
@@ -240,7 +254,11 @@ sap.ui.define([
 
 			this.getAggregation("_dialog").addContent(_vbox);
 
-			// set ref to table
+			// after open
+			
+			this.getAggregation("_dialog").attachAfterOpen(function() {
+				this.bindAngebot(this.getAngebot());
+			}.bind(this));
 
 		},
 
@@ -253,20 +271,67 @@ sap.ui.define([
 			// head
 			// note this needs to be done for the other 2 tables 
 
-			
 			this._topcontainer.getItems()[0].setSrc("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + oAngebot.Matnr +
 				"')/$value");
 
 			var _path = "/OfrHeadSet(guid'" + oAngebot.Angebot + "')";
-			
+
 			this._topcontainer.getItems()[1].bindElement({
-								path: _path,
-								model: "Offers"
-							});
-							
-			this._topcontainer.getItems()[1].bindProperty("title", "Offers>PromoTypeTxt");
-			this._topcontainer.getItems()[1].addAttribute(new ObjectAttribute({ title:"Angebotsnr", text:"{Offers>ZzExtOfrId}"}));
-							
+				path: _path,
+				model: "Offers"
+			});
+
+		
+			// Stellplatz - wt - top table
+
+			this.getTableTop().bindAggregation("items", {
+				path: "/PlanungItemDetailSet",
+				filters: [
+					new sap.ui.model.Filter("StellplatzId",
+						sap.ui.model.FilterOperator.EQ, this.getStellplatzId()),
+					new sap.ui.model.Filter("WtId",
+						sap.ui.model.FilterOperator.EQ, this.getWtId()),
+					new sap.ui.model.Filter("Woche",
+						sap.ui.model.FilterOperator.EQ, this.getWoche()),
+					new sap.ui.model.Filter("Angebot",
+						sap.ui.model.FilterOperator.EQ, oAngebot.Angebot)
+				],
+				factory: function (sId, oContext) {
+
+					var oItemTemplate = new sap.m.ColumnListItem({
+						type: "Inactive"
+					});
+					oItemTemplate.addCell(new Text({
+						text: oContext.getObject().Beschreibung
+					}));
+					oItemTemplate.addCell(new Text({
+						text: oContext.getObject().Artikel
+					}));
+					oItemTemplate.addCell(new Text({
+						text: "0"
+					}));
+					oItemTemplate.addCell(new Text({
+						text: "0"
+					}));
+					oItemTemplate.addCell(new Text({
+						text: "0"
+					}));
+					oItemTemplate.addCell(new Text({
+						text: oContext.getObject().WerbeArtikel ? "Ja" : "Nein"
+					}));
+
+					return oItemTemplate;
+				},
+				events: {
+					dataReceived: function () {
+						//this.getAggregation("_dialog").open();
+					}.bind(this)
+
+				}
+			});
+			
+			// Angebot - unten links 
+
 			this.getTableAngebot().bindAggregation("items", {
 				path: "/OfrHeadSet(guid'" + oAngebot.Angebot + "')/toOfrItemSet",
 				model: "Offers",
@@ -302,10 +367,15 @@ sap.ui.define([
 				},
 				events: {
 					dataReceived: function () {
-						this.getAggregation("_dialog").open();
+						//this.getAggregation("_dialog").open();
 					}.bind(this)
 				}
 			});
+			
+			/*window.setTimeout(function() {
+				this.getAggregation("_dialog").open();
+			}.bind(this),0);*/
+
 		},
 
 		onDragDropTop: function (oEvent) {
@@ -318,19 +388,21 @@ sap.ui.define([
 			this._lastDraggedControl = oEvent.getParameters().draggedControl;
 			var _object = this.getModel("Offers").getProperty(_path);
 
-			var _objectData  =  {
+			var _objectData = {
 				StellplatzId: this.getStellplatzId(),
 				WtId: this.getWtId(),
 				Woche: this.getWoche(),
 				Angebot: _object.OfferGuid,
-				Artikel: _object.ExtProdId
+				Artikel: _object.ExtProdId,
+				WerbeArtikel: _object.Werbeartikel,
+				Beschreibung: _object.Bezeichnung
 			};
 
 			this.getModel().create("/PlanungItemDetailSet", _objectData, {
-					success: function () {
-						var a = 1 ; 
-					}.bind(this)
-				});
+				success: function () {
+					var a = 1;
+				}.bind(this)
+			});
 		},
 		onDragDropAngebot: function (oEvent) {
 
@@ -340,6 +412,12 @@ sap.ui.define([
 
 			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
 			this._lastDraggedControl = oEvent.getParameters().draggedControl;
+			
+			this.getModel().remove(_path, {
+					success: function () {
+						//
+					}.bind(this)
+				});
 
 		},
 		onDragDropZusatz: function (oEvent) {
@@ -351,7 +429,7 @@ sap.ui.define([
 			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
 			this._lastDraggedControl = oEvent.getParameters().draggedControl;
 
-		}
+		},
 
 	});
 });

@@ -30,6 +30,9 @@ sap.ui.define([
 				},
 				dialog: {
 					type: "any"
+				},
+				view: {
+					type: "any"
 				}
 			},
 			aggregations: {
@@ -41,6 +44,7 @@ sap.ui.define([
 			}
 		},
 
+ 
 		init: function () {
 
 			this.setAggregation("_panel", new Panel({
@@ -55,6 +59,7 @@ sap.ui.define([
 
 			this._oDetailDialog = new AngebotDetailDialog();
 
+			
 			_text.bindProperty("text", "Name");
 
 			_overflowtoolbar.addContent(_text);
@@ -110,14 +115,17 @@ sap.ui.define([
 			// itempress event 
 
 			_table.attachItemPress(function (oEvent) {
+				this.getView().addDependent(this._oDetailDialog);
 				this._currentDetailObject = oEvent.getParameters().listItem.getBindingContext().getObject();
-				this._oDetailDialog.setModel(this.getModel("Offers"), "Offers");
-				this._oDetailDialog.setModel(this.getModel());
+	//			this._oDetailDialog.setModel(this.getModel("Offers"), "Offers");
+	//			this._oDetailDialog.setModel(this.getModel());
 				this._oDetailDialog.setWoche(this.getWeek());
 				this._oDetailDialog.setStellplatzId(this.getKey());
 				this._oDetailDialog.setWtId(this._currentDetailObject.WtId);
-
-				this._oDetailDialog.bindAngebot(this._currentDetailObject);
+				this._oDetailDialog.setAngebot(this._currentDetailObject);
+			
+				//this._oDetailDialog.bindAngebot(this._currentDetailObject);
+				this._oDetailDialog.open();
 
 			}.bind(this));
 

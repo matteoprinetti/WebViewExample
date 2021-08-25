@@ -415,7 +415,8 @@ sap.ui.define([
 				content: [
 					new StellPlatzDetail({
 						week: '{local>/CalWeek}',
-						key: '{Key}'
+						key: '{Key}',
+						view: this.getView()
 					})
 				]
 			});
