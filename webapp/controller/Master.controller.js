@@ -279,6 +279,10 @@ sap.ui.define([
 
 		onCalWeekChange: function (oEvent) {
 			this.getView().byId("AngeboteTable").destroyItems();
+			
+			this.getModel("local").setProperty("/CalWeek", oEvent.getParameters().value);
+			//this.getModel("local").setProperty("/CalWeekAsDate", nextweek);
+			this.getModel("local").setProperty();
 		},
 
 		onTabbarSelect: function (oEvent) {

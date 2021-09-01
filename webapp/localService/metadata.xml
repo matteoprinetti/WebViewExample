@@ -2,12 +2,12 @@
 <edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
 	xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
 	<edmx:DataServices m:DataServiceVersion="2.0">
-		<Schema Namespace="ZISM_POLY_SRV" xml:lang="de" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+		<Schema Namespace="ZISM_POLY_SRV" xml:lang="it" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
 			<EntityType Name="WarentraegerTyp" sap:content-version="1">
 				<Key><PropertyRef Name="WtId"/></Key><Property Name="WtId" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="PlanungsTyp" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="MaxHoehe" Type="Edm.Int32" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
-					sap:sortable="false" sap:filterable="false"/><Property Name="MengenBeschr" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Flag" sap:creatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="MengenBeschr" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Indicatore" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><NavigationProperty Name="toVariante" Relationship="ZISM_POLY_SRV.WtTypToVariante" FromRole="FromRole_WtTypToVariante"
 					ToRole="ToRole_WtTypToVariante"/></EntityType>
 			<EntityType Name="WarentraegerTypDescr" sap:content-version="1">
@@ -49,9 +49,9 @@
 					sap:sortable="false" sap:filterable="false"/><Property Name="Planungsplan" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="Planungsplantxt" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="MaxHoehe" Type="Edm.Int32" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
-					sap:sortable="false" sap:filterable="false"/><Property Name="MengenBeschr" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Flag" sap:creatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="MengenBeschr" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Indicatore" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Menge" Type="Edm.Int32" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
-					sap:sortable="false" sap:filterable="false"/><Property Name="Default" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Flag" sap:creatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Default" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Indicatore" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
 			<EntityType Name="ExpiredSellouts" sap:content-version="1">
 				<Key><PropertyRef Name="Locco"/><PropertyRef Name="Week"/><PropertyRef Name="Angebot"/></Key><Property Name="Locco" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
@@ -83,8 +83,8 @@
 				<Key><PropertyRef Name="StellplatzId"/><PropertyRef Name="WtId"/><PropertyRef Name="Woche"/><PropertyRef Name="Angebot"/><PropertyRef Name="ArtikelFlag"/></Key><Property Name="StellplatzId" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="Stellplatz Zuordnung" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="WtId" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="WtId" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="Woche" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Kalenderwoche" sap:creatable="false"
-					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Angebot" Type="Edm.String" Nullable="false" MaxLength="36" sap:unicode="false" sap:label="ID externes Angebot"
-					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ArtikelFlag" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Artikelflag" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Angebot" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="ID externes Angebot" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="ArtikelFlag" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Artikelflag" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Mehrfach" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Mehrfach" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Von" Type="Edm.DateTime" Precision="0" sap:unicode="false" sap:label="Von" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="Bis" Type="Edm.DateTime" Precision="0" sap:unicode="false" sap:label="Bis" sap:creatable="false" sap:updatable="false"

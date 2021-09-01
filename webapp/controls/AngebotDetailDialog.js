@@ -16,9 +16,11 @@ sap.ui.define([
 	"sap/m/ScrollContainer",
 	"sap/ui/core/Icon",
 	"sap/m/Image",
-	"sap/m/ObjectAttribute"
+	"sap/m/ObjectAttribute",
+	"sap/m/Button",
+	"sap/m/ButtonType"
 ], function (Control, Dialog, Table, VBox, HBox, IconTabBar, IconTabFilter, Label, Column, Text,
-	ObjectHeader, Splitter, SplitterLayoutData, SearchField, ScrollContainer, Icon, Image, ObjectAttribute) {
+	ObjectHeader, Splitter, SplitterLayoutData, SearchField, ScrollContainer, Icon, Image, ObjectAttribute, Button, ButtonType) {
 	"use strict";
 	return Control.extend("zpoly.zpolyplanung.controls.AngebotDetailDialog", {
 
@@ -37,6 +39,9 @@ sap.ui.define([
 
 			},
 			properties: {
+				ParentControl: {
+					type: "sap.m.Table" // ref to inner Table
+				},
 				TableTop: {
 					type: "sap.m.Table" // ref to inner Table
 				},
@@ -64,11 +69,30 @@ sap.ui.define([
 		init: function () {
 			this.setAggregation("_dialog", new Dialog({
 				title: "Artikel im Angebot",
-				stretch: true
+				stretch: true,
+				customHeader: [
+					new sap.m.Bar({
+						contentRight: new Button({
+							type: ButtonType.Transparent,
+							icon: "sap-icon://decline",
+							width: "20px",
+							press: function (oEvent) {
+
+								this.getAggregation("_dialog").close();
+							}.bind(this)
+						}).addStyleClass("sapUiSmallMarginBottom"),
+						contentMiddle: [
+							new sap.m.Title({
+								text: "Angebotsdetail"
+							})
+						]
+					})
+
+				]
 			}));
 
 			var _tabletop = new Table().setLayoutData(new SplitterLayoutData({
-				minSize: 300,
+				minSize: 250,
 				resizable: false
 			}));
 			var _tableangebot = new Table();
@@ -79,6 +103,10 @@ sap.ui.define([
 			this.setProperty("TableZusatz", _tablezusatz);
 
 			// ANGEBOT (Unten Links)
+
+			_tableangebot.addColumn(new Column().setHeader(new Text({
+				text: "" //Artikelbild
+			})));
 
 			_tableangebot.addColumn(new Column().setHeader(new Text({
 				text: "ArtikelBezeichnung"
@@ -107,6 +135,10 @@ sap.ui.define([
 			// ZUSATZ (Unten Rechts)
 
 			_tablezusatz.addColumn(new Column().setHeader(new Text({
+				text: "Artikelbild" //Artikelbild
+			})));
+
+			_tablezusatz.addColumn(new Column().setHeader(new Text({
 				text: "Artikelbezeichnung"
 			})));
 
@@ -114,7 +146,7 @@ sap.ui.define([
 				text: "Artikelnummer"
 			})));
 
-			_tablezusatz.addColumn(new Column().setHeader(new Text({
+			/*_tablezusatz.addColumn(new Column().setHeader(new Text({
 				text: "Zuteilung aus Aufteiler"
 			})));
 
@@ -128,9 +160,13 @@ sap.ui.define([
 
 			_tablezusatz.addColumn(new Column().setHeader(new Text({
 				text: "Werbeartikel"
-			})));
+			})));*/
 
 			// TOP
+
+			_tabletop.addColumn(new Column().setHeader(new Text({
+				text: "" // Artikelbild
+			})));
 
 			_tabletop.addColumn(new Column().setHeader(new Text({
 				text: "Artikelbezeichnung"
@@ -198,20 +234,44 @@ sap.ui.define([
 
 			});
 
-
 			_objheader.bindProperty("title", "Offers>PromoTypeTxt");
-	 
+
 			_objheader.addAttribute(new ObjectAttribute({
-				title: "Angebotsnr",
-				text: "{Offers>ZzExtOfrId}"
+				title: "{Offers>ZzExtOfrId}",
+				text: ""
 			}));
 
+			_objheader.addAttribute(new ObjectAttribute({
+				title: "Angebotsart",
+				text: "{Offers>PromoTypeTxtShort} "
+			}));
+
+			_objheader.addAttribute(new ObjectAttribute({
+				title: "Rabattwert",
+				text: "{Offers>ZzRedText} {Offers>ZzRedTypText} "
+			}));
 
 			this._topcontainer.addItem(new Image({
 				height: "10rem"
 			}).addStyleClass("sapUiSmallMargin"));
 
 			this._topcontainer.addItem(_objheader);
+
+			// also WT data
+
+			var _objheaderWt = new ObjectHeader({
+
+			});
+
+			_objheaderWt.bindProperty("title", "WtName");
+
+			_objheaderWt.addAttribute(new ObjectAttribute({
+				title: "Anzahl Wt.",
+				text: "{AnzWt}"
+			}));
+
+			this._topcontainer.addItem(_objheaderWt);
+
 			_vbox.addItem(this._topcontainer);
 
 			//this.setAggregation("_topcontainer",_vbox.getItems()[0]);	
@@ -222,7 +282,12 @@ sap.ui.define([
 				orientation: "Vertical"
 			});
 
+			/*_splitter.addContentArea(new ScrollContainer({
+				height: "300px",
+				vertical: true }).addContent(this.getProperty("TableTop"))); */
+
 			_splitter.addContentArea(this.getProperty("TableTop"));
+
 			_splitter.addContentArea(_tabbar);
 
 			_vbox.addItem(_splitter);
@@ -235,7 +300,7 @@ sap.ui.define([
 			});
 
 			var _searchFieldAngebot = new SearchField();
-			var _searchFieldZusatz = new SearchField();
+			var _searchFieldZusatz = new SearchField().attachSearch(this.onZusatzSearch.bind(this));
 
 			_tabfilter1.addContent(_searchFieldAngebot);
 			_tabfilter1.addContent(new ScrollContainer({
@@ -255,11 +320,56 @@ sap.ui.define([
 			this.getAggregation("_dialog").addContent(_vbox);
 
 			// after open
-			
-			this.getAggregation("_dialog").attachAfterOpen(function() {
+
+			this.getAggregation("_dialog").attachAfterOpen(function () {
 				this.bindAngebot(this.getAngebot());
 			}.bind(this));
 
+		},
+
+		onZusatzSearch: function (oEvent) {
+
+			var sValue = oEvent.getParameters().query;
+			var aFilter = [];
+			if (sValue.match(/^[0-9]+$/)) {
+				aFilter.push(new sap.ui.model.Filter("matnr", sap.ui.model.FilterOperator.StartsWith, sValue));
+			} else {
+				aFilter.push(new sap.ui.model.Filter("maktx", sap.ui.model.FilterOperator.StartsWith, sValue));
+			}
+
+			var oItemFactory = function (sId, oContext) {
+
+				var oItemTemplate = new sap.m.ColumnListItem({
+					type: "Inactive"
+				});
+
+				oItemTemplate.addCell(new Image({
+					height: "2rem",
+					src: "/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/HauptBildSet(Artnr='" + oContext.getObject().matnr +
+						"',Format='web240x310')/$value"
+				}).addStyleClass("sapUiSmallMargin"));
+
+				oItemTemplate.addCell(new Text({
+					text: oContext.getObject().maktx
+				}));
+				oItemTemplate.addCell(new Text({
+					text: oContext.getObject().matnr
+				}));
+
+				return oItemTemplate;
+			};
+
+			this.getTableZusatz().bindAggregation("items", {
+				path: "/ArtikelsucheSet",
+				filters: aFilter,
+				model: "ZSRSDATAFEED",
+				factory: oItemFactory
+					/*,
+									parameters: {
+										expand: "toBild",
+										faultTolerant: true
+									}*/
+			});
 		},
 
 		open: function () {
@@ -281,7 +391,16 @@ sap.ui.define([
 				model: "Offers"
 			});
 
-		
+			var _objectKey = this.getModel().createKey("/PlanungItemHeadSet", {
+				StellplatzId: this.getStellplatzId(),
+				WtId: this.getWtId(),
+				Woche: this.getWoche()
+			});
+
+			this._topcontainer.getItems()[2].bindElement({
+				path: _objectKey
+			});
+
 			// Stellplatz - wt - top table
 
 			this.getTableTop().bindAggregation("items", {
@@ -301,6 +420,13 @@ sap.ui.define([
 					var oItemTemplate = new sap.m.ColumnListItem({
 						type: "Inactive"
 					});
+
+					oItemTemplate.addCell(new Image({
+						height: "2rem",
+						src: "/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/HauptBildSet(Artnr='" + oContext.getObject().Artikel +
+							"',Format='web240x310')/$value"
+					}).addStyleClass("sapUiSmallMargin"));
+
 					oItemTemplate.addCell(new Text({
 						text: oContext.getObject().Beschreibung
 					}));
@@ -329,7 +455,7 @@ sap.ui.define([
 
 				}
 			});
-			
+
 			// Angebot - unten links 
 
 			this.getTableAngebot().bindAggregation("items", {
@@ -344,6 +470,13 @@ sap.ui.define([
 					var oItemTemplate = new sap.m.ColumnListItem({
 						type: "Inactive"
 					});
+
+					oItemTemplate.addCell(new Image({
+						height: "2rem",
+						src: "/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/HauptBildSet(Artnr='" + oContext.getObject().ExtProdId +
+							"',Format='web240x310')/$value"
+					}).addStyleClass("sapUiSmallMargin"));
+
 					oItemTemplate.addCell(new Text({
 						text: oContext.getObject().Bezeichnung
 					}));
@@ -371,7 +504,7 @@ sap.ui.define([
 					}.bind(this)
 				}
 			});
-			
+
 			/*window.setTimeout(function() {
 				this.getAggregation("_dialog").open();
 			}.bind(this),0);*/
@@ -386,23 +519,48 @@ sap.ui.define([
 
 			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
 			this._lastDraggedControl = oEvent.getParameters().draggedControl;
-			var _object = this.getModel("Offers").getProperty(_path);
 
-			var _objectData = {
-				StellplatzId: this.getStellplatzId(),
-				WtId: this.getWtId(),
-				Woche: this.getWoche(),
-				Angebot: _object.OfferGuid,
-				Artikel: _object.ExtProdId,
-				WerbeArtikel: _object.Werbeartikel,
-				Beschreibung: _object.Bezeichnung
-			};
+			// data from Angebot 
+
+			var _objectData = null;
+			var _object = null;
+
+			if (_path.indexOf("/OfrItemSet") >= 0) {
+				_object = this.getModel("Offers").getProperty(_path);
+				_objectData = {
+					StellplatzId: this.getStellplatzId(),
+					WtId: this.getWtId(),
+					Woche: this.getWoche(),
+					Angebot: _object.OfferGuid,
+					Artikel: _object.ExtProdId,
+					WerbeArtikel: _object.Werbeartikel,
+					Beschreibung: _object.Bezeichnung
+				};
+
+			}
+
+			// data from Zusatz
+
+			if (_path.indexOf("/ArtikelsucheSet") >= 0) {
+				_object = this.getModel("ZSRSDATAFEED").getProperty(_path);
+				_objectData = {
+					StellplatzId: this.getStellplatzId(),
+					WtId: this.getWtId(),
+					Woche: this.getWoche(),
+					Angebot: this.getAngebot().Angebot,
+					Artikel: _object.matnr,
+					Beschreibung: _object.maktx,
+					Zusatz: true 
+				};
+			}
 
 			this.getModel().create("/PlanungItemDetailSet", _objectData, {
 				success: function () {
-					var a = 1;
+					this.getParentControl().getCells()[1].getItems()[0].getElementBinding().refresh(true);
+					this.getParentControl().getCells()[1].getItems()[1].getElementBinding().refresh(true);
 				}.bind(this)
 			});
+
 		},
 		onDragDropAngebot: function (oEvent) {
 
@@ -411,13 +569,17 @@ sap.ui.define([
 			}
 
 			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
+
+			if (_path.indexOf("PlanungItemDetailSet") < 0) return;
+
 			this._lastDraggedControl = oEvent.getParameters().draggedControl;
-			
+
 			this.getModel().remove(_path, {
-					success: function () {
-						//
-					}.bind(this)
-				});
+				success: function () {
+					this.getParentControl().getCells()[1].getItems()[0].getElementBinding().refresh(true);
+					this.getParentControl().getCells()[1].getItems()[1].getElementBinding().refresh(true);
+				}.bind(this)
+			});
 
 		},
 		onDragDropZusatz: function (oEvent) {
@@ -427,8 +589,17 @@ sap.ui.define([
 			}
 
 			var _path = oEvent.getParameters().draggedControl.getBindingContextPath();
+
+			if (_path.indexOf("PlanungItemDetailSet") < 0) return;
+
 			this._lastDraggedControl = oEvent.getParameters().draggedControl;
 
+			this.getModel().remove(_path, {
+				success: function () {
+					this.getParentControl().getCells()[1].getItems()[0].getElementBinding().refresh(true);
+					this.getParentControl().getCells()[1].getItems()[1].getElementBinding().refresh(true);
+				}.bind(this)
+			});
 		},
 
 	});

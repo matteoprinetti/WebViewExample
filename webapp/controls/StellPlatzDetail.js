@@ -9,9 +9,12 @@ sap.ui.define([
 	"sap/m/ColumnListItem",
 	"sap/m/MessageBox",
 	"sap/m/Text",
-	"sap/m/ListType"
+	"sap/m/ListType",
+	"sap/m/ObjectHeader",
+	"sap/m/ObjectAttribute",
+	"sap/m/VBox"
 ], function (Control, Panel, OverflowToolbar, Button, Table, StellPlatzItemTableDetail,
-	AngebotDetailDialog, ColumnListItem, MessageBox, Text, ListType) {
+	AngebotDetailDialog, ColumnListItem, MessageBox, Text, ListType, ObjectHeader, ObjectAttribute, VBox) {
 	"use strict";
 	return Control.extend("zpoly.zpolyplanung.controls.StellPlatzDetail", {
 
@@ -44,7 +47,6 @@ sap.ui.define([
 			}
 		},
 
- 
 		init: function () {
 
 			this.setAggregation("_panel", new Panel({
@@ -59,7 +61,6 @@ sap.ui.define([
 
 			this._oDetailDialog = new AngebotDetailDialog();
 
-			
 			_text.bindProperty("text", "Name");
 
 			_overflowtoolbar.addContent(_text);
@@ -100,7 +101,7 @@ sap.ui.define([
 
 			_table.addColumn(new sap.m.Column({
 				header: new sap.m.Text({
-					text: "WT_Typ"
+					text: "Warenträgertyp"
 				})
 			}));
 
@@ -117,13 +118,14 @@ sap.ui.define([
 			_table.attachItemPress(function (oEvent) {
 				this.getView().addDependent(this._oDetailDialog);
 				this._currentDetailObject = oEvent.getParameters().listItem.getBindingContext().getObject();
-	//			this._oDetailDialog.setModel(this.getModel("Offers"), "Offers");
-	//			this._oDetailDialog.setModel(this.getModel());
+				//			this._oDetailDialog.setModel(this.getModel("Offers"), "Offers");
+				//			this._oDetailDialog.setModel(this.getModel());
 				this._oDetailDialog.setWoche(this.getWeek());
 				this._oDetailDialog.setStellplatzId(this.getKey());
 				this._oDetailDialog.setWtId(this._currentDetailObject.WtId);
 				this._oDetailDialog.setAngebot(this._currentDetailObject);
-			
+				this._oDetailDialog.setParentControl(oEvent.getParameters().listItem);
+
 				//this._oDetailDialog.bindAngebot(this._currentDetailObject);
 				this._oDetailDialog.open();
 
@@ -211,19 +213,52 @@ sap.ui.define([
 
 						oItemTemplate.addCell(_angebotdetails);
 
-						oItemTemplate.addCell(new Text({
-							text: "Art"
-						}));
-						oItemTemplate.addCell(new Text({
-							text: "Zusa"
-						}));
-						oItemTemplate.addCell(new Text({
-							text: oContext.getObject().WtId
-						}));
+						//create path to summary of details
+
+						var _detailPath = this.getModel().createKey("/PlanungItemDetailSummarySet", {
+							StellplatzId: oContext.getObject().StellplatzId,
+							WtId: oContext.getObject().WtId,
+							Woche: oContext.getObject().Woche,
+							Angebot: oContext.getObject().Angebot
+						});
+
+						var _artikelBox = new VBox();
+						_artikelBox.addItem(new Text().bindElement({
+							path: _detailPath
+						}).bindProperty("text", "Artikel1txt").addStyleClass("sapUiTinyMargin"));
+						_artikelBox.addItem(new Text().bindElement({
+							path: _detailPath
+						}).bindProperty("text", "Artikel2txt").addStyleClass("sapUiTinyMargin"));
+
+						oItemTemplate.addCell(_artikelBox);
+
+						var _zusatzBox = new VBox();
+						_zusatzBox.addItem(new Text().bindElement({
+							path: _detailPath
+						}).bindProperty("text", "Zusatz1txt").addStyleClass("sapUiTinyMargin"));
+						_zusatzBox.addItem(new Text().bindElement({
+							path: _detailPath
+						}).bindProperty("text", "Zusatz2txt").addStyleClass("sapUiTinyMargin"));
+
+						oItemTemplate.addCell(_zusatzBox);
+
+						//Wtname
+
+						var _objectHeadKey = this.getModel().createKey("/PlanungItemHeadSet", {
+							StellplatzId: oContext.getObject().StellplatzId,
+							WtId: oContext.getObject().WtId,
+							Woche: oContext.getObject().Woche
+						});
+
+						oItemTemplate.addCell(new Text().bindElement({
+							path: _objectHeadKey
+						}).bindProperty("text", "WtName").addStyleClass("sapUiSmallMargin"));
+
+
 						oItemTemplate.addCell(new Text({
 							text: oContext.getObject().AnzWt
 						}));
-
+						
 					}
 
 					// this is ARTIKEL 
