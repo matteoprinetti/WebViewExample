@@ -41,8 +41,7 @@ sap.ui.define([
 			aggregations: {
 				_panel: {
 					type: "sap.m.Panel",
-					multiple: false,
-					visibility: "hidden"
+					multiple: false
 				}
 			}
 		},
@@ -118,15 +117,21 @@ sap.ui.define([
 			_table.attachItemPress(function (oEvent) {
 				this.getView().addDependent(this._oDetailDialog);
 				this._currentDetailObject = oEvent.getParameters().listItem.getBindingContext().getObject();
+				
+				// 20.09.2021 do nothing if this is a matnr - they have no detail
+				
+				if(this._currentDetailObject.ArtikelFlag ) return; 
+				
 				//			this._oDetailDialog.setModel(this.getModel("Offers"), "Offers");
 				//			this._oDetailDialog.setModel(this.getModel());
-				this._oDetailDialog.setWoche(this.getWeek());
-				this._oDetailDialog.setStellplatzId(this.getKey());
+				this._oDetailDialog.setWoche(this._currentDetailObject.Woche);
+				this._oDetailDialog.setStellplatzId(this._currentDetailObject.StellplatzId);
 				this._oDetailDialog.setWtId(this._currentDetailObject.WtId);
 				this._oDetailDialog.setAngebot(this._currentDetailObject);
 				this._oDetailDialog.setParentControl(oEvent.getParameters().listItem);
 
 				//this._oDetailDialog.bindAngebot(this._currentDetailObject);
+				
 				this._oDetailDialog.open();
 
 			}.bind(this));
@@ -291,14 +296,24 @@ sap.ui.define([
 						oItemTemplate.addCell(_artikeldetails);
 
 						oItemTemplate.addCell(new Text({
-							text: "Art"
+							text: ""
 						}));
 						oItemTemplate.addCell(new Text({
-							text: "Zusa"
+							text: ""
 						}));
-						oItemTemplate.addCell(new Text({
-							text: oContext.getObject().WtId
-						}));
+						
+						
+						var _objectHeadKeyArticle = this.getModel().createKey("/PlanungItemHeadSet", {
+							StellplatzId: oContext.getObject().StellplatzId,
+							WtId: oContext.getObject().WtId,
+							Woche: oContext.getObject().Woche
+						});
+
+						oItemTemplate.addCell(new Text().bindElement({
+							path: _objectHeadKeyArticle
+						}).bindProperty("text", "WtName").addStyleClass("sapUiSmallMargin"));
+
+			 
 						oItemTemplate.addCell(new Text({
 							text: oContext.getObject().AnzWt
 						}));

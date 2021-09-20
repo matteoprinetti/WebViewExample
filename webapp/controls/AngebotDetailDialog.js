@@ -109,6 +109,10 @@ sap.ui.define([
 			})));
 
 			_tableangebot.addColumn(new Column().setHeader(new Text({
+				text: "Angebotsname"
+			})));
+
+			_tableangebot.addColumn(new Column().setHeader(new Text({
 				text: "ArtikelBezeichnung"
 			})));
 
@@ -336,6 +340,10 @@ sap.ui.define([
 			} else {
 				aFilter.push(new sap.ui.model.Filter("maktx", sap.ui.model.FilterOperator.StartsWith, sValue));
 			}
+			
+			// 20.09.2021 add allsort as filter to get all the products
+			
+			aFilter.push(new sap.ui.model.Filter("allsort", sap.ui.model.FilterOperator.EQ, true));
 
 			var oItemFactory = function (sId, oContext) {
 
@@ -477,6 +485,16 @@ sap.ui.define([
 							"',Format='web240x310')/$value"
 					}).addStyleClass("sapUiSmallMargin"));
 
+
+					var _angebotTitle = new Text();
+					_angebotTitle.bindElement(  {
+						path: "/OfrHeadSet(guid'" + oContext.getObject().OfferGuid + "')",
+						model: "Offers"});
+						
+					_angebotTitle.bindProperty("text","Offers>OfrName");
+					
+					oItemTemplate.addCell(_angebotTitle);
+					
 					oItemTemplate.addCell(new Text({
 						text: oContext.getObject().Bezeichnung
 					}));

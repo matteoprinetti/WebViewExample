@@ -293,6 +293,12 @@ sap.ui.define([
 			// Detail 
 			if (oEvent.getParameters().key === "Detail") {
 				var _ppf=this.getModel("local").getProperty("/selectedPPF");
+				
+				// 20.09.2021 very poorly solved - refresh the binding of the tables in the 
+				// detail view to reflect wt changes.
+				
+				for (var x in this.getView().byId("idStellPlatzDetail").getItems())
+					this.getView().byId("idStellPlatzDetail").getItems()[x].getContent()[0].get_panel().getContent()[0].getBinding("items").refresh();
 			}
 		},
 

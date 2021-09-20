@@ -147,7 +147,7 @@ sap.ui.define([
 						new StellPlatzItemTable({
 							StellplatzId: oContext.getObject().StellplatzId,
 							WtId: oContext.getObject().WtId,
-							Woche: oContext.getObject().Woche 
+							Woche: oContext.getObject().Woche
 						})
 					);
 					return _item;

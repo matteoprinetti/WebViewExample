@@ -581,11 +581,14 @@ sap.ui.define([
 				}));
 				// the input data for detail
 
+				oItemTemplate.addCell(new sap.m.Label({
+				}));
+				
 				oItemTemplate.addCell(new sap.m.Input({
 					width: "5%",
 					value: oContext.getObject().AnzWt,
 					type: InputType.Number,
-					change: this.onWTChange.bind(this)
+					change: this.onWTChange 
 						/*,
 											liveChange: function (oEvent) {
 												var _oInput = oEvent.getSource();
@@ -594,11 +597,11 @@ sap.ui.define([
 												_oInput.setValue(val);
 											}*/
 				}));
-				oItemTemplate.addCell(new sap.m.Input({
+			/*	oItemTemplate.addCell(new sap.m.Input({
 					width: "5%",
 					value: oContext.getObject().Hoehe,
 					change: this.onHChange
-				}));
+				}));*/
 				oItemTemplate.addCell(new sap.m.Label({
 					text: "10"
 				}));
