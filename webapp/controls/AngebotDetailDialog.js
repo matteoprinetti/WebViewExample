@@ -108,9 +108,9 @@ sap.ui.define([
 				text: "" //Artikelbild
 			})));
 
-			_tableangebot.addColumn(new Column().setHeader(new Text({
+			/*_tableangebot.addColumn(new Column().setHeader(new Text({
 				text: "Angebotsname"
-			})));
+			})));*/
 
 			_tableangebot.addColumn(new Column().setHeader(new Text({
 				text: "ArtikelBezeichnung"
@@ -238,7 +238,7 @@ sap.ui.define([
 
 			});
 
-			_objheader.bindProperty("title", "Offers>PromoTypeTxt");
+			_objheader.bindProperty("title", "Offers>OfrName");
 
 			_objheader.addAttribute(new ObjectAttribute({
 				title: "{Offers>ZzExtOfrId}",
@@ -485,13 +485,13 @@ sap.ui.define([
 							"',Format='web240x310')/$value"
 					}).addStyleClass("sapUiSmallMargin"));
 
-
+					/*
 					var _angebotTitle = new Text();
 					_angebotTitle.bindElement(  {
 						path: "/OfrHeadSet(guid'" + oContext.getObject().OfferGuid + "')",
 						model: "Offers"});
 						
-					_angebotTitle.bindProperty("text","Offers>OfrName");
+					_angebotTitle.bindProperty("text","Offers>OfrName");*/
 					
 					oItemTemplate.addCell(_angebotTitle);
 					
