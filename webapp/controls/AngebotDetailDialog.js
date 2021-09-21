@@ -241,8 +241,8 @@ sap.ui.define([
 			_objheader.bindProperty("title", "Offers>OfrName");
 
 			_objheader.addAttribute(new ObjectAttribute({
-				title: "{Offers>ZzExtOfrId}",
-				text: ""
+				title: "Angebotsnummer",
+				text: "{Offers>ZzExtOfrId}"
 			}));
 
 			_objheader.addAttribute(new ObjectAttribute({
