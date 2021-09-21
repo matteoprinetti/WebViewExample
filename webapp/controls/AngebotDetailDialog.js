@@ -493,7 +493,7 @@ sap.ui.define([
 						
 					_angebotTitle.bindProperty("text","Offers>OfrName");*/
 					
-					oItemTemplate.addCell(_angebotTitle);
+					//oItemTemplate.addCell(_angebotTitle);
 					
 					oItemTemplate.addCell(new Text({
 						text: oContext.getObject().Bezeichnung
