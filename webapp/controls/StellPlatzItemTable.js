@@ -12,9 +12,10 @@ sap.ui.define([
 	"zpoly/zpolyplanung/model/formatter",
 	"zpoly/zpolyplanung/controls/IconHover",
 	'sap/ui/core/Fragment',
-	"sap/m/InputType"
+	"sap/m/InputType",
+	"sap/m/MessageBox"
 ], function (Control, Table, VBox, FlexBox, ObjectPageHeaderContent, HorizontalLayout, ObjectStatus, Input,
-	Label, Icon, Formatter, IconHover, Fragment, InputType) {
+	Label, Icon, Formatter, IconHover, Fragment, InputType, MessageBox) {
 	"use strict";
 	return Control.extend("zpoly.zpolyplanung.controls.StellPlatzItemTableDetail", {
 
@@ -248,6 +249,13 @@ sap.ui.define([
 			// 1.12.2020 for some reason sometime draggedControl is empty ...
 
 			if (!oEvent.getParameters().draggedControl) {
+				return;
+			}
+
+			// 23.09.2021 if the Stellplatz has 0 capacity, no drag and drop.
+			
+			if(this.getParent().getBindingContext().getObject().AnzWt === 0) {
+				MessageBox.error("Anzahl Warenträger im Stellplatz darf nicht 0 sein");
 				return;
 			}
 
@@ -638,11 +646,22 @@ sap.ui.define([
 
 			if (!isNaN(data.AnzWt) && !isNaN(parseFloat(data.AnzWt))) {
 
+				// 23.09.2021 cannot set to zero if there are still items 
+				
+				/*if(this.getParent().getParent().getParent().getTable().getItems().length > 0 && 
+				   data.AnzWt === 0    ) {
+						MessageBox.error("Bitte alle Angebote und Artikel entfernen");
+						return;
+				}*/
+
+
 				this.getModel().update(_path, data, {
 					refreshAfterChange: false,
 					success: function (oData) {
 						this.addStyleClass("zPolyGreenBackground");
 						this.getParent().getParent().getParent().refreshIconBelegt();
+						// ask the list to refresh again
+						this.getParent().getParent().getParent().getParent().getParent().getBinding("items").refresh();
 						// focus on next input
 						var inputs = $(':input');
 						var index = $(':input').index($("#" + _id + "-inner")[0]);

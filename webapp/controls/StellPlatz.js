@@ -29,8 +29,7 @@ sap.ui.define([
 			aggregations: {
 				_panel: {
 					type: "sap.m.Panel",
-					multiple: false,
-					visibility: "hidden"
+					multiple: false
 				}
 			}
 		},
