@@ -37,11 +37,11 @@
 								<FlexItemData growFactor="1"/>
 							</layoutData>
 						</CheckBox>
-						<Input id="idSelSearch" value="" class="sapUiSmallMarginEnd" submit="onSearch">
+						<SearchField id="idSelSearch" value="" class="sapUiSmallMarginEnd" search="onSearch">
 							<layoutData>
 								<FlexItemData growFactor="4"/>
 							</layoutData>
-						</Input>
+						</SearchField>
 					</FlexBox>
 					<Table id="AngeboteTableHead" showNoData="false">
 						<columns>
@@ -55,19 +55,19 @@
 										value='\{"sortProperty": "OfrName", "filterProperty": "OfrName", "columnKey": "OfrName", "leadingProperty": "OfrName" , "columnIndex":"1"}'/>
 								</customData>
 							</Column>
-							<Column>
+							<Column width="35%">
 								<Text text="Kampagne"/>
 							</Column>
-							<Column>
+							<Column width="20%">
 								<customData>
 									<core:CustomData key="p13nData"
 										value='\{"sortProperty": "PromoTypeTxt", "filterProperty": "PromoTypeTxt", "columnKey": "PromoTypeTxt", "leadingProperty": "PromoTypeTxt" , "columnIndex":"3"}'/>
 								</customData>
-								<Text text="Art" width="20%"/>
+								<Text text="Art" />
 							</Column>
-							<Column width="15%">
+							<!--<Column width="15%">
 								<Text text="Prognose"/>
-							</Column>
+							</Column>-->
 						</columns>
 					</Table>
 					<ScrollContainer vertical="true" focusable="true" height="550px">
@@ -83,9 +83,8 @@
 							<columns>
 								<Column width="10%"></Column>
 								<Column width="35%"></Column>
-								<Column ></Column>
+								<Column width="35%"></Column>
 								<Column width="20%"/>
-								<Column width="15%"/>
 							</columns>
 							<items>
 								<ColumnListItem id="AngeboteTableColumnListItem">
@@ -102,7 +101,7 @@
 										<ObjectIdentifier text="{ parts: [ { path: 'toCampaign' } ], formatter: '.formatter.getFirstCampaignId' }"
 											title="{ parts: [ { path: 'toCampaign' } ], formatter: '.formatter.getFirstCampaignName' }"/>
 										<Text text="{path: 'PromoTypeTxt', formatter: '.formatter.getFirstWord' }"/>
-										<Text text="{path: 'Prognose', formatter: '.formatter.stripTrailingZeroes' }"/>
+										<!--<Text text="{path: 'Prognose', formatter: '.formatter.stripTrailingZeroes' }"/>-->
 									</cells>
 								</ColumnListItem>
 							</items>

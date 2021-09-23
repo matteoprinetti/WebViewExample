@@ -120,7 +120,7 @@ sap.ui.define([
 				text: "ArtikelNummer"
 			})));
 
-			_tableangebot.addColumn(new Column().setHeader(new Text({
+			/*_tableangebot.addColumn(new Column().setHeader(new Text({
 				text: "Zuteilung aus Aufteiler"
 			})));
 
@@ -130,7 +130,7 @@ sap.ui.define([
 
 			_tableangebot.addColumn(new Column().setHeader(new Text({
 				text: "Prognose"
-			})));
+			})));*/
 
 			_tableangebot.addColumn(new Column().setHeader(new Text({
 				text: "Werbeartikel"
@@ -180,7 +180,7 @@ sap.ui.define([
 				text: "Artikelnummer"
 			})));
 
-			_tabletop.addColumn(new Column().setHeader(new Text({
+			/*_tabletop.addColumn(new Column().setHeader(new Text({
 				text: "Zuteilung aus Aufteiler"
 			})));
 
@@ -190,7 +190,7 @@ sap.ui.define([
 
 			_tabletop.addColumn(new Column().setHeader(new Text({
 				text: "Prognose"
-			})));
+			})));*/
 
 			_tabletop.addColumn(new Column().setHeader(new Text({
 				text: "Werbeartikel"
@@ -441,7 +441,7 @@ sap.ui.define([
 					oItemTemplate.addCell(new Text({
 						text: oContext.getObject().Artikel
 					}));
-					oItemTemplate.addCell(new Text({
+				/*	oItemTemplate.addCell(new Text({
 						text: "0"
 					}));
 					oItemTemplate.addCell(new Text({
@@ -449,7 +449,7 @@ sap.ui.define([
 					}));
 					oItemTemplate.addCell(new Text({
 						text: "0"
-					}));
+					}));*/
 					oItemTemplate.addCell(new Text({
 						text: oContext.getObject().WerbeArtikel ? "Ja" : "Nein"
 					}));
@@ -501,7 +501,7 @@ sap.ui.define([
 					oItemTemplate.addCell(new Text({
 						text: oContext.getObject().ExtProdId
 					}));
-					oItemTemplate.addCell(new Text({
+					/*oItemTemplate.addCell(new Text({
 						text: "0"
 					}));
 					oItemTemplate.addCell(new Text({
@@ -509,7 +509,7 @@ sap.ui.define([
 					}));
 					oItemTemplate.addCell(new Text({
 						text: "0"
-					}));
+					}));*/
 					oItemTemplate.addCell(new Text({
 						text: oContext.getObject().Werbeartikel ? "Ja" : "Nein"
 					}));
