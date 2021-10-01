@@ -118,10 +118,15 @@ sap.ui.define([
 				this.getView().addDependent(this._oDetailDialog);
 				this._currentDetailObject = oEvent.getParameters().listItem.getBindingContext().getObject();
 				
+				if (this._currentDetailObject.AnzWt === 0) {
+					MessageBox.error("Anzahl Warenträger im Stellplatz darf nicht 0 sein");
+					return;
+				}
+
 				// 20.09.2021 do nothing if this is a matnr - they have no detail
-				
-				if(this._currentDetailObject.ArtikelFlag ) return; 
-				
+
+				if (this._currentDetailObject.ArtikelFlag) return;
+
 				//			this._oDetailDialog.setModel(this.getModel("Offers"), "Offers");
 				//			this._oDetailDialog.setModel(this.getModel());
 				this._oDetailDialog.setWoche(this._currentDetailObject.Woche);
@@ -131,7 +136,7 @@ sap.ui.define([
 				this._oDetailDialog.setParentControl(oEvent.getParameters().listItem);
 
 				//this._oDetailDialog.bindAngebot(this._currentDetailObject);
-				
+
 				this._oDetailDialog.open();
 
 			}.bind(this));
@@ -259,11 +264,10 @@ sap.ui.define([
 							path: _objectHeadKey
 						}).bindProperty("text", "WtName").addStyleClass("sapUiSmallMargin"));
 
-
 						oItemTemplate.addCell(new Text({
 							text: oContext.getObject().AnzWt
 						}));
-						
+
 					}
 
 					// this is ARTIKEL 
@@ -301,8 +305,7 @@ sap.ui.define([
 						oItemTemplate.addCell(new Text({
 							text: ""
 						}));
-						
-						
+
 						var _objectHeadKeyArticle = this.getModel().createKey("/PlanungItemHeadSet", {
 							StellplatzId: oContext.getObject().StellplatzId,
 							WtId: oContext.getObject().WtId,
@@ -313,7 +316,6 @@ sap.ui.define([
 							path: _objectHeadKeyArticle
 						}).bindProperty("text", "WtName").addStyleClass("sapUiSmallMargin"));
 
-			 
 						oItemTemplate.addCell(new Text({
 							text: oContext.getObject().AnzWt
 						}));

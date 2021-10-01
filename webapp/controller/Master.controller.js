@@ -2,11 +2,12 @@ sap.ui.define([
 	"./BaseController",
  	"zpoly/zpolyplanung/controls/StellPlatz",
 	"zpoly/zpolyplanung/controls/StellPlatzDetail",
+	"zpoly/zpolyplanung/factories/StellPlatzFactory",
 	"zpoly/zpolyplanung/factories/FlaecheItemFactory",
 	"zpoly/zpolyplanung/factories/OffersItemFactory",
 	"../model/formatter",
 	'sap/ui/core/Fragment'
-], function (BaseController, StellPlatz, StellPlatzDetail, FlaecheItemFactory, OffersItemFactory, Formatter, Fragment) {
+], function (BaseController, StellPlatz, StellPlatzDetail, StellPlatzFactory, FlaecheItemFactory, OffersItemFactory, Formatter, Fragment) {
 	"use strict";
 
 	//template: this.getView().byId("AngeboteTableColumnListItem").clone(),
@@ -223,14 +224,14 @@ sap.ui.define([
 
 							// position on the Id that was chosen 
 
-							for (var x = 0; x < this.getView().byId("selPPDetail").getItems().length; x++) {
+							/*for (var x = 0; x < this.getView().byId("selPPDetail").getItems().length; x++) {
 								var item = this.getView().byId("selPPDetail").getItems()[x];
 								if (item.getKey() === oData.Id) { // the chosen one 
 									this.getView().byId("selPPDetail").setSelectedItem(item);
 
 									this.loadGrob(oData.Id, this.getView().byId("calenderAuswahl").getValue());
 								}
-							}
+							}*/
 
 						}.bind(this)
 					}
@@ -343,7 +344,8 @@ sap.ui.define([
 		},*/
 
 		loadGrob: function (oId, oWeek) {
-
+			
+			window.console.log("loadGrob Invoked");
 			this._stellplatz_id = oId;
 
 			sap.ui.core.BusyIndicator.show();
@@ -359,16 +361,6 @@ sap.ui.define([
 			var _angebotcontainer = this.getView().byId("AngeboteTable");
 			_height = $("#" + this.getView().byId("idSplitter").getId()).css("height");
 			_angebotcontainer.setHeight(_height);*/
-
-			var _template_stellplatz = new sap.m.CustomListItem({
-				content: [
-					new StellPlatz({
-						week: '{local>/CalWeek}',
-						key: '{Key}',
-						PopOverControl: this.getOwnerComponent()._AngebotDetailPopover
-					})
-				]
-			});
 
 			// Read ExpiredSellouts then bind , we need the expired sellouts later in the angebot search
 
@@ -387,7 +379,7 @@ sap.ui.define([
 
 					_stellplatz.bindItems({
 						path: "/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz",
-						template: _template_stellplatz,
+						factory: StellPlatzFactory.factory.bind(this ),
 						events: {
 							dataReceived: function () {
 								this.internalRebind(this.getView().byId("idSelDefault").getSelected());
