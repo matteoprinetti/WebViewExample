@@ -1,14 +1,20 @@
 sap.ui.define([
 	"./BaseController",
- 	"zpoly/zpolyplanung/controls/StellPlatz",
+	"zpoly/zpolyplanung/controls/StellPlatz",
 	"zpoly/zpolyplanung/controls/StellPlatzDetail",
 	"zpoly/zpolyplanung/factories/StellPlatzFactory",
 	"zpoly/zpolyplanung/factories/FlaecheItemFactory",
 	"zpoly/zpolyplanung/factories/OffersItemFactory",
 	"../model/formatter",
-	'sap/ui/core/Fragment'
-], function (BaseController, StellPlatz, StellPlatzDetail, StellPlatzFactory, FlaecheItemFactory, OffersItemFactory, Formatter, Fragment) {
+	'sap/ui/core/Fragment',
+	'sap/ui/export/library',
+	'sap/ui/export/Spreadsheet',
+	'sap/m/MessageToast'
+], function (BaseController, StellPlatz, StellPlatzDetail, StellPlatzFactory, FlaecheItemFactory, OffersItemFactory, Formatter, Fragment,
+	exportLibrary, Spreadsheet, MessageToast) {
 	"use strict";
+
+	var EdmType = exportLibrary.EdmType;
 
 	//template: this.getView().byId("AngeboteTableColumnListItem").clone(),
 
@@ -18,7 +24,7 @@ sap.ui.define([
 		_stellplatz_id: null,
 		_lastDraggedControl: null,
 		_detailPlanungDialog: null,
-		
+
 		onInit: function () {
 
 			// get a copy of the template
@@ -108,17 +114,17 @@ sap.ui.define([
 					return oPopover;
 				}.bind(this));
 			}
-			
+
 			// DetailPlanung Dialog
-			
-/*			if (!this._detailPlanungDialog) {
-              	this._detailPlanungDialog = Fragment.load({
-					id: this.getView().getId(),
-					name: "zpoly.zpolyplanung.view.DetailPlanungAngebot",
-					controller: this
-				});
-            }*/
-			
+
+			/*			if (!this._detailPlanungDialog) {
+			              	this._detailPlanungDialog = Fragment.load({
+								id: this.getView().getId(),
+								name: "zpoly.zpolyplanung.view.DetailPlanungAngebot",
+								controller: this
+							});
+			            }*/
+
 		},
 
 		onArtikelSearch: function (oEvent) {
@@ -203,7 +209,7 @@ sap.ui.define([
 									this.getView().byId("selPP").setSelectedItem(item);
 
 									this.loadGrob(oData.Id, this.getView().byId("calenderAuswahl").getValue());
-									
+
 									this.loadDetail(oData.Id, this.getView().byId("calenderAuswahl").getValue());
 								}
 							}
@@ -236,7 +242,6 @@ sap.ui.define([
 						}.bind(this)
 					}
 				});
-
 
 				// if there is at least on
 
@@ -280,7 +285,7 @@ sap.ui.define([
 
 		onCalWeekChange: function (oEvent) {
 			this.getView().byId("AngeboteTable").destroyItems();
-			
+
 			this.getModel("local").setProperty("/CalWeek", oEvent.getParameters().value);
 			//this.getModel("local").setProperty("/CalWeekAsDate", nextweek);
 			this.getModel("local").setProperty();
@@ -290,14 +295,21 @@ sap.ui.define([
 			if (oEvent.getParameters().key === "Ueber") {
 				this.getView().byId("Detail").setEnabled(false);
 				this.getView().byId("tabDetail").setEnabled(false);
+				this.getView().byId("printBtn").setVisible(true);
+			}
+			// Grob
+
+			if (oEvent.getParameters().key === "Grob") {
+				this.getView().byId("printBtn").setVisible(false);
 			}
 			// Detail 
 			if (oEvent.getParameters().key === "Detail") {
-				var _ppf=this.getModel("local").getProperty("/selectedPPF");
-				
+				this.getView().byId("printBtn").setVisible(false);
+				var _ppf = this.getModel("local").getProperty("/selectedPPF");
+
 				// 20.09.2021 very poorly solved - refresh the binding of the tables in the 
 				// detail view to reflect wt changes.
-				
+
 				for (var x in this.getView().byId("idStellPlatzDetail").getItems())
 					this.getView().byId("idStellPlatzDetail").getItems()[x].getContent()[0].get_panel().getContent()[0].getBinding("items").refresh();
 			}
@@ -344,8 +356,10 @@ sap.ui.define([
 		},*/
 
 		loadGrob: function (oId, oWeek) {
-			
+
 			window.console.log("loadGrob Invoked");
+			this.getView().byId("printBtn").setVisible(false);
+
 			this._stellplatz_id = oId;
 
 			sap.ui.core.BusyIndicator.show();
@@ -379,7 +393,7 @@ sap.ui.define([
 
 					_stellplatz.bindItems({
 						path: "/FlaechenSet(guid'" + oId + "')/FlaecheToStellplatz",
-						factory: StellPlatzFactory.factory.bind(this ),
+						factory: StellPlatzFactory.factory.bind(this),
 						events: {
 							dataReceived: function () {
 								this.internalRebind(this.getView().byId("idSelDefault").getSelected());
@@ -626,6 +640,98 @@ sap.ui.define([
 				}
 			});
 
+		},
+		createExcelColumnConfig: function () {
+			return [{
+				label: 'Locco',
+				property: 'Locco',
+				type: EdmType.String
+			},  {
+				label: 'Woche',
+				property: 'Woche',
+				type: EdmType.String
+			},{
+				label: 'Fläche',
+				property: 'Name',
+				type: EdmType.String
+			}, {
+				label: 'Flächentyp',
+				property: 'Type',
+				type: EdmType.String
+			}, {
+				label: 'Sortimentsbereich',
+				property: 'Sortber',
+				type: EdmType.String
+			}, {
+				label: 'Stellplatz',
+				property: 'StellPlatzName',
+				type: EdmType.String
+			}, {
+				label: 'Warenträger',
+				property: 'WtName',
+				type: EdmType.String
+			}, {
+				label: 'Flächentyp',
+				property: 'Type',
+				type: EdmType.String
+			}, {
+				label: 'Artikel',
+				property: 'Artikel',
+				width: '15',
+				type: EdmType.String
+			}, {
+				label: 'Artikelbeschreibung',
+				property: 'Beschreibung',
+				width: '40',
+				type: EdmType.String
+			}, {
+				label: 'Angebot',
+				property: 'Angebot',
+				type: EdmType.String
+			}, {
+				label: 'Angebotsname',
+				property: 'AngebotsName',
+				width: '40',
+				type: EdmType.String
+			}, {
+				label: 'Zusatz',
+				property: 'ZusatzArtikel',
+				type: EdmType.String
+			}];
+		},
+
+		onBtnExcel: function () {
+
+			var _filters = [];
+			_filters.push(new sap.ui.model.Filter("Locco",
+				sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco));
+
+			_filters.push(new sap.ui.model.Filter("Woche",
+				sap.ui.model.FilterOperator.EQ, this.getView().byId("calenderAuswahlGrob").getValue()));
+
+			this.getView().getModel().read("/FlatViewSet", {
+				filters: _filters,
+				success: function (oData, oResponse) {
+					var aCols, aProducts, oSettings, oSheet;
+
+					aCols = this.createExcelColumnConfig();
+					aProducts =oData.results;
+
+					oSettings = {
+						workbook: {
+							columns: aCols
+						},
+						dataSource: aProducts
+					};
+
+					oSheet = new Spreadsheet(oSettings);
+					oSheet.build()
+						.then(function () {
+							MessageToast.show('Spreadsheet export has finished');
+						})
+						.finally(oSheet.destroy);
+				}.bind(this)
+			})
 		}
 
 	});

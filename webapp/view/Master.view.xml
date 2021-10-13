@@ -56,7 +56,7 @@
 		<footer>
 			<Bar id="masterToolbar">
 				<contentRight>
-					<Button id="printBtn" icon="sap-icon://print" text="Plan Ausdrücken" press="onBtnPrint"/>
+					<Button id="printBtn" icon="sap-icon://excel-attachment" text="Excel download" press="onBtnExcel"/>
 				</contentRight>
 			</Bar>
 		</footer>
