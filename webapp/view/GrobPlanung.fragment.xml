@@ -11,7 +11,7 @@
 			<DatePicker id="calenderAuswahlGrob" placeholder="{i18n>Kalenderwoche}" displayFormat="w.YYYY" valueFormat="wwYYYY" class="sapUiSmallMargin"
 				value="{local>/CalWeek}" editable="false" width="40%"/>
 			<Label text="{i18n>PPFlaeche}" class="sapUiSmallMargin"/>
-			<Select id="selPP" enabled="true" forceSelection="false" selectedKey="{local>/selectedPPF}" change="onPPSelected" class="sapUiSmallMargin"></Select>
+			<Select id="selPP" enabled="true" forceSelection="false" selectedKey="{local>/selectedPPF}" change="onPPSelectedGrob" class="sapUiSmallMargin"></Select>
 		</items>
 	</FlexBox>
 	<l:Splitter id="idSplitter">

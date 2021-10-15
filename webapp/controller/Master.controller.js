@@ -12,7 +12,6 @@ sap.ui.define([
 	'sap/m/MessageToast'
 ], function (BaseController, StellPlatz, StellPlatzDetail, StellPlatzFactory, FlaecheItemFactory, OffersItemFactory, Formatter, Fragment,
 	exportLibrary, Spreadsheet, MessageToast) {
-	"use strict";
 
 	var EdmType = exportLibrary.EdmType;
 
@@ -315,12 +314,16 @@ sap.ui.define([
 			}
 		},
 
-		onPPSelected: function (oEvent) {
+		onPPSelectedGrob: function (oEvent) {
 			this.loadGrob(oEvent.getParameters().selectedItem.getKey(), this.getView().byId("calenderAuswahlGrob").getValue());
+			this.loadDetail(oEvent.getParameters().selectedItem.getKey(), this.getView().byId("calenderAuswahlDetail").getValue());
+			this.getView().byId("selPPDetail").setSelectedKey(oEvent.getParameters().selectedItem.getKey());
 		},
 
 		onPPSelectedDetail: function (oEvent) {
+			this.loadGrob(oEvent.getParameters().selectedItem.getKey(), this.getView().byId("calenderAuswahlGrob").getValue());
 			this.loadDetail(oEvent.getParameters().selectedItem.getKey(), this.getView().byId("calenderAuswahlDetail").getValue());
+			this.getView().byId("selPP").setSelectedKey(oEvent.getParameters().selectedItem.getKey());
 		},
 		/*onBeforeRebindAngeboteTable: function (oEvent) {
 
@@ -413,7 +416,7 @@ sap.ui.define([
 
 			this._stellplatz_id = oId;
 
-			sap.ui.core.BusyIndicator.show();
+			//sap.ui.core.BusyIndicator.show();
 
 			var _stellplatz_detail = this.getView().byId("idStellPlatzDetail");
 
