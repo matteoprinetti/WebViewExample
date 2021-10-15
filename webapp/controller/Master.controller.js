@@ -673,9 +673,14 @@ sap.ui.define([
 				label: 'Warenträger',
 				property: 'WtName',
 				type: EdmType.String
+			},  {
+				label: 'Anzahl WT',
+				property: 'AnzWtItem',
+				type: EdmType.String
 			}, {
-				label: 'Flächentyp',
-				property: 'Type',
+				label: 'Angebotsname',
+				property: 'AngebotsName',
+				width: '40',
 				type: EdmType.String
 			}, {
 				label: 'Artikel',
@@ -685,15 +690,6 @@ sap.ui.define([
 			}, {
 				label: 'Artikelbeschreibung',
 				property: 'Beschreibung',
-				width: '40',
-				type: EdmType.String
-			}, {
-				label: 'Angebot',
-				property: 'Angebot',
-				type: EdmType.String
-			}, {
-				label: 'Angebotsname',
-				property: 'AngebotsName',
 				width: '40',
 				type: EdmType.String
 			}, {
