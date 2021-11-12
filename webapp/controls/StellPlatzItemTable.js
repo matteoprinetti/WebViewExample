@@ -628,6 +628,11 @@ sap.ui.define([
 					success: function (oData) {
 						this.addStyleClass("zPolyGreenBackground");
 						this.getParent().getParent().getParent().getParent().refreshIconBelegt();
+									
+						// 12.11.2021 ABSURD HACK because Im doing owner propagation wrong.
+						
+						this.getParent().getParent().getParent().getParent().getParent().getParent().getParent().getHeaderToolbar().getContent()[2].getElementBinding().refresh();
+							
 						//this.setValueState(sap.ui.core.ValueState.Information);//red
 					}.bind(this)
 
@@ -662,6 +667,7 @@ sap.ui.define([
 						this.getParent().getParent().getParent().refreshIconBelegt();
 						// ask the list to refresh again
 						this.getParent().getParent().getParent().getParent().getParent().getBinding("items").refresh();
+		
 						// focus on next input
 						var inputs = $(':input');
 						var index = $(':input').index($("#" + _id + "-inner")[0]);

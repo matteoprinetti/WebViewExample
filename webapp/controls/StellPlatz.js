@@ -83,12 +83,39 @@ sap.ui.define([
 			}.bind(this));
 
 			var _overflowtoolbar = new sap.m.OverflowToolbar();
-			var _text = new sap.m.Text();
+			var _text = new sap.m.Text({
+				width: "25%"
+			});
+			var _belegung = new sap.m.Text();
 
 			_text.bindProperty("text", "Name");
 
 			_overflowtoolbar.addContent(_text);
+
+			_overflowtoolbar.addContent(new sap.m.Text({
+				text: "Belegung:"
+			}));
+			_belegung.bindText("Belegung");
+
+			_overflowtoolbar.addContent(_belegung);
+
+				var _maxkapa = new sap.m.Text();
+ 		
+			_overflowtoolbar.addContent(new sap.m.Text({
+				text: "%: Max Kapa:"
+			}));
+			_maxkapa.bindText("Maxkapa");
+
+			_overflowtoolbar.addContent(_maxkapa);
+
+
+
 			_overflowtoolbar.addContent(new sap.m.ToolbarSpacer());
+
+			/*_overflowtoolbar.addContent(new sap.m.Text("Belegung"));
+			_overflowtoolbar.addContent(_belegung);
+			_overflowtoolbar.addContent(new sap.m.ToolbarSpacer());*/
+
 			_overflowtoolbar.addContent(_btnAdd);
 			_overflowtoolbar.addContent(_btnDel);
 
@@ -96,8 +123,8 @@ sap.ui.define([
 
 			this.getAggregation("_panel").attachExpand(function (oEvent) {
 				var _enabled = oEvent.getParameters().expand;
-				this.getHeaderToolbar().getContent()[2].setVisible(_enabled);
-				this.getHeaderToolbar().getContent()[3].setVisible(_enabled);
+				this.getHeaderToolbar().getContent()[4].setVisible(_enabled);
+				this.getHeaderToolbar().getContent()[5].setVisible(_enabled);
 			});
 
 			// Create the list and bind it to PlanungItemHeadSet
@@ -105,7 +132,6 @@ sap.ui.define([
 			this.getAggregation("_panel").addContent(_list);
 
 		},
-			
 
 		setWeek: function (oValue) {
 			this.setProperty("week", oValue);
@@ -131,6 +157,14 @@ sap.ui.define([
 			if (!(this.getWeek() && this.getKey()))
 				return;
 
+			// Prinetti 12.11.2021 bind the 3 content from the aggregation to the 
+			// Stellplatzbelegung set
+
+			 	var _belegungkey = "/StellplatzBelegungSet(Key=guid'" + 
+				  this.getKey() + "',Woche='" +
+				  this.getWeek()+ "')";
+				 this.getAggregation("_panel").getHeaderToolbar().getContent()[2].bindElement({ path: _belegungkey }); 
+
 			this.getAggregation("_panel").getContent()[0].bindAggregation("items", {
 				path: "/PlanungItemHeadSet",
 				filters: [
@@ -139,7 +173,12 @@ sap.ui.define([
 					new sap.ui.model.Filter("StellplatzId",
 						sap.ui.model.FilterOperator.EQ, this.getKey())
 				],
+				events: {
+					dataReceived: function (oData) {
+					  var a = 1;
 
+					}.bind(this)
+				},
 				factory: function (sId, oContext) {
 					var _item = new sap.m.CustomListItem();
 					_item.addContent(
