@@ -123,8 +123,8 @@ sap.ui.define([
 
 			this.getAggregation("_panel").attachExpand(function (oEvent) {
 				var _enabled = oEvent.getParameters().expand;
-				this.getHeaderToolbar().getContent()[4].setVisible(_enabled);
-				this.getHeaderToolbar().getContent()[5].setVisible(_enabled);
+				this.getHeaderToolbar().getContent()[6].setVisible(_enabled);
+				this.getHeaderToolbar().getContent()[7].setVisible(_enabled);
 			});
 
 			// Create the list and bind it to PlanungItemHeadSet
