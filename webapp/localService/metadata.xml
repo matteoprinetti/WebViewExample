@@ -93,7 +93,7 @@
 			<EntityType Name="StellplatzBelegung" sap:content-version="1">
 				<Key><PropertyRef Name="Key"/><PropertyRef Name="Woche"/></Key><Property Name="Key" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/><Property Name="Woche" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
-					sap:sortable="false" sap:filterable="false"/><Property Name="Belegung" Type="Edm.Decimal" Nullable="false" Precision="2" Scale="0" sap:unicode="false" sap:creatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Belegung" Type="Edm.Decimal" Nullable="false" Precision="8" Scale="2" sap:unicode="false" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
 			<EntityType Name="Flaechen" sap:content-version="1">
 				<Key><PropertyRef Name="Id"/></Key><Property Name="Id" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"
@@ -164,6 +164,11 @@
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zusatz1txt" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Artikell1txt" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Zusatz2txt" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Zusatz2txt" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="FlaecheBelegung" sap:content-version="1">
+				<Key><PropertyRef Name="Key"/><PropertyRef Name="Woche"/></Key><Property Name="Key" Type="Edm.Guid" Nullable="false" sap:unicode="false" sap:label="UUID" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Woche" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="Belegung" Type="Edm.Decimal" Nullable="false" Precision="8" Scale="2" sap:unicode="false" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
 			<Association Name="stellPlatzToWt" sap:content-version="1"><End Type="ZISM_POLY_SRV.Stellplatz" Multiplicity="1" Role="FromRole_stellPlatzToWt"/><End Type="ZISM_POLY_SRV.PlanungItemHead" Multiplicity="*" Role="ToRole_stellPlatzToWt"/>
 				<ReferentialConstraint>
 					<Principal Role="FromRole_stellPlatzToWt"><PropertyRef Name="Key"/></Principal>
@@ -219,7 +224,8 @@
 				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="PlanungItemHeadSet" EntityType="ZISM_POLY_SRV.PlanungItemHead" sap:creatable="false" sap:updatable="false"
 				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="FreieWarentraegerSet" EntityType="ZISM_POLY_SRV.FreieWarentraeger" sap:creatable="false" sap:updatable="false"
 				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="PlanungItemDetailSummarySet" EntityType="ZISM_POLY_SRV.PlanungItemDetailSummary" sap:creatable="false"
-				sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+				sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="FlaecheBelegungSet" EntityType="ZISM_POLY_SRV.FlaecheBelegung" sap:creatable="false" sap:updatable="false"
+				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
 				<AssociationSet Name="WtTypToVarianteSet" Association="ZISM_POLY_SRV.WtTypToVariante" sap:creatable="false" sap:updatable="false"
 					sap:deletable="false" sap:content-version="1"><End EntitySet="WarentraegerTypSet" Role="FromRole_WtTypToVariante"/><End EntitySet="WarentraegerTypVarianteSet" Role="ToRole_WtTypToVariante"/></AssociationSet>
 				<AssociationSet Name="stellPlartzToFreieWt_AssocSet" Association="ZISM_POLY_SRV.stellPlartzToFreieWt" sap:creatable="false"

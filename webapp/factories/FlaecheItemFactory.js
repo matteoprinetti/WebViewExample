@@ -47,9 +47,18 @@ sap.ui.define([], function () {
 
 			oItemTemplate.addCell(sortberText);
 
-			oItemTemplate.addCell(new sap.m.Text({
-				text: "{Belegung}" // TODO this is calculated
-			}));
+			// 25.11.2021 get the Belegung 
+			
+			var _belegung = new sap.m.Text({
+				text: "{Belegung} %" // TODO this is calculated
+			});
+		
+		  	var _belegungkey = "/FlaecheBelegungSet(Key=guid'" + 
+				  oContext.getProperty("Id") + "',Woche='" +
+				  this.getModel("local").getProperty("/CalWeek") + "')";
+				  _belegung.bindElement({ path: _belegungkey }); 
+			
+			oItemTemplate.addCell(_belegung);
 
 			return oItemTemplate;
 		}
