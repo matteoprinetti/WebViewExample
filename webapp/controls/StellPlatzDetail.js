@@ -117,7 +117,7 @@ sap.ui.define([
 			_table.attachItemPress(function (oEvent) {
 				this.getView().addDependent(this._oDetailDialog);
 				this._currentDetailObject = oEvent.getParameters().listItem.getBindingContext().getObject();
-				
+
 				if (this._currentDetailObject.AnzWt === 0) {
 					MessageBox.error("Anzahl Warenträger im Stellplatz darf nicht 0 sein");
 					return;
@@ -191,7 +191,8 @@ sap.ui.define([
 
 					var _objectid = oContext.getObject().Angebot;
 
-					if (oContext.getObject().ArtikelFlag === false) {
+					// ANGEBOTE
+					if (oContext.getObject().ArtikelFlag === false && oContext.getObject().Angebot !== oContext.getObject().Matnr) {
 						var _objectkey = this.getModel("Offers").createKey("OfrHeadSet", {
 							OfferGuid: _objectid
 						});
@@ -262,6 +263,85 @@ sap.ui.define([
 
 						oItemTemplate.addCell(new Text().bindElement({
 							path: _objectHeadKey
+						}).bindProperty("text", "WtName").addStyleClass("sapUiSmallMargin"));
+
+						oItemTemplate.addCell(new Text({
+							text: oContext.getObject().AnzWt
+						}));
+
+					};
+
+					// PLATZHALTER
+					if (oContext.getObject().ArtikelFlag === false && oContext.getObject().Angebot === oContext.getObject().Matnr) {
+						var _phobjectkey = this.getModel().createKey("PlatzhalterAngebotSet", {
+							PlatzhalterId: _objectid
+						});
+
+						//2.12.2020 this is the error: we cannot map to the offer in the model  ! we need to map to the 
+						//oData entityset..
+
+						var _phangebotPath = "/" + _phobjectkey;
+
+						var _phangebotdetails = new sap.m.StandardListItem().addStyleClass("zPolySqueezedArticle");
+						_phangebotdetails.setWrapping(true);
+
+						_phangebotdetails.bindElement({
+							path: _phangebotPath
+						});
+
+						//IMPORTANT NEVER FORGET THE MODEL NAME IN THE MAPPING !!!!
+						_phangebotdetails.bindProperty("title", "Bezeichnung");
+
+						// 28.07.2021 iconhover instead of pic
+
+						//<poly:IconHover src="{ parts: [ {path: 'Startdat' }, { path: 'Enddat' } , { path: 'Duration' } ], formatter: '.formatter.getAngebotStatus'}"
+						//color="{ parts: [ {path: 'Startdat' }, { path: 'Enddat' } , { path: 'Duration' }], formatter: '.formatter.getAngebotColor'}" size="2.5em"
+						//hover="onAngebotSelectIconHover" class="zPolyIconHover"></poly:IconHover>
+
+						//				_angebotdetails.setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + oContext.getObject().Matnr +
+						//					"')/$value");
+
+						oItemTemplate.addCell(_phangebotdetails);
+
+						//create path to summary of details
+
+						var _phdetailPath = this.getModel().createKey("/PlanungItemDetailSummarySet", {
+							StellplatzId: oContext.getObject().StellplatzId,
+							WtId: oContext.getObject().WtId,
+							Woche: oContext.getObject().Woche,
+							Angebot: oContext.getObject().Angebot
+						});
+
+						var _phartikelBox = new VBox();
+						_phartikelBox.addItem(new Text().bindElement({
+							path: _phdetailPath
+						}).bindProperty("text", "Artikel1txt").addStyleClass("sapUiTinyMargin"));
+						_phartikelBox.addItem(new Text().bindElement({
+							path: _phdetailPath
+						}).bindProperty("text", "Artikel2txt").addStyleClass("sapUiTinyMargin"));
+
+						oItemTemplate.addCell(_phartikelBox);
+
+						var _phzusatzBox = new VBox();
+						_phzusatzBox.addItem(new Text().bindElement({
+							path: _phdetailPath
+						}).bindProperty("text", "Zusatz1txt").addStyleClass("sapUiTinyMargin"));
+						_phzusatzBox.addItem(new Text().bindElement({
+							path: _phdetailPath
+						}).bindProperty("text", "Zusatz2txt").addStyleClass("sapUiTinyMargin"));
+
+						oItemTemplate.addCell(_phzusatzBox);
+
+						//Wtname
+
+						var _phobjectHeadKey = this.getModel().createKey("/PlanungItemHeadSet", {
+							StellplatzId: oContext.getObject().StellplatzId,
+							WtId: oContext.getObject().WtId,
+							Woche: oContext.getObject().Woche
+						});
+
+						oItemTemplate.addCell(new Text().bindElement({
+							path: _phobjectHeadKey
 						}).bindProperty("text", "WtName").addStyleClass("sapUiSmallMargin"));
 
 						oItemTemplate.addCell(new Text({

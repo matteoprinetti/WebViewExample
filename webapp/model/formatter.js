@@ -20,15 +20,15 @@ sap.ui.define([], function () {
 		},
 
 		_getAngebotAttribs: function (_startdat, _enddat, _aweek) {
-				
+
 			// neu: Neu: status-positive in grün wenn diese woche gleich wie angebot start woche ist (jahr mitnehmen)
 			// aktiv: wekk > start < end sap-icon://physical-activity in blau
 			// auslaufend: week = end : Sap-icon://past in orange
 			// abgelaufen - week > end :  Sap-icon://stop
 
 			var _weekNumber = [];
-			_weekNumber[0] = _aweek.substr(2,4)*1;
-			_weekNumber[1] = _aweek.substr(0,2)*1;
+			_weekNumber[0] = _aweek.substr(2, 4) * 1;
+			_weekNumber[1] = _aweek.substr(0, 2) * 1;
 			var _startNumber = this.getWeekNumber(_startdat);
 			var _endNumber = this.getWeekNumber(_enddat);
 
@@ -81,7 +81,7 @@ sap.ui.define([], function () {
 		// 27.04.2021 new functions due to smarttable instead of normal tabel and OffersFactory no more usabe
 		// 13.07.2021 _duration is now one of NEU, AUSL und LAUF, 
 		// 24.08.2021 new status ABGL
-		
+
 		getAngebotStatus: function (_startdat, _enddat, _duration, _woche) {
 			if (_startdat === null) return "";
 			//
@@ -96,17 +96,82 @@ sap.ui.define([], function () {
 
 		},
 
-		getAngebotColor: function (_startdat, _enddat, _duration,_woche) {
+		getAngebotColor: function (_startdat, _enddat, _duration, _woche) {
 			if (_startdat === null) return "";
+
 			// 
-			if (_woche === undefined)  {
+			if (_woche === undefined) {
 				if (_duration === "NEU") return "green";
 				if (_duration === "AUSL") return "blue";
 				if (_duration === "LAUF") return "orange";
 				if (_duration === "ABGL") return "red";
 			} else {
-				return zpoly.zpolyplanung.model.formatter._getAngebotAttribs(_startdat, _enddat,_woche).color;
+				return zpoly.zpolyplanung.model.formatter._getAngebotAttribs(_startdat, _enddat, _woche).color;
 			}
+
+		},
+
+		getPlatzhalterAngebotStatus: function (_woche, _actualweek) {
+			if (_woche === null) return "";
+			var _ynow = _actualweek.substr(2, 4) * 100;
+			var _now = parseInt(_actualweek.substr(0, 2), 10) + _ynow;
+
+			var _y;
+			var biswoche;
+			if (_woche instanceof Date) {
+				_y = _woche.getFullYear() * 100;
+				biswoche = this.getWeekNumber(_woche)[1] + _ynow;
+			} else {
+				_y = _woche.split(".")[1] * 100;
+				biswoche = parseInt(_woche.split(".")[0], 10) + _y;
+			}
+
+
+			// only now (positive) or last week 
+			if (biswoche > _now)
+				return "sap-icon://status-positive";
+			return "sap-icon://physical-activity"
+				//
+				/*	if (_woche === undefined) {
+						if (_duration === "NEU") return "sap-icon://status-positive";
+						if (_duration === "AUSL") return "sap-icon://physical-activity";
+						if (_duration === "LAUF") return "sap-icon://past";
+						if (_duration === "ABGL") return "sap-icon://stop";
+					} else {
+						return zpoly.zpolyplanung.model.formatter._getAngebotAttribs(_startdat, _enddat, _woche).src;
+					}*/
+
+		},
+
+		getPlatzhalterAngebotColor: function (_woche, _actualweek) {
+			if (_woche === null) return "";
+
+			var _ynow = _actualweek.substr(2, 4) * 100;
+			var _now = parseInt(_actualweek.substr(0, 2), 10) + _ynow;
+
+			var _y;
+			var biswoche;
+			if (_woche instanceof Date) {
+				_y = _woche.getFullYear() * 100;
+				biswoche = this.getWeekNumber(_woche)[1] + _ynow;
+			} else {
+				_y = _woche.split(".")[1] * 100;
+				biswoche = parseInt(_woche.split(".")[0], 10) + _y;
+			}
+
+			// only now (positive) or last week 
+			if (biswoche > _now)
+				return "green";
+			return "blue";
+				// 
+				/*if (_woche === undefined)  {
+					if (_duration === "NEU") return "green";
+					if (_duration === "AUSL") return "blue";
+					if (_duration === "LAUF") return "orange";
+					if (_duration === "ABGL") return "red";
+				} else {
+					return zpoly.zpolyplanung.model.formatter._getAngebotAttribs(_startdat, _enddat,_woche).color;
+				}*/
 
 		},
 

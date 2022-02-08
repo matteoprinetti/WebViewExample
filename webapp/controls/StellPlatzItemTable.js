@@ -266,6 +266,7 @@ sap.ui.define([
 			var _bis = null;
 			var _matnr = "";
 			var _article_flag = "";
+			
 
 			// 20.04.2021 we can drag drop between warenträger. In this case we have a delete 
 			// followed by an Insert.
@@ -282,6 +283,24 @@ sap.ui.define([
 				_matnr = this.getModel("ZSRSDATAFEED").getProperty(_path).matnr;
 				_article_flag = "X";
 
+			}
+
+			// 08.02.2022 Platzhalter
+			
+			if (_path.indexOf("/PlatzhalterAngebotSet") >= 0) { // we just dropped a Platzhalter
+				_angebot_or_article_key = this.getModel().getProperty(_path).PlatzhalterId;
+				_matnr = this.getModel().getProperty(_path).PlatzhalterId; // also used for ofr id
+				_von = new Date();
+				// convert ww.yyyy to date
+				 var _week=this.getModel().getProperty(_path).BisWoche;
+				 var w= _week.split(".")[0];
+				 var y= _week.split(".")[1];
+				 var d = (1 + (w - 1) * 7); // 1st of January + 7 days for each week
+				 
+				 //let date = new Date(y, 0, (1 + (w - 1) * 7)); // Elle's method
+				 //date.setDate(date.getDate() + (1 - date.getDay())); // 0 - Sunday, 1 - Monday etc
+				_bis = new Date(y, 0, d);
+					
 			}
 
 			// warenträger to warenträger
@@ -390,7 +409,11 @@ sap.ui.define([
 			// 12.08 the current WT is not in the table yet.
 			this.refreshIconBelegt(oContext.getObject().AnzWt);
 
-			if (oContext.getObject().ArtikelFlag === false) {
+
+
+			// 08.02.2002 if matrn and angebot are the same -> Platzhalter
+			
+			if (oContext.getObject().ArtikelFlag === false && oContext.getObject().Angebot !== oContext.getObject().Matnr ) {
 				var _objectkey = this.getModel("Offers").createKey("OfrHeadSet", {
 					OfferGuid: _objectid
 				});
@@ -537,6 +560,95 @@ sap.ui.define([
 
 			}
 
+			// PLATZHALTER 
+			if (oContext.getObject().ArtikelFlag === false && oContext.getObject().Angebot === oContext.getObject().Matnr ) {
+			 
+				var _phobjectkey = this.getModel().createKey("PlatzhalterAngebotSet", {
+					PlatzhalterId: _objectid
+				});
+
+				//2.12.2020 this is the error: we cannot map to the offer in the model  ! we need to map to the 
+				//oData entityset..
+
+				var _phangebotPath = "/" + _phobjectkey;
+
+				var _phangebotdetails = new sap.m.StandardListItem().addStyleClass("zPolySqueezedArticle");
+				_phangebotdetails.setWrapping(true);
+		
+				_phangebotdetails.bindElement({
+					path: _phangebotPath
+				});
+
+				//IMPORTANT NEVER FORGET THE MODEL NAME IN THE MAPPING !!!!
+			 
+				_phangebotdetails.bindProperty("title", "Bezeichnung");
+		
+				//_phangebotdetails.setTitle(oContext.getObject().Bezeichnung);
+				// mehrfach makes no sense for ph
+				oItemTemplate.addCell(new sap.m.Label({
+						text: " "
+					}));
+
+				var _icon = new Icon();
+				//var _data = this.getModel("Offers").getProperty(_angebotPath);
+				_icon.setSrc(Formatter.getPlatzhalterAngebotStatus(oContext.getObject().Bis,this.getModel("local").getProperty("/CalWeek")));
+				_icon.setColor(Formatter.getPlatzhalterAngebotColor(oContext.getObject().Bis,this.getModel("local").getProperty("/CalWeek")));
+				_icon.setSize("2.5em");
+				_icon.addStyleClass("zPolyIconHover");
+
+
+				oItemTemplate.addCell(_icon);
+
+				//				_angebotdetails.setIcon("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + oContext.getObject().Matnr +
+				//					"')/$value");
+
+				oItemTemplate.addCell(_phangebotdetails);
+				// Status
+				/*oItemTemplate.addCell(new sap.ui.core.Icon({
+					src: "sap-icon://restart"
+				}).addStyleClass("zPolyLargeIcon"));*/
+
+				// Angebotsart 
+
+				var _phpromotype = new sap.m.ObjectIdentifier({
+					title: "PH",
+					text: "Platzhalter"
+					//	title: _object.PromoType,
+					//	text: _object.PromoTypeTxt.substring(0, 10)
+				});
+
+				oItemTemplate.addCell(_phpromotype);
+
+				oItemTemplate.addCell(new sap.m.Input({
+					width: "5%",
+					value: oContext.getObject().AnzWt,
+					change: this.onWTChange
+						/*,
+											liveChange: function (oEvent) {
+												var _oInput = oEvent.getSource();
+												var val = _oInput.getValue();
+												val = val.replace(/[^\d]/g, '');
+												_oInput.setValue(val);
+											}*/
+				}).addEventDelegate({
+					onfocusin: function (oEvent) {
+						$("#" + oEvent.originalEvent.target.id).select();
+					}
+				}));
+				/*
+				oItemTemplate.addCell(new sap.m.Input({
+					width: "5%",
+					value: oContext.getObject().Hoehe,
+					change: this.onHChange
+				}));
+				oItemTemplate.addCell(new sap.m.Label({
+					text: "10"
+				}));*/
+				/*	oItemTemplate.addCell(new sap.ui.core.Icon({
+						src: "sap-icon://accept"
+					}));*/
+
+			}
 			// this is ARTIKEL 
 
 			if (oContext.getObject().ArtikelFlag) {

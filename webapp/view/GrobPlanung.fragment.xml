@@ -11,7 +11,8 @@
 			<DatePicker id="calenderAuswahlGrob" placeholder="{i18n>Kalenderwoche}" displayFormat="w.YYYY" valueFormat="wwYYYY" class="sapUiSmallMargin"
 				value="{local>/CalWeek}" editable="false" width="40%"/>
 			<Label text="{i18n>PPFlaeche}" class="sapUiSmallMargin"/>
-			<Select id="selPP" enabled="true" forceSelection="false" selectedKey="{local>/selectedPPF}" change="onPPSelectedGrob" class="sapUiSmallMargin"></Select>
+			<Select id="selPP" enabled="true" forceSelection="false" selectedKey="{local>/selectedPPF}" change="onPPSelectedGrob"
+				class="sapUiSmallMargin"></Select>
 		</items>
 	</FlexBox>
 	<l:Splitter id="idSplitter">
@@ -37,11 +38,16 @@
 								<FlexItemData growFactor="1"/>
 							</layoutData>
 						</CheckBox>
-						<SearchField id="idSelSearch" value="" class="sapUiSmallMarginEnd" search="onSearch">
+						<SearchField id="idSelSearch" value="" search="onSearch">
 							<layoutData>
 								<FlexItemData growFactor="4"/>
 							</layoutData>
 						</SearchField>
+						<Button id="addPlaceholderBtn" text="Platzhalter" icon="sap-icon://add" class="sapUiSmallMarginBegin" press="onBtnAddPlaceholderPress">
+							<layoutData>
+								<FlexItemData growFactor="1"/>
+							</layoutData>
+						</Button>
 					</FlexBox>
 					<Table id="AngeboteTableHead" showNoData="false">
 						<columns>
@@ -63,7 +69,7 @@
 									<core:CustomData key="p13nData"
 										value='\{"sortProperty": "PromoTypeTxt", "filterProperty": "PromoTypeTxt", "columnKey": "PromoTypeTxt", "leadingProperty": "PromoTypeTxt" , "columnIndex":"3"}'/>
 								</customData>
-								<Text text="Art" />
+								<Text text="Art"/>
 							</Column>
 							<!--<Column width="15%">
 								<Text text="Prognose"/>
@@ -75,6 +81,35 @@
 							useTablePersonalisation="false" useExportToExcel="false" useOnlyOneSolidToolbar="false" showTablePersonalisation="false"
 						
 							requestAtLeastFields="ZzExtOfrId,Startdat,Enddat,OfrName,PromoType,PromoTypeTxt,OfferGuid,toCampaign/CampaignId,toCampaign/CampaignName">-->
+						<Table id="PlatzhalterAngeboteTable" showNoData="false" visible="false">
+							<dragDropConfig>
+								<dnd:DragInfo groupName="itemsgroup" sourceAggregation="items"/>
+								<dnd:DropInfo drop="onStellPlatzItemDelete"/>
+							</dragDropConfig>
+							<columns>
+								<Column width="10%"></Column>
+								<Column width="35%"></Column>
+								<Column width="35%"></Column>
+								<Column width="20%"></Column>
+							</columns>
+							<items>
+								<ColumnListItem id="PlatzhalterAngeboteTableColumnListItem">
+									<cells>
+										<poly:IconHover src="{ parts: [ { path: 'BisWoche' } , { path: 'local>/CalWeek' }] , formatter: '.formatter.getPlatzhalterAngebotStatus'}"
+											color="{ parts: [ { path: 'BisWoche' } , { path: 'local>/CalWeek' }] , formatter: '.formatter.getPlatzhalterAngebotColor'}" size="2.5em"
+											class="zPolyIconHover"></poly:IconHover>
+										<StandardListItem title="{Bezeichnung}" class="zPolySqueezedArticle" wrapping="true">
+											<customData>
+												<core:CustomData key="offerguid" value="{PlatzhalterId}"/>
+											</customData>
+										</StandardListItem>
+										<ObjectIdentifier text="Gültig bis {BisWoche}"/>
+										<Text text="PH"/>
+										<!--<Text text="{path: 'Prognose', formatter: '.formatter.stripTrailingZeroes' }"/>-->
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
 						<Table id="AngeboteTable">
 							<dragDropConfig>
 								<dnd:DragInfo groupName="itemsgroup" sourceAggregation="items"/>
@@ -92,8 +127,7 @@
 										<poly:IconHover src="{ parts: [ {path: 'Startdat' }, { path: 'Enddat' } , { path: 'Duration' } ], formatter: '.formatter.getAngebotStatus'}"
 											color="{ parts: [ {path: 'Startdat' }, { path: 'Enddat' } , { path: 'Duration' }], formatter: '.formatter.getAngebotColor'}" size="2.5em"
 											hover="onAngebotSelectIconHover" class="zPolyIconHover"></poly:IconHover>
-										<StandardListItem title="{OfrName}" description="{ZzExtOfrId}" class="zPolySqueezedArticle"
-										wrapping="true" >
+										<StandardListItem title="{OfrName}" description="{ZzExtOfrId}" class="zPolySqueezedArticle" wrapping="true">
 											<customData>
 												<core:CustomData key="offerguid" value="{OfferGuid}"/>
 											</customData>

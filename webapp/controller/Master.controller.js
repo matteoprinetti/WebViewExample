@@ -9,9 +9,18 @@ sap.ui.define([
 	'sap/ui/core/Fragment',
 	'sap/ui/export/library',
 	'sap/ui/export/Spreadsheet',
-	'sap/m/MessageToast'
+	'sap/m/MessageToast',
+	'sap/m/VBox',
+	'sap/m/Dialog',
+	'sap/m/Button',
+	'sap/m/ButtonType',
+	'sap/m/Text',
+	'sap/m/Label',
+	'sap/m/Input',
+	'sap/m/DatePicker',
+	'sap/ui/layout/form/SimpleForm'
 ], function (BaseController, StellPlatz, StellPlatzDetail, StellPlatzFactory, FlaecheItemFactory, OffersItemFactory, Formatter, Fragment,
-	exportLibrary, Spreadsheet, MessageToast) {
+	exportLibrary, Spreadsheet, MessageToast, VBox, Dialog, Button, ButtonType, Text, Label, Input, DatePicker, SimpleForm) {
 
 	var EdmType = exportLibrary.EdmType;
 
@@ -20,14 +29,17 @@ sap.ui.define([
 	return BaseController.extend("zpoly.zpolyplanung.controller.Master", {
 		formatter: Formatter,
 		_template_angebote: null,
+		_template_platzhalter_angebote: null,
 		_stellplatz_id: null,
 		_lastDraggedControl: null,
-		_detailPlanungDialog: null,
+		//_detailPlanungDialog: null,
+		_addPlatzhalterDialog: null,
 
 		onInit: function () {
 
 			// get a copy of the template
 			this._template_angebote = this.getView().byId("AngeboteTableColumnListItem").clone();
+			this._template_platzhalter_angebote = this.getView().byId("PlatzhalterAngeboteTableColumnListItem").clone();
 
 			// set up an event so I know when someone has deleted something
 
@@ -471,6 +483,13 @@ sap.ui.define([
 							_item.getCells()[1].getDescription())
 							_item.setVisible(true);
 					}
+					// could be a platzhalter
+					for (var _x in this.getView().byId("PlatzhalterAngeboteTable").getItems()) {
+						var _item = this.getView().byId("PlatzhalterAngeboteTable").getItems()[_x];
+						if (this._lastDraggedControl.getCells()[2].getTitle() ===
+							_item.getCells()[1].getTitle())
+							_item.setVisible(true);
+					}
 				}.bind(this)
 			});
 
@@ -643,17 +662,33 @@ sap.ui.define([
 				}
 			});
 
+			// 08.02.2022 Added PlatzhalterTable
+
+			this.getView().byId("PlatzhalterAngeboteTable").setModel(this.getView().getModel());
+			//this.getView().byId("PlatzhalterAngeboteTable").setVisible(true);
+			this.getView().byId("PlatzhalterAngeboteTable").bindItems({
+				path: "/PlatzhalterAngebotSet",
+				template: this._template_platzhalter_angebote,
+				filters: [ new sap.ui.model.Filter("Locco",
+					sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco)],
+				events: {
+					dataReceived: function (oData) {
+						this.getView().byId("PlatzhalterAngeboteTable").setVisible(oData.getParameter("data").results.length > 0);
+					}.bind(this)
+				}
+			});
+
 		},
 		createExcelColumnConfig: function () {
 			return [{
 				label: 'Locco',
 				property: 'Locco',
 				type: EdmType.String
-			},  {
+			}, {
 				label: 'Woche',
 				property: 'Woche',
 				type: EdmType.String
-			},{
+			}, {
 				label: 'Fläche',
 				property: 'Name',
 				type: EdmType.String
@@ -673,7 +708,7 @@ sap.ui.define([
 				label: 'Warenträger',
 				property: 'WtName',
 				type: EdmType.String
-			},  {
+			}, {
 				label: 'Anzahl WT',
 				property: 'AnzWtItem',
 				type: EdmType.String
@@ -714,7 +749,7 @@ sap.ui.define([
 					var aCols, aProducts, oSettings, oSheet;
 
 					aCols = this.createExcelColumnConfig();
-					aProducts =oData.results;
+					aProducts = oData.results;
 
 					oSettings = {
 						workbook: {
@@ -731,6 +766,85 @@ sap.ui.define([
 						.finally(oSheet.destroy);
 				}.bind(this)
 			})
+		},
+
+		// 08.02.2022 added placeholder btn.
+
+		onBtnAddPlaceholderPress: function () {
+
+			var _bezeichnungCtrl;
+			var _biswocheCtrl;
+
+			if (!this._addPlatzhalterDialog) {
+				this._addPlatzhalterDialog = new Dialog({
+					id: "idPlatzhalterDialog",
+					title: "Neuer Platzhalter",
+					contentWidth: "550px",
+					contentHeight: "300px",
+					beginButton: new Button({
+						type: ButtonType.Emphasized,
+						text: "Anlegen",
+						press: function (oEvent) {
+							// make a new default Platzhalter
+
+							/*var _phobjectkey = this.getModel().createKey("PlatzhalterAngebotSet", {
+								PlatzhalterId: _objectid
+							});*/
+							this.getModel().create("/PlatzhalterAngebotSet", {
+								Locco: this.getOwnerComponent().locco,
+								Bezeichnung: _bezeichnungCtrl.getValue(),
+								BisWoche: _biswocheCtrl.getValue().substr(0,2)+"."+_biswocheCtrl.getValue().substr(2,4)
+							}, {
+								success: function () {
+									this._addPlatzhalterDialog.close();
+								}.bind(this)
+							});
+
+						}.bind(this)
+					}),
+					endButton: new Button({
+						text: "Schliessen",
+						press: function () {
+							this._addPlatzhalterDialog.close();
+						}.bind(this)
+					})
+				});
+
+				var form = new SimpleForm();
+				var _bezeichnungCtrl = new Input({
+					id: "idNewPhBez"
+				});
+				form.addContent(new Label({
+					text: "Bezeichnung"
+				}));
+				form.addContent(_bezeichnungCtrl);
+				form.addContent(new Label({
+					text: "Gültig bis"
+				}));
+
+				//<DatePicker id="calenderAuswahlGrob" placeholder="{i18n>Kalenderwoche}" displayFormat="w.YYYY" valueFormat="wwYYYY" class="sapUiSmallMargin"
+				//value="{local>/CalWeek}" editable="false" width="40%"/> 
+
+				var _biswocheCtrl = new DatePicker({
+					id: "idNewPhBisWoche",
+					placeholder: "{i18n>Kalenderwoche}",
+					displayFormat: "w.YYYY",
+					valueFormat: "wwYYYY",
+					style: "sapUiSmallMargin"
+				})
+				form.addContent(_biswocheCtrl);
+
+				var vbox = new VBox();
+				vbox.addStyleClass("sapUiSmallMargin");
+				vbox.addItem(form);
+				this._addPlatzhalterDialog.addContent(vbox);
+
+				//to get access to the controller's model
+				this.getView().addDependent(this._addPlatzhalterDialog);
+			}
+
+			this._addPlatzhalterDialog.open();
+
 		}
 
 	});
