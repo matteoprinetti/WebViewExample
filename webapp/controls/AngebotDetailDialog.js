@@ -237,24 +237,24 @@ sap.ui.define([
 			var _objheader = new ObjectHeader({
 
 			});
+			/*
+						_objheader.bindProperty("title", "Offers>OfrName");
 
-			_objheader.bindProperty("title", "Offers>OfrName");
+						_objheader.addAttribute(new ObjectAttribute({
+							title: "Angebotsnummer",
+							text: "{Offers>ZzExtOfrId}"
+						}));
 
-			_objheader.addAttribute(new ObjectAttribute({
-				title: "Angebotsnummer",
-				text: "{Offers>ZzExtOfrId}"
-			}));
+						_objheader.addAttribute(new ObjectAttribute({
+							title: "Angebotsart",
+							text: "{Offers>PromoTypeTxtShort} "
+						}));
 
-			_objheader.addAttribute(new ObjectAttribute({
-				title: "Angebotsart",
-				text: "{Offers>PromoTypeTxtShort} "
-			}));
-
-			_objheader.addAttribute(new ObjectAttribute({
-				title: "Rabattwert",
-				text: "{Offers>ZzRedText} {Offers>ZzRedTypText} "
-			}));
-
+						_objheader.addAttribute(new ObjectAttribute({
+							title: "Rabattwert",
+							text: "{Offers>ZzRedText} {Offers>ZzRedTypText} "
+						}));
+			*/
 			this._topcontainer.addItem(new Image({
 				height: "10rem"
 			}).addStyleClass("sapUiSmallMargin"));
@@ -331,6 +331,74 @@ sap.ui.define([
 
 		},
 
+		setAngebot: function (_angebot) {
+			this.setProperty("Angebot", _angebot);
+			// bind now as we only now can tell what kind of angebot is this (Platzhalter )
+
+			var _objheader = this._topcontainer.getItems()[1];
+			_objheader.removeAllAttributes();
+			
+			if (_angebot.Matnr !== _angebot.Angebot) {
+
+				this._topcontainer.getItems()[0].setSrc("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + _angebot.Matnr +
+					"')/$value");
+
+				var _path = "/OfrHeadSet(guid'" + _angebot.Angebot + "')";
+
+				this._topcontainer.getItems()[1].bindElement({
+					path: _path,
+					model: "Offers"
+				});
+
+				_objheader.bindProperty("title", "Offers>OfrName");
+
+				_objheader.addAttribute(new ObjectAttribute({
+					title: "Angebotsnummer",
+					text: "{Offers>ZzExtOfrId}"
+				}));
+
+				_objheader.addAttribute(new ObjectAttribute({
+					title: "Angebotsart",
+					text: "{Offers>PromoTypeTxtShort} "
+				}));
+
+				_objheader.addAttribute(new ObjectAttribute({
+					title: "Rabattwert",
+					text: "{Offers>ZzRedText} {Offers>ZzRedTypText} "
+				}));
+				return;
+			}
+
+			// Platzhalter
+
+		this._topcontainer.getItems()[0].setSrc("");
+
+				var _phpath = "/PlatzhalterAngebotSet(guid'" + _angebot.Angebot + "')";
+
+				this._topcontainer.getItems()[1].bindElement({
+					path: _phpath
+				});
+
+				
+				_objheader.bindProperty("title", "Bezeichnung");
+				
+				/*_objheader.addAttribute(new ObjectAttribute({
+					title: "Angebotsnummer",
+					text: "{Offers>ZzExtOfrId}"
+				}));*/
+
+				_objheader.addAttribute(new ObjectAttribute({
+					title: "Angebotsart",
+					text: "Platzhalter "
+				}));
+
+				/*_objheader.addAttribute(new ObjectAttribute({
+					title: "Rabattwert",
+					text: "{Offers>ZzRedText} {Offers>ZzRedTypText} "
+				}));*/
+				
+		},
+
 		onZusatzSearch: function (oEvent) {
 
 			var sValue = oEvent.getParameters().query;
@@ -340,9 +408,9 @@ sap.ui.define([
 			} else {
 				aFilter.push(new sap.ui.model.Filter("maktx", sap.ui.model.FilterOperator.StartsWith, sValue));
 			}
-			
+
 			// 20.09.2021 add allsort as filter to get all the products
-			
+
 			aFilter.push(new sap.ui.model.Filter("allsort", sap.ui.model.FilterOperator.EQ, true));
 
 			var oItemFactory = function (sId, oContext) {
@@ -389,6 +457,7 @@ sap.ui.define([
 			// head
 			// note this needs to be done for the other 2 tables 
 
+			/*
 			this._topcontainer.getItems()[0].setSrc("/sap/opu/odata/sap/ZR_MEDIAEXPORT_SRV/AngebotSet(AngebotNr='" + oAngebot.Matnr +
 				"')/$value");
 
@@ -397,7 +466,8 @@ sap.ui.define([
 			this._topcontainer.getItems()[1].bindElement({
 				path: _path,
 				model: "Offers"
-			});
+			}); 
+			*/
 
 			var _objectKey = this.getModel().createKey("/PlanungItemHeadSet", {
 				StellplatzId: this.getStellplatzId(),
@@ -441,15 +511,15 @@ sap.ui.define([
 					oItemTemplate.addCell(new Text({
 						text: oContext.getObject().Artikel
 					}));
-				/*	oItemTemplate.addCell(new Text({
-						text: "0"
-					}));
-					oItemTemplate.addCell(new Text({
-						text: "0"
-					}));
-					oItemTemplate.addCell(new Text({
-						text: "0"
-					}));*/
+					/*	oItemTemplate.addCell(new Text({
+							text: "0"
+						}));
+						oItemTemplate.addCell(new Text({
+							text: "0"
+						}));
+						oItemTemplate.addCell(new Text({
+							text: "0"
+						}));*/
 					oItemTemplate.addCell(new Text({
 						text: oContext.getObject().WerbeArtikel ? "Ja" : "Nein"
 					}));
@@ -492,9 +562,9 @@ sap.ui.define([
 						model: "Offers"});
 						
 					_angebotTitle.bindProperty("text","Offers>OfrName");*/
-					
+
 					//oItemTemplate.addCell(_angebotTitle);
-					
+
 					oItemTemplate.addCell(new Text({
 						text: oContext.getObject().Bezeichnung
 					}));
@@ -568,7 +638,7 @@ sap.ui.define([
 					Angebot: this.getAngebot().Angebot,
 					Artikel: _object.matnr,
 					Beschreibung: _object.maktx,
-					Zusatz: true 
+					Zusatz: true
 				};
 			}
 
