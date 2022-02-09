@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "description": "",
   "devDependencies": {
-    "@ui5/cli": "1.13.0",
+    "@ui5/cli": "2.14.4",
     "@sap/ui5-builder-webide-extension": "1.0.x",
-    "grunt": "1.0.1",
+    "grunt": "1.4.1",
     "@sap/grunt-sapui5-bestpractice-build": "1.4.15"
   },
   "scripts": {
