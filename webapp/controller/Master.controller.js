@@ -266,7 +266,7 @@ sap.ui.define([
 				"Filiale": filiale
 			});
 
-			Globals.getLocco() = this.getModel("ZSRSDATAFEED").getProperty("/FilialenSet('" + filiale + "')").Locco;
+			Globals.setLocco(this.getModel("ZSRSDATAFEED").getProperty("/FilialenSet('" + filiale + "')").Locco);
 
 			var oLoccoFilter = new sap.ui.model.Filter("Locco",
 				sap.ui.model.FilterOperator.EQ, Globals.getLocco());
