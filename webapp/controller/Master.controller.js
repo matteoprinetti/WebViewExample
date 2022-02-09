@@ -2,13 +2,12 @@ sap.ui.define([
 	"./BaseController",
 	"zpoly/zpolyplanung/controls/StellPlatz",
 	"zpoly/zpolyplanung/controls/StellPlatzDetail",
+	"zpoly/zpolyplanung/controls/PlatzhalterAngebotDialog",
 	"zpoly/zpolyplanung/factories/StellPlatzFactory",
 	"zpoly/zpolyplanung/factories/FlaecheItemFactory",
 	"zpoly/zpolyplanung/factories/OffersItemFactory",
 	"../model/formatter",
 	'sap/ui/core/Fragment',
-	'sap/ui/export/library',
-	'sap/ui/export/Spreadsheet',
 	'sap/m/MessageToast',
 	'sap/m/VBox',
 	'sap/m/Dialog',
@@ -18,22 +17,23 @@ sap.ui.define([
 	'sap/m/Label',
 	'sap/m/Input',
 	'sap/m/DatePicker',
-	'sap/ui/layout/form/SimpleForm'
-], function (BaseController, StellPlatz, StellPlatzDetail, StellPlatzFactory, FlaecheItemFactory, OffersItemFactory, Formatter, Fragment,
-	exportLibrary, Spreadsheet, MessageToast, VBox, Dialog, Button, ButtonType, Text, Label, Input, DatePicker, SimpleForm) {
-
-	var EdmType = exportLibrary.EdmType;
-
+	"zpoly/zpolyplanung/artifacts/Globals",
+	"zpoly/zpolyplanung/artifacts/ExcelExporter"
+], function (BaseController, StellPlatz, StellPlatzDetail, PlatzhalterAngebotDialog, StellPlatzFactory, FlaecheItemFactory,
+	OffersItemFactory, Formatter, Fragment,
+	 MessageToast, VBox, Dialog, Button, ButtonType, Text, Label, Input, DatePicker,  Globals,
+	ExcelExporter) {
+ 
 	//template: this.getView().byId("AngeboteTableColumnListItem").clone(),
 
 	return BaseController.extend("zpoly.zpolyplanung.controller.Master", {
 		formatter: Formatter,
+
 		_template_angebote: null,
 		_template_platzhalter_angebote: null,
+
 		_stellplatz_id: null,
 		_lastDraggedControl: null,
-		//_detailPlanungDialog: null,
-		_addPlatzhalterDialog: null,
 
 		onInit: function () {
 
@@ -51,10 +51,10 @@ sap.ui.define([
 			this.getOwnerComponent().getModel("User").read("/UserSet('DUMMY')", {
 				success: function (oResponse) {
 
-					this.getOwnerComponent().locco = oResponse.Locco;
+					Globals.setLocco(oResponse.Locco);
 
 					var oLoccoFilter = new sap.ui.model.Filter("Locco",
-						sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco);
+						sap.ui.model.FilterOperator.EQ, Globals.getLocco());
 
 					this.getView().byId("flTable").bindItems({
 						path: "/FlaechenSet",
@@ -77,38 +77,8 @@ sap.ui.define([
 				}.bind(this)
 			});
 
-			this.byId("idSelDefault").addEventDelegate({
-				onmouseover: function () {
-					// Open popover here
-					this._timeId = setTimeout(() => {
-
-						// bind the list in case the switch is set
-
-						this.byId("defaultPopoverList").removeAllItems();
-						if (this.byId("idSelDefault").getSelected()) {
-
-							// print the filter that has been set.
-							for (var _filter in this.byId("AngeboteTable").getBindingInfo("items").filters) {
-
-								// exclude some filter...
-
-								var _filtervalue = this.byId("AngeboteTable").getBindingInfo("items").filters[_filter];
-
-								if (_filtervalue.sPath.indexOf("Locco") >= 0 ||
-									_filtervalue.sPath.indexOf("Week") >= 0 ||
-									_filtervalue.sPath.indexOf("IncludedOfr") >= 0) continue;
-
-								var _item = new sap.m.CustomListItem().addStyleClass("sapUiTinyMargin");
-								_item.addContent(new sap.m.Label({
-									text: _filtervalue.sPath + " = " + _filtervalue.oValue1
-								}));
-								this.byId("defaultPopoverList").addItem(_item);
-							}
-						};
-
-						this.byId("defaultPopover").openBy(this.byId("idSelDefault"));
-					}, 500);
-				}.bind(this),
+			this.byId("idZugewiesene").addEventDelegate({
+				onmouseover: this.onMouseOverZugewiesen.bind(this),
 				onmouseout: function () {
 					clearTimeout(this._timeId);
 					this.byId("defaultPopover").close();
@@ -126,15 +96,38 @@ sap.ui.define([
 				}.bind(this));
 			}
 
-			// DetailPlanung Dialog
+		},
 
-			/*			if (!this._detailPlanungDialog) {
-			              	this._detailPlanungDialog = Fragment.load({
-								id: this.getView().getId(),
-								name: "zpoly.zpolyplanung.view.DetailPlanungAngebot",
-								controller: this
-							});
-			            }*/
+		onMouseOverZugewiesen: function () {
+			// Open popover after 500 ms 
+			this._timeId = setTimeout(() => {
+
+				// bind the list in case the switch is set
+
+				this.byId("defaultPopoverList").removeAllItems();
+				if (this.byId("idZugewiesene").getSelected()) {
+
+					// print the filter that has been set.
+					for (var _filter in this.byId("AngeboteTable").getBindingInfo("items").filters) {
+
+						// exclude some filter...
+
+						var _filtervalue = this.byId("AngeboteTable").getBindingInfo("items").filters[_filter];
+
+						if (_filtervalue.sPath.indexOf("Locco") >= 0 ||
+							_filtervalue.sPath.indexOf("Week") >= 0 ||
+							_filtervalue.sPath.indexOf("IncludedOfr") >= 0) continue;
+
+						var _item = new sap.m.CustomListItem().addStyleClass("sapUiTinyMargin");
+						_item.addContent(new sap.m.Label({
+							text: _filtervalue.sPath + " = " + _filtervalue.oValue1
+						}));
+						this.byId("defaultPopoverList").addItem(_item);
+					}
+				};
+
+				this.byId("defaultPopover").openBy(this.byId("idZugewiesene"));
+			}, 500);
 
 		},
 
@@ -167,11 +160,7 @@ sap.ui.define([
 				filters: aFilter,
 				model: "ZSRSDATAFEED",
 				factory: oItemFactory
-					/*,
-									parameters: {
-										expand: "toBild",
-										faultTolerant: true
-									}*/
+
 			});
 
 		},
@@ -202,7 +191,7 @@ sap.ui.define([
 				// set the binding for the selPP element 
 
 				var oLoccoFilter = new sap.ui.model.Filter("Locco",
-					sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco);
+					sap.ui.model.FilterOperator.EQ, Globals.getLocco());
 
 				this.getView().byId("selPP").bindItems({
 					path: "/FlaechenSet",
@@ -277,10 +266,10 @@ sap.ui.define([
 				"Filiale": filiale
 			});
 
-			this.getOwnerComponent().locco = this.getModel("ZSRSDATAFEED").getProperty("/FilialenSet('" + filiale + "')").Locco;
+			Globals.getLocco() = this.getModel("ZSRSDATAFEED").getProperty("/FilialenSet('" + filiale + "')").Locco;
 
 			var oLoccoFilter = new sap.ui.model.Filter("Locco",
-				sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco);
+				sap.ui.model.FilterOperator.EQ, Globals.getLocco());
 
 			this.getView().byId("flTable").bindItems({
 				path: "/FlaechenSet",
@@ -295,11 +284,10 @@ sap.ui.define([
 		},
 
 		onCalWeekChange: function (oEvent) {
+			
 			this.getView().byId("AngeboteTable").destroyItems();
-
 			this.getModel("local").setProperty("/CalWeek", oEvent.getParameters().value);
-			//this.getModel("local").setProperty("/CalWeekAsDate", nextweek);
-			this.getModel("local").setProperty();
+		
 		},
 
 		onTabbarSelect: function (oEvent) {
@@ -337,38 +325,6 @@ sap.ui.define([
 			this.loadDetail(oEvent.getParameters().selectedItem.getKey(), this.getView().byId("calenderAuswahlDetail").getValue());
 			this.getView().byId("selPP").setSelectedKey(oEvent.getParameters().selectedItem.getKey());
 		},
-		/*onBeforeRebindAngeboteTable: function (oEvent) {
-
-			// 12.05.2021 Prinetti
-			// check the search flags and ACT
-
-			var _default = this.getView().byId("idSelDefault").getSelected();
-			var _searchText = this.getView().byId("idSelSearch").getValue();
-
-			var binding = oEvent.getParameter("bindingParams");
-			var oLoccoFilter = new sap.ui.model.Filter("Locco",
-				sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco);
-
-			var oWeekFilter = new sap.ui.model.Filter("Week",
-				sap.ui.model.FilterOperator.EQ, this.getView().byId("calenderAuswahlGrob").getValue());
-
-			binding.parameters["expand"] = "toCampaign";
-			binding.filters.push(oLoccoFilter);
-			binding.filters.push(oWeekFilter);
-
-			// now the custom filter 
-			// only if this.All is not true
-
-			if (_default) {
-				// add the filters according to the type of polyflaeche				
-			}
-
-			if (_searchText && _searchText !== "") {
-				binding.filters.push(new sap.ui.model.Filter("OfrName",
-					sap.ui.model.FilterOperator.EQ, _searchText));
-			}
-
-		},*/
 
 		loadGrob: function (oId, oWeek) {
 
@@ -395,7 +351,7 @@ sap.ui.define([
 
 			var _selloutFilters = [];
 			_selloutFilters.push(new sap.ui.model.Filter("Locco",
-				sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco));
+				sap.ui.model.FilterOperator.EQ, Globals.getLocco()));
 
 			_selloutFilters.push(new sap.ui.model.Filter("Week",
 				sap.ui.model.FilterOperator.EQ, this.getView().byId("calenderAuswahlGrob").getValue()));
@@ -411,7 +367,7 @@ sap.ui.define([
 						factory: StellPlatzFactory.factory.bind(this),
 						events: {
 							dataReceived: function () {
-								this.internalRebind(this.getView().byId("idSelDefault").getSelected());
+								this.internalRebind(this.getView().byId("idZugewiesene").getSelected());
 							}.bind(this)
 						}
 
@@ -457,7 +413,7 @@ sap.ui.define([
 				template: _template_stellplatz_detail,
 				events: {
 					dataReceived: function () {
-						//this.internalRebind(this.getView().byId("idSelDefault").getSelected());
+						//this.internalRebind(this.getView().byId("idZugewiesene").getSelected());
 					}.bind(this)
 				}
 
@@ -546,7 +502,7 @@ sap.ui.define([
 
 		onSearch: function (oEvent) {
 			// call internalRebind
-			var _selected = this.getView().byId("idSelDefault").getSelected();
+			var _selected = this.getView().byId("idZugewiesene").getSelected();
 			var _search = this.getView().byId("idSelSearch").getValue();
 
 			// get the data for the polyflaeche and build a filter
@@ -590,7 +546,7 @@ sap.ui.define([
 
 			var filters = [];
 			var oLoccoFilter = new sap.ui.model.Filter("Locco",
-				sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco);
+				sap.ui.model.FilterOperator.EQ, Globals.getLocco());
 
 			var oWeekFilter = new sap.ui.model.Filter("Week",
 				sap.ui.model.FilterOperator.EQ, this.getView().byId("calenderAuswahlGrob").getValue());
@@ -669,8 +625,8 @@ sap.ui.define([
 			this.getView().byId("PlatzhalterAngeboteTable").bindItems({
 				path: "/PlatzhalterAngebotSet",
 				template: this._template_platzhalter_angebote,
-				filters: [ new sap.ui.model.Filter("Locco",
-					sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco)],
+				filters: [new sap.ui.model.Filter("Locco",
+					sap.ui.model.FilterOperator.EQ, Globals.getLocco())],
 				events: {
 					dataReceived: function (oData) {
 						this.getView().byId("PlatzhalterAngeboteTable").setVisible(oData.getParameter("data").results.length > 0);
@@ -679,93 +635,11 @@ sap.ui.define([
 			});
 
 		},
-		createExcelColumnConfig: function () {
-			return [{
-				label: 'Locco',
-				property: 'Locco',
-				type: EdmType.String
-			}, {
-				label: 'Woche',
-				property: 'Woche',
-				type: EdmType.String
-			}, {
-				label: 'Fläche',
-				property: 'Name',
-				type: EdmType.String
-			}, {
-				label: 'Flächentyp',
-				property: 'Type',
-				type: EdmType.String
-			}, {
-				label: 'Sortimentsbereich',
-				property: 'Sortber',
-				type: EdmType.String
-			}, {
-				label: 'Stellplatz',
-				property: 'StellPlatzName',
-				type: EdmType.String
-			}, {
-				label: 'Warenträger',
-				property: 'WtName',
-				type: EdmType.String
-			}, {
-				label: 'Anzahl WT',
-				property: 'AnzWtItem',
-				type: EdmType.String
-			}, {
-				label: 'Angebotsname',
-				property: 'AngebotsName',
-				width: '40',
-				type: EdmType.String
-			}, {
-				label: 'Artikel',
-				property: 'Artikel',
-				width: '15',
-				type: EdmType.String
-			}, {
-				label: 'Artikelbeschreibung',
-				property: 'Beschreibung',
-				width: '40',
-				type: EdmType.String
-			}, {
-				label: 'Zusatz',
-				property: 'ZusatzArtikel',
-				type: EdmType.String
-			}];
-		},
 
 		onBtnExcel: function () {
-
-			var _filters = [];
-			_filters.push(new sap.ui.model.Filter("Locco",
-				sap.ui.model.FilterOperator.EQ, this.getOwnerComponent().locco));
-
-			_filters.push(new sap.ui.model.Filter("Woche",
-				sap.ui.model.FilterOperator.EQ, this.getView().byId("calenderAuswahlGrob").getValue()));
-
-			this.getView().getModel().read("/FlatViewSet", {
-				filters: _filters,
-				success: function (oData, oResponse) {
-					var aCols, aProducts, oSettings, oSheet;
-
-					aCols = this.createExcelColumnConfig();
-					aProducts = oData.results;
-
-					oSettings = {
-						workbook: {
-							columns: aCols
-						},
-						dataSource: aProducts
-					};
-
-					oSheet = new Spreadsheet(oSettings);
-					oSheet.build()
-						.then(function () {
-							MessageToast.show('Spreadsheet export has finished');
-						})
-						.finally(oSheet.destroy);
-				}.bind(this)
-			})
+		 
+			ExcelExporter.export(this.getView().getModel(),this.getModel("local").getProperty("/CalWeek"));
+			
 		},
 
 		// 08.02.2022 added placeholder btn.
@@ -776,68 +650,29 @@ sap.ui.define([
 			var _biswocheCtrl;
 
 			if (!this._addPlatzhalterDialog) {
-				this._addPlatzhalterDialog = new Dialog({
-					id: "idPlatzhalterDialog",
-					title: "Neuer Platzhalter",
-					contentWidth: "550px",
-					contentHeight: "300px",
-					beginButton: new Button({
-						type: ButtonType.Emphasized,
-						text: "Anlegen",
-						press: function (oEvent) {
-							// make a new default Platzhalter
 
-							/*var _phobjectkey = this.getModel().createKey("PlatzhalterAngebotSet", {
-								PlatzhalterId: _objectid
-							});*/
-							this.getModel().create("/PlatzhalterAngebotSet", {
-								Locco: this.getOwnerComponent().locco,
-								Bezeichnung: _bezeichnungCtrl.getValue(),
-								BisWoche: _biswocheCtrl.getValue().substr(0,2)+"."+_biswocheCtrl.getValue().substr(2,4)
-							}, {
-								success: function () {
-									this._addPlatzhalterDialog.close();
-								}.bind(this)
-							});
+				this._addPlatzhalterDialog = new PlatzhalterAngebotDialog({
+					confirm: function (oEvent) {
+						// make a new default Platzhalter
 
-						}.bind(this)
-					}),
-					endButton: new Button({
-						text: "Schliessen",
-						press: function () {
-							this._addPlatzhalterDialog.close();
-						}.bind(this)
-					})
+						/*var _phobjectkey = this.getModel().createKey("PlatzhalterAngebotSet", {
+							PlatzhalterId: _objectid
+						});*/
+						this.getModel().create("/PlatzhalterAngebotSet", {
+							Locco: Globals.getLocco(),
+							Bezeichnung:oEvent.getParameters().Bezeichnung,
+							BisWoche: oEvent.getParameters().BisWoche
+						}, {
+							success: function () {
+								this._addPlatzhalterDialog.close();
+							}.bind(this)
+						});
+
+					}.bind(this),
+					cancel: function (oEvent) {
+						this._addPlatzhalterDialog.close();
+					}.bind(this)
 				});
-
-				var form = new SimpleForm();
-				var _bezeichnungCtrl = new Input({
-					id: "idNewPhBez"
-				});
-				form.addContent(new Label({
-					text: "Bezeichnung"
-				}));
-				form.addContent(_bezeichnungCtrl);
-				form.addContent(new Label({
-					text: "Gültig bis"
-				}));
-
-				//<DatePicker id="calenderAuswahlGrob" placeholder="{i18n>Kalenderwoche}" displayFormat="w.YYYY" valueFormat="wwYYYY" class="sapUiSmallMargin"
-				//value="{local>/CalWeek}" editable="false" width="40%"/> 
-
-				var _biswocheCtrl = new DatePicker({
-					id: "idNewPhBisWoche",
-					placeholder: "{i18n>Kalenderwoche}",
-					displayFormat: "w.YYYY",
-					valueFormat: "wwYYYY",
-					style: "sapUiSmallMargin"
-				})
-				form.addContent(_biswocheCtrl);
-
-				var vbox = new VBox();
-				vbox.addStyleClass("sapUiSmallMargin");
-				vbox.addItem(form);
-				this._addPlatzhalterDialog.addContent(vbox);
 
 				//to get access to the controller's model
 				this.getView().addDependent(this._addPlatzhalterDialog);

@@ -2,14 +2,15 @@ sap.ui.define([
 	"sap/ui/core/UIComponent",
 	"sap/ui/Device",
 	"zpoly/zpolyplanung/model/models",
-	"sap/ui/model/json/JSONModel"
-], function (UIComponent, Device, models, JSONModel) {
+	"sap/ui/model/json/JSONModel",
+	"zpoly/zpolyplanung/artifacts/Globals"
+], function (UIComponent, Device, models, JSONModel, Globals) {
 	"use strict";
 
 	return UIComponent.extend("zpoly.zpolyplanung.Component", {
 
-		locco: null,
-		last_new_flaeche_id: null, // the id of the Flaeche das als neu eingetragen worden ist.
+	 
+		//last_new_flaeche_id: null, // the id of the Flaeche das als neu eingetragen worden ist.
 		// das ist wegen der Sortierung der Masterliste: wenn eine neue Zeile hinzugefügt wird,
 		// muss sie immer als Letzte erscheinen, damit sie nicht rumspringt beim Ändern vom Text
 		// wenn eine andere Zeile hinzugefügt wird, oder nochmal gelesen, ist dann normal sortiert.
@@ -47,22 +48,11 @@ sap.ui.define([
 			
 			this.setModel(new sap.ui.model.json.JSONModel(), "local");
 			
-			// also set the date of the picker to today 
-			// 6.8.2021 and + 1 week ! 
+			// Datepicker
 
-			var today = new Date();
-			var nextweek = new Date(today.getTime() + 86400000*6);
-			
-			var dd = String(nextweek.getDate()).padStart(2, '0');
-			var mm = String(nextweek.getMonth() + 1).padStart(2, '0'); //January is 0!
-			var yyyy = nextweek.getFullYear();
-
-			var week = dd + '.' + mm + '.' + yyyy;
-
-			this.getModel("local").setProperty("/CalWeek", week);
-			this.getModel("local").setProperty("/CalWeekAsDate", nextweek);
-			
-			
+			this.getModel("local").setProperty("/CalWeek", Globals.getDayNextWeek());
+			this.getModel("local").setProperty("/CalWeekAsDate", Globals.getDayNextWeekAsDate());
+		 
 			// size limit of Suggestions and error Handler
 			// (assuming a oData provider is set as default model)
 			if (this.getModel() !== undefined) {
@@ -79,40 +69,7 @@ sap.ui.define([
 				});
 			}
 
-			// model containing the choices for Selection type 
-
-			// take care of language 
-
-			var bundle = this.getModel("i18n").getResourceBundle();
-
-			var oData = {
-
-				"TypCollection": [{
-					"Typ": "1",
-					"Name": bundle.getText("typ1")
-				}, {
-					"Typ": "2",
-					"Name": bundle.getText("typ2")
-				}]
-			};
-
-			var oModel = new JSONModel(oData);
-			this.setModel(oModel, "Typ");
-
-			// model containing suggestions for possible names of fläche
-
-			var namenCollection = [];
-			for (var x = 0; x < 5; x++)
-				namenCollection.push({
-					"SuggestedName": bundle.getText("Suggestion" + (x+1))
-				});
-
-			var oData2 = {
-				"NamenCollection": namenCollection
-			};
-
-			var oModel2 = new JSONModel(oData2);
-			this.setModel(oModel2, "Namen");
+		 
 
 		}
 	});

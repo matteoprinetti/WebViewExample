@@ -1,7 +1,8 @@
 sap.ui.define([
 	"./BaseController",
-	"../model/formatter"
-], function (BaseController, Formatter) {
+	"../model/formatter",
+		"zpoly/zpolyplanung/artifacts/Globals"
+], function (BaseController, Formatter,Globals) {
 	"use strict";
 
 	return BaseController.extend("zpoly.zpolyplanung.controller.Detail", {
@@ -38,7 +39,7 @@ sap.ui.define([
 			// if locco is not set yet, do not bind,
 			// this happens because the framework binding is not dynamic
 
-			if (this.getOwnerComponent().locco === null) {
+			if (Globals.getLocco() === null) {
 				return;
 			}
 

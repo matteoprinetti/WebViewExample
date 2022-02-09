@@ -99,16 +99,14 @@ sap.ui.define([
 
 			_overflowtoolbar.addContent(_belegung);
 
-				var _maxkapa = new sap.m.Text();
- 		
+			var _maxkapa = new sap.m.Text();
+
 			_overflowtoolbar.addContent(new sap.m.Text({
 				text: "%: Max Kapa:"
 			}));
 			_maxkapa.bindText("Maxkapa");
 
 			_overflowtoolbar.addContent(_maxkapa);
-
-
 
 			_overflowtoolbar.addContent(new sap.m.ToolbarSpacer());
 
@@ -160,10 +158,12 @@ sap.ui.define([
 			// Prinetti 12.11.2021 bind the 3 content from the aggregation to the 
 			// Stellplatzbelegung set
 
-			 	var _belegungkey = "/StellplatzBelegungSet(Key=guid'" + 
-				  this.getKey() + "',Woche='" +
-				  this.getWeek()+ "')";
-				 this.getAggregation("_panel").getHeaderToolbar().getContent()[2].bindElement({ path: _belegungkey }); 
+			var _belegungkey = "/StellplatzBelegungSet(Key=guid'" +
+				this.getKey() + "',Woche='" +
+				this.getWeek() + "')";
+			this.getAggregation("_panel").getHeaderToolbar().getContent()[2].bindElement({
+				path: _belegungkey
+			});
 
 			this.getAggregation("_panel").getContent()[0].bindAggregation("items", {
 				path: "/PlanungItemHeadSet",
@@ -175,7 +175,7 @@ sap.ui.define([
 				],
 				events: {
 					dataReceived: function (oData) {
-					  var a = 1;
+						var a = 1;
 
 					}.bind(this)
 				},

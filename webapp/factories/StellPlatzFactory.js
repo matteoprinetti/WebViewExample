@@ -4,7 +4,6 @@ sap.ui.define(["zpoly/zpolyplanung/controls/StellPlatz"], function (StellPlatz) 
 
 		factory: function (sId, oContext) {
 
-
 			var oItemTemplate = new sap.m.CustomListItem({
 			});
 			oItemTemplate.addContent( new StellPlatz({
