@@ -6,7 +6,7 @@
     "@ui5/cli": "1.13.0",
     "@sap/ui5-builder-webide-extension": "1.0.x",
     "grunt": "1.0.1",
-    "@sap/grunt-sapui5-bestpractice-build": "1.4.6"
+    "@sap/grunt-sapui5-bestpractice-build": "1.4.15"
   },
   "scripts": {
     "build": "ui5 build -all --clean-dest --verbose --include-task=generateManifestBundle generateCachebusterInfo"
